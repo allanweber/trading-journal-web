@@ -1,4 +1,4 @@
-import { router } from 'Routes';
+import { router } from 'pages/Routes';
 import { RouterProvider } from 'react-router-dom';
 import './App.css';
 
