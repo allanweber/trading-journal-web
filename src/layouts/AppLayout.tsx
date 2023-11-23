@@ -1,10 +1,14 @@
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import { useAuthState } from 'lib/authentication';
 import { NavLink, Navigate, Outlet } from 'react-router-dom';
 
 export const AppLayout = () => {
-  const user = useAuthState();
+  const { isLoading, isAuthenticated } = useAuthState();
+  const { logout } = useKindeAuth();
 
-  if (!user) return <Navigate to="/login" />;
+  if (isLoading) return <div>Loading...</div>;
+
+  if (!isAuthenticated) return <Navigate to="/login" />;
 
   return (
     <div className="help-layout">
@@ -21,6 +25,11 @@ export const AppLayout = () => {
         </p>
         <p>
           <NavLink to="entries">Entries</NavLink>
+        </p>
+        <p>
+          <button onClick={() => logout()} type="button">
+            LogOut
+          </button>
         </p>
       </nav>
 
