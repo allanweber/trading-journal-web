@@ -1,10 +1,8 @@
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import { useAuthState } from 'lib/authentication';
 import { NavLink, Navigate, Outlet } from 'react-router-dom';
 
 export const AppLayout = () => {
-  const { isLoading, isAuthenticated } = useAuthState();
-  const { logout } = useKindeAuth();
+  const { isLoading, isAuthenticated, logout } = useAuthState();
 
   if (isLoading) return <div>Loading...</div>;
 

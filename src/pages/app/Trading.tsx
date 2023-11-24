@@ -1,15 +1,16 @@
-import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
+import { useAuthState } from 'lib/authentication';
+import { config } from 'lib/config';
 import { useEffect, useState } from 'react';
 
 export const Trading = () => {
   const [journals, setJournals] = useState([]);
 
-  const { getToken } = useKindeAuth();
+  const { getToken } = useAuthState();
 
   const fetchBooks = async () => {
     try {
       const accessToken = await getToken();
-      const res = await fetch('http://localhost:8080/api', {
+      const res = await fetch(`${config.api}/api`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -23,9 +24,8 @@ export const Trading = () => {
 
   useEffect(() => {
     fetchBooks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log('journals', journals);
 
   return (
     <>
