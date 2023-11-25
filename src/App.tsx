@@ -4,7 +4,9 @@ import { router } from 'pages/Routes';
 import { RouterProvider } from 'react-router-dom';
 import './App.css';
 
-inject();
+if (process.env.NODE_ENV === 'production') {
+  inject();
+}
 
 function App() {
   return (
