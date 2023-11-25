@@ -10,7 +10,7 @@ export const Trading = () => {
   const fetchBooks = async () => {
     try {
       const accessToken = await getToken();
-      const res = await fetch(`${config.api}/api`, {
+      const res = await fetch(`${config.api}/api/v1/journals`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
