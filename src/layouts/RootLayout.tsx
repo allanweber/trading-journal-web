@@ -7,13 +7,28 @@ export const RootLayout = () => {
         <nav>
           <h1>Jobarouter</h1>
           <p>
-            <NavLink to="/">Home</NavLink>
+            <NavLink
+              className="underline underline-offset-4 hover:text-primary"
+              to="/"
+            >
+              Home
+            </NavLink>
           </p>
           <p>
-            <NavLink to="about">About</NavLink>
+            <NavLink
+              className="underline underline-offset-4 hover:text-primary"
+              to="about"
+            >
+              About
+            </NavLink>
           </p>
           <p>
-            <NavLink to="trading">Trading</NavLink>
+            <NavLink
+              className="underline underline-offset-4 hover:text-primary"
+              to="trading"
+            >
+              Trading
+            </NavLink>
           </p>
         </nav>
       </header>

@@ -1,15 +1,16 @@
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
+import { Button } from 'components/ui/button';
 
 export const Login = () => {
   const { login, register } = useKindeAuth();
   return (
     <>
-      <button onClick={() => register()} type="button">
+      <Button onClick={() => register()} type="button">
         Sign up
-      </button>
-      <button onClick={() => login()} type="button">
+      </Button>
+      <Button onClick={() => login()} type="button">
         Sign In
-      </button>
+      </Button>
     </>
   );
 };

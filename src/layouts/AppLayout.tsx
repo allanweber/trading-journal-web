@@ -1,3 +1,4 @@
+import { Button } from 'components/ui/button';
 import { useAuthState } from 'lib/authentication';
 import { NavLink, Navigate, Outlet } from 'react-router-dom';
 
@@ -19,15 +20,25 @@ export const AppLayout = () => {
 
       <nav>
         <p>
-          <NavLink to="journals">Journals</NavLink>
+          <NavLink
+            className="underline underline-offset-4 hover:text-primary"
+            to="journals"
+          >
+            Journals
+          </NavLink>
         </p>
         <p>
-          <NavLink to="entries">Entries</NavLink>
+          <NavLink
+            className="underline underline-offset-4 hover:text-primary"
+            to="entries"
+          >
+            Entries
+          </NavLink>
         </p>
         <p>
-          <button onClick={() => logout()} type="button">
+          <Button onClick={() => logout()} type="button">
             LogOut
-          </button>
+          </Button>
         </p>
       </nav>
 
