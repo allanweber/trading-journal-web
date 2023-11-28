@@ -1,6 +1,6 @@
 import { PlusCircle } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 export const AddJournalButton = () => {
   return (

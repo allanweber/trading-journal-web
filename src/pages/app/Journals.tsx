@@ -1,4 +1,4 @@
-import { AddJournalButton } from 'components/AddJournalButton';
+import { AddJournalButton } from 'components/journals/AddJournalButton';
 import { PageHeader } from 'components/PageHeader';
 
 export const Journals = () => {

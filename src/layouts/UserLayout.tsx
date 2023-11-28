@@ -1,5 +1,5 @@
 import { PageHeader } from 'components/PageHeader';
-import { UserSideNav } from 'components/UserSideNav';
+import { UserSideNav } from 'components/user/UserSideNav';
 import { Outlet } from 'react-router-dom';
 
 export const UserLayout = () => {

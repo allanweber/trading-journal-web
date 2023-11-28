@@ -1,4 +1,4 @@
-import { AddEntryButton } from 'components/AddEntryButton';
+import { AddEntryButton } from 'components/entries/AddEntryButton';
 import { PageHeader } from 'components/PageHeader';
 
 export const Entries = () => {

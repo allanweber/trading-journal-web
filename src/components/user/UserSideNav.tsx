@@ -1,6 +1,6 @@
 import { cn } from 'lib/utils';
 import { NavLink, useLocation } from 'react-router-dom';
-import { buttonVariants } from './ui/button';
+import { buttonVariants } from '../ui/button';
 
 const items = [
   {

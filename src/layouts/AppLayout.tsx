@@ -1,5 +1,5 @@
 import TradingNav from 'components/TradingNav';
-import { UserNav } from 'components/UserNav';
+import { UserNav } from 'components/user/UserNav';
 import { useAuthState } from 'lib/authentication';
 import { Navigate, Outlet } from 'react-router-dom';
 
