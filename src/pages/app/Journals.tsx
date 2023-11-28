@@ -1,4 +1,6 @@
 import { AddJournalButton } from 'components/journals/AddJournalButton';
+import { JournalSearch } from 'components/journals/JournalSearch';
+import { JournalsTable } from 'components/journals/JournalsTable';
 import { PageHeader } from 'components/PageHeader';
 
 export const Journals = () => {
@@ -11,6 +13,8 @@ export const Journals = () => {
           <AddJournalButton />
         </PageHeader.Action>
       </PageHeader>
+      <JournalSearch />
+      <JournalsTable />
     </>
   );
 };
