@@ -20,7 +20,19 @@ export const JournalsTable = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { data: journals, error, isLoading, isSuccess } = useGetJournals();
+  console.log('searchParams', searchParams.get('query'));
+
+  const {
+    data: journals,
+    error,
+    isLoading,
+    isSuccess,
+  } = useGetJournals(
+    searchParams.get('query') || undefined,
+    searchParams.get('currency') || undefined,
+    searchParams.get('pageSize') || undefined,
+    searchParams.get('page') || undefined
+  );
 
   if (error) {
     return <MessageDisplay message={error} variant="destructive" />;
