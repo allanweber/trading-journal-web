@@ -5,11 +5,11 @@ import { buttonVariants } from '../ui/button';
 const items = [
   {
     key: 'Settings',
-    href: 'trading/user/settings',
+    href: '/trading/user/settings',
   },
   {
     key: 'Profile',
-    href: 'trading/user/profile',
+    href: '/trading/user/profile',
   },
 ];
 
@@ -22,10 +22,10 @@ export const UserSideNav = () => {
       {items.map((item) => (
         <NavLink
           key={item.href}
-          to={`/${item.href}`}
+          to={item.href}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            pathname === `/${item.href}`
+            pathname === item.href
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline',
             'justify-start'
