@@ -6,7 +6,9 @@ export const Entries = () => {
     <>
       <PageHeader>
         <PageHeader.Title>Entries</PageHeader.Title>
-        <PageHeader.Subtitle>View and manage your entries</PageHeader.Subtitle>
+        <PageHeader.Subtitle>
+          <span className="hidden md:flex">View and manage your entries</span>
+        </PageHeader.Subtitle>
         <PageHeader.Action>
           <AddEntryButton />
         </PageHeader.Action>

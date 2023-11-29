@@ -63,27 +63,25 @@ export default function Search(props: Props) {
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
-        <Input
-          className="h-8 w-[150px] lg:w-[250px]"
-          ref={inputRef as Ref<HTMLInputElement>}
-          placeholder={placeholder}
-          onChange={(e) => {
-            handleSearch(e.target.value);
-          }}
-          defaultValue={searchParams.get('query')?.toString()}
-        />
-        {filters?.map((filter) => (
-          <TableFilter key={filter.filterId} {...filter} />
-        ))}
-        {filtering && (
-          <Button variant="ghost" onClick={reset} className="h-8 px-2 lg:px-3">
-            Reset
-            <Cross2Icon className="ml-2 h-4 w-4" />
-          </Button>
-        )}
-      </div>
+    <div className="flex items-start gap-1 flex-wrap">
+      <Input
+        className="h-8 w-[150px] lg:w-[250px]"
+        ref={inputRef as Ref<HTMLInputElement>}
+        placeholder={placeholder}
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+        defaultValue={searchParams.get('query')?.toString()}
+      />
+      {filters?.map((filter) => (
+        <TableFilter key={filter.filterId} {...filter} />
+      ))}
+      {filtering && (
+        <Button variant="ghost" onClick={reset} className="h-8 px-2 lg:px-3">
+          <span className="hidden md:flex">Reset</span>
+          <Cross2Icon className="ml-1 h-5 w-5 md:h-4 md:w-5" />
+        </Button>
+      )}
     </div>
   );
 }

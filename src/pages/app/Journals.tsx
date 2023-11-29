@@ -8,7 +8,9 @@ export const Journals = () => {
     <>
       <PageHeader>
         <PageHeader.Title>Journals</PageHeader.Title>
-        <PageHeader.Subtitle>View and manage your journals</PageHeader.Subtitle>
+        <PageHeader.Subtitle>
+          <span className="hidden md:flex">View and manage your journals</span>
+        </PageHeader.Subtitle>
         <PageHeader.Action>
           <AddJournalButton />
         </PageHeader.Action>
