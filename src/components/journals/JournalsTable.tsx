@@ -20,8 +20,6 @@ export const JournalsTable = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  console.log('searchParams', searchParams.get('query'));
-
   const {
     data: journals,
     error,
@@ -44,9 +42,9 @@ export const JournalsTable = () => {
         {isSuccess &&
           journals?.data?.map((journal) => (
             <div
-              key={journal.id}
+              key={journal._id}
               className="hover:bg-slate-200"
-              onClick={() => navigate(`/trading/journals/${journal.id}`)}
+              onClick={() => navigate(`/trading/journals/${journal._id}`)}
             >
               <div className="mb-2 w-full rounded-md p-4">
                 <div className="flex items-center justify-between">
@@ -95,9 +93,9 @@ export const JournalsTable = () => {
               journals.data &&
               (journals.pagination.total > 0 ? (
                 journals.data.map((journal) => (
-                  <TableRow key={journal.id}>
+                  <TableRow key={journal._id}>
                     <TableCell className="font-medium">
-                      <Link to={`/trading/journals/${journal.id}`}>
+                      <Link to={`/trading/journals/${journal._id}`}>
                         {journal.name}
                       </Link>
                     </TableCell>
@@ -111,10 +109,10 @@ export const JournalsTable = () => {
                     <TableCell>{journal.currency}</TableCell>
                     <TableCell className="text-right">
                       <div className="max-w-[45px] flex justify-between">
-                        <Link to={`/trading/journals/${journal.id}`}>
+                        <Link to={`/trading/journals/${journal._id}`}>
                           <EditIcon className="h-4 w-4" />
                         </Link>
-                        <Link to={`/trading/journals/${journal.id}`}>
+                        <Link to={`/trading/journals/${journal._id}`}>
                           <TrashIcon className="h-4 w-4" />
                         </Link>
                       </div>

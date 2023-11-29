@@ -12,7 +12,7 @@ export const balanceSchema = z.object({
 export type Balance = z.infer<typeof balanceSchema>;
 
 export const journalSchema = z.object({
-  id: z.string().optional(),
+  _id: z.string().optional(),
   name: z
     .string({
       required_error: 'name-required',
