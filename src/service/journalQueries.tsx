@@ -29,19 +29,19 @@ const getJournals = (
   pageSize?: string,
   page?: string
 ): Promise<Paginated<Journal>> => {
-  let url = `${config.api}/api/v1/journals`;
+  let url = `${config.api}/api/v1/journals?`;
 
   if (query) {
-    url = `${url}?query=${query}`;
+    url = `${url}query=${query}&`;
   }
   if (currency) {
-    url = `${url}?currency=${currency}`;
+    url = `${url}currency=${currency}&`;
   }
   if (page) {
-    url = `${url}?page=${page}`;
+    url = `${url}page=${page}&`;
   }
   if (pageSize) {
-    url = `${url}?pageSize=${pageSize}`;
+    url = `${url}pageSize=${pageSize}&`;
   }
 
   return fetch(url, {
