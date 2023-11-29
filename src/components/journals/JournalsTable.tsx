@@ -11,48 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from 'components/ui/table';
-import { useAuthState } from 'lib/authentication';
-import { config } from 'lib/config';
 import { EditIcon, TrashIcon } from 'lucide-react';
-import { Journal } from 'model/journal';
-import { Paginated } from 'model/pagination';
-import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useGetJournals } from 'service/journalQueries';
 import JournalBalanceStatus from './JournalBalanceStatus';
 
 export const JournalsTable = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const [journals, setJournals] = useState<Paginated<Journal>>();
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<any>();
-
-  const { getToken } = useAuthState();
-
-  const fetchBooks = async () => {
-    try {
-      const accessToken = await getToken();
-      const res = await fetch(`${config.api}/api/v1/journals`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await res.json();
-      setJournals(data);
-      setIsSuccess(true);
-      setIsLoading(false);
-    } catch (err) {
-      setError(err);
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchBooks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { data: journals, error, isLoading, isSuccess } = useGetJournals();
 
   if (error) {
     return <MessageDisplay message={error} variant="destructive" />;

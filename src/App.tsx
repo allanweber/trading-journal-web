@@ -1,3 +1,8 @@
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { inject } from '@vercel/analytics';
 import { AuthContext } from 'contexts/AuthContext';
 import { router } from 'pages/Routes';
@@ -8,11 +13,28 @@ if (process.env.NODE_ENV === 'production') {
   inject();
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error.message === '401') {
+        window.location.href = '/login';
+      }
+    },
+  }),
+});
+
 function App() {
   return (
     <main>
       <AuthContext>
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </AuthContext>
     </main>
   );
