@@ -22,6 +22,18 @@ export const useGetJournals = (
   });
 };
 
+export const useGetJournal = (id: string) => {
+  const { getToken } = useAuthState();
+
+  return useQuery({
+    queryKey: [`journal-${id}`],
+    queryFn: async () => {
+      const accessToken = await getToken();
+      return getJournal(accessToken!, id);
+    },
+  });
+};
+
 const getJournals = (
   accessToken: string,
   query?: string,
@@ -45,6 +57,16 @@ const getJournals = (
   }
 
   return fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  }).then(responseOrError);
+};
+
+const getJournal = (accessToken: string, id: string): Promise<Journal> => {
+  return fetch(`${config.api}/api/v1/journals/${id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${accessToken}`,

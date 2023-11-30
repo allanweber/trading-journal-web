@@ -14,6 +14,8 @@ export async function readErrors(rawResponse: any) {
 
   if (response.error) {
     return response.error;
+  } else if (response.message) {
+    return response.message;
   } else if (response.errors) {
     const message = response.errors.join('\n');
     return message;
