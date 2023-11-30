@@ -39,7 +39,10 @@ export const JournalsTable = () => {
   return (
     <>
       <div className="md:hidden rounded-md border min-w-full">
-        {isSuccess &&
+        {isLoading && isSuccess ? (
+          <TableLoading />
+        ) : (
+          isSuccess &&
           journals?.data?.map((journal) => (
             <div
               key={journal._id}
@@ -66,7 +69,8 @@ export const JournalsTable = () => {
               </div>
               <Separator />
             </div>
-          ))}
+          ))
+        )}
       </div>
       <div className="hidden rounded-md border min-w-full md:table">
         <Table>
