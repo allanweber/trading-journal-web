@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 
 import { Label } from 'components/ui/label';
-import { Clock } from 'lucide-react';
 import { TimePickerInput } from './TimePickerInput';
+import { Button } from './ui/button';
 
 interface Props {
   date: Date | undefined;
@@ -13,6 +13,12 @@ export const TimePicker = ({ date, setDate }: Props) => {
   const minuteRef = useRef<HTMLInputElement>(null);
   const hourRef = useRef<HTMLInputElement>(null);
   const secondRef = useRef<HTMLInputElement>(null);
+
+  const nowClick = () => {
+    const now = new Date();
+    date?.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
+    setDate(date);
+  };
 
   return (
     <div className="flex items-end gap-2">
@@ -54,7 +60,10 @@ export const TimePicker = ({ date, setDate }: Props) => {
         />
       </div>
       <div className="flex h-10 items-center">
-        <Clock className="ml-2 h-4 w-4" />
+        {/* <Clock className="ml-2 h-4 w-4" /> */}
+        <Button variant="outline" size="sm" onClick={nowClick}>
+          Now
+        </Button>
       </div>
     </div>
   );

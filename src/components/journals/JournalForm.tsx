@@ -20,13 +20,17 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 export const JournalForm = ({ journal }: { journal?: Journal }) => {
-  const [values, setValues] = useState<Journal>({
-    name: '',
-    description: '',
-    startDate: new Date(),
-    startBalance: 0,
-    currency: 'USD',
-  });
+  if (!journal) {
+    journal = {
+      name: '',
+      description: '',
+      startDate: new Date(),
+      startBalance: 0,
+      currency: 'USD',
+    };
+  }
+
+  const [values, setValues] = useState<Journal>(journal);
 
   useEffect(() => {
     if (journal) {
@@ -89,7 +93,11 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Start Date</FormLabel>
-                <DateTimePicker setDate={field.onChange} date={field.value} />
+                <DateTimePicker
+                  setDate={field.onChange}
+                  date={field.value}
+                  withTime
+                />
                 <FormDescription>
                   This is the date when you started your journal used to
                   calculate your balance, and can never be changed. (required)
