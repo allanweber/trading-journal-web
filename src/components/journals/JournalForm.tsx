@@ -13,6 +13,7 @@ import { Input } from 'components/ui/input';
 import { useForm } from 'react-hook-form';
 
 import CurrencySelect from 'components/CurrencySelect';
+import { DateTimePicker } from 'components/DateTimePicker';
 import { NumberInput } from 'components/NumberInput';
 import { Journal, journalSchema } from 'model/journal';
 import { useEffect, useState } from 'react';
@@ -82,21 +83,21 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             )}
           />
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="startDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>{t('start-date-label')}</FormLabel>
-                <DatePicker
-                  value={field.value}
-                  onSelect={field.onChange}
-                  placeholder={t('start-date-placeholder')}
-                />
-
+                <FormLabel>Start Date</FormLabel>
+                <DateTimePicker setDate={field.onChange} date={field.value} />
+                <FormDescription>
+                  This is the date when you started your journal used to
+                  calculate your balance, and can never be changed. (required)
+                </FormDescription>
+                <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <FormField
             control={form.control}
@@ -107,7 +108,7 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
                 <NumberInput {...field} disabled={journal} />
                 <FormDescription>
                   This is the balance of your account at the start of your
-                  journal and can never be changed. (required)
+                  journal, and can never be changed. (required)
                 </FormDescription>
                 <FormMessage />
               </FormItem>
