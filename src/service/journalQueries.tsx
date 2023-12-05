@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthState } from 'lib/authentication';
 import { config } from 'lib/config';
 import { Journal } from 'model/journal';
@@ -30,6 +30,34 @@ export const useGetJournal = (id: string) => {
     queryFn: async () => {
       const accessToken = await getToken();
       return getJournal(accessToken!, id);
+    },
+  });
+};
+
+export const useSaveJournal = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['journals'],
+    mutationFn: async (journal: Journal) => {
+      const accessToken = await getToken();
+      return createJournal(accessToken!, journal);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({ queryKey: [`journal-${data._id}`] });
+    },
+  });
+};
+
+export const useDeleteJournal = () => {
+  const { getToken } = useAuthState();
+
+  return useMutation({
+    mutationKey: ['journals'],
+    mutationFn: async (id: string) => {
+      const accessToken = await getToken();
+      return deleteJournal(accessToken!, id);
     },
   });
 };
@@ -68,6 +96,30 @@ const getJournals = (
 const getJournal = (accessToken: string, id: string): Promise<Journal> => {
   return fetch(`${config.api}/api/v1/journals/${id}`, {
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  }).then(responseOrError);
+};
+
+const createJournal = (
+  accessToken: string,
+  journal: Journal
+): Promise<Journal> => {
+  return fetch(`${config.api}/api/v1/journals`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(journal),
+  }).then(responseOrError);
+};
+
+const deleteJournal = (accessToken: string, id: string): Promise<string> => {
+  return fetch(`${config.api}/api/v1/journals/${id}`, {
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',

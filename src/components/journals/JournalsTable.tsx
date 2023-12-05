@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from 'components/ui/table';
-import { EditIcon, TrashIcon } from 'lucide-react';
+import { EditIcon } from 'lucide-react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useGetJournals } from 'service/journalQueries';
 import JournalBalanceStatus from './JournalBalanceStatus';
@@ -112,12 +112,9 @@ export const JournalsTable = () => {
                     </TableCell>
                     <TableCell>{journal.currency}</TableCell>
                     <TableCell className="text-right">
-                      <div className="max-w-[45px] flex justify-between">
+                      <div className="max-w-[45px] flex justify-end">
                         <Link to={`/trading/journals/${journal._id}`}>
                           <EditIcon className="h-4 w-4" />
-                        </Link>
-                        <Link to={`/trading/journals/${journal._id}`}>
-                          <TrashIcon className="h-4 w-4" />
                         </Link>
                       </div>
                     </TableCell>

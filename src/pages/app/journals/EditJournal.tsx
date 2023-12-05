@@ -26,9 +26,7 @@ export const EditJournal = () => {
           <span className="hidden md:flex">{journal?.name}</span>
         </PageHeader.Subtitle>
         <PageHeader.Action>
-          <span className="sm:hidden block">
-            <DeleteJournalButton />
-          </span>
+          <DeleteJournalButton journal={journal!} />
         </PageHeader.Action>
       </PageHeader>
       <JournalForm journal={journal} />

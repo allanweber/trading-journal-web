@@ -10,14 +10,17 @@ import {
   FormMessage,
 } from 'components/ui/form';
 import { Input } from 'components/ui/input';
+import { useToast } from 'components/ui/use-toast';
 import { useForm } from 'react-hook-form';
 
 import CurrencySelect from 'components/CurrencySelect';
 import { DateTimePicker } from 'components/DateTimePicker';
+import { MessageDisplay } from 'components/MessageDisplay';
 import { NumberInput } from 'components/NumberInput';
 import { Journal, journalSchema } from 'model/journal';
 import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useSaveJournal } from 'service/journalQueries';
 
 export const JournalForm = ({ journal }: { journal?: Journal }) => {
   const startValues = {
@@ -29,7 +32,10 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
   };
 
   const [values, setValues] = useState<Journal>(journal || startValues);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
+  const mutation = useSaveJournal();
   useEffect(() => {
     if (journal) {
       setValues(journal);
@@ -43,12 +49,20 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
   });
 
   function onSubmit(data: Journal) {
-    console.log(data);
+    mutation.mutate(data, {
+      onSuccess: (data) => {
+        toast({
+          title: 'Journal saved',
+          description: `Your journal ${data.name} was saved successfully`,
+        });
+        navigate('/trading/journals');
+      },
+    });
   }
 
   return (
     <>
-      {/* <MessageDisplay message={error} variant="destructive" /> */}
+      <MessageDisplay message={mutation.error} variant="destructive" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -91,7 +105,11 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Start Date</FormLabel>
-                <DateTimePicker setDate={field.onChange} date={field.value} />
+                <DateTimePicker
+                  setDate={field.onChange}
+                  date={field.value}
+                  disabled={journal}
+                />
                 <FormDescription>
                   This is the date when you started your journal used to
                   calculate your balance, and can never be changed. (required)
@@ -143,6 +161,7 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             <Button
               type="submit"
               className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
+              disabled={mutation.isPending}
             >
               Save
             </Button>

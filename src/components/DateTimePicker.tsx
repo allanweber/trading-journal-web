@@ -4,8 +4,9 @@ import { Separator } from '@radix-ui/react-dropdown-menu';
 import { Button } from 'components/ui/button';
 import { Calendar } from 'components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover';
-import { format, parse, parseISO } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { enGB } from 'date-fns/locale';
+import parseJSON from 'date-fns/parseJSON';
 import { LegacyRef, useState } from 'react';
 import { IMask, useIMask } from 'react-imask';
 import { TimePicker } from './TimePicker';
@@ -30,8 +31,9 @@ export const DateTimePicker = ({
   ...rest
 }: Props) => {
   if (typeof date === 'string') {
-    date = parseISO(date);
+    date = parseJSON(date);
   }
+  const dateFormat = withTime ? dateFnsWithTimeFormat : dateFnsFormat;
 
   const [month, setMonth] = useState<Date>(date ?? new Date());
 
@@ -71,8 +73,7 @@ export const DateTimePicker = ({
   const onComplete = (value: string) => {
     if (withTime && value.length < 16) return;
     if (value.length < 10) return;
-    const format = withTime ? dateFnsWithTimeFormat : dateFnsFormat;
-    const parsedDate = parse(value, format, new Date());
+    const parsedDate = parse(value, dateFormat, new Date());
     if (parsedDate) {
       setDate(parsedDate);
     }
@@ -80,6 +81,7 @@ export const DateTimePicker = ({
 
   const { ref, setValue } = useIMask(opts, {
     onComplete: onComplete,
+    onAccept: onComplete,
   });
 
   const todayClick = () => {
@@ -104,10 +106,7 @@ export const DateTimePicker = ({
   return (
     <div className="w-full flex justify-normal items-center space-x-2">
       <input
-        defaultValue={format(
-          date || new Date(),
-          withTime ? dateFnsWithTimeFormat : dateFnsFormat
-        )}
+        defaultValue={format(date || new Date(), dateFormat)}
         placeholder={
           placeholder || withTime ? dateFnsWithTimeFormat : dateFnsFormat
         }
@@ -119,7 +118,7 @@ export const DateTimePicker = ({
       />
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={'outline'} className="">
+          <Button variant={'outline'} className="" {...rest}>
             <CalendarIcon className=" h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>

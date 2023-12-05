@@ -24,7 +24,7 @@ export const journalSchema = z.object({
       message: 'name-max',
     }),
   description: z.string().optional(),
-  startDate: z.date({
+  startDate: z.coerce.date({
     required_error: 'start-date-required',
   }),
   startBalance: z

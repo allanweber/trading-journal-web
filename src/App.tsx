@@ -4,6 +4,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import { inject } from '@vercel/analytics';
+import { Toaster } from 'components/ui/toaster';
 import { AuthContext } from 'contexts/AuthContext';
 import { router } from 'pages/Routes';
 import { RouterProvider } from 'react-router-dom';
@@ -36,6 +37,7 @@ function App() {
           <RouterProvider router={router} />
         </QueryClientProvider>
       </AuthContext>
+      <Toaster />
     </main>
   );
 }
