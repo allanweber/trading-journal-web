@@ -16,7 +16,12 @@ import { Journal } from 'model/journal';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteJournal } from 'service/journalQueries';
 
-export const DeleteJournalButton = ({ journal }: { journal: Journal }) => {
+type Props = {
+  journal: Journal;
+  onError: (error: any) => void;
+};
+
+export const DeleteJournalButton = ({ journal, onError }: Props) => {
   const mutation = useDeleteJournal();
   const navigate = useNavigate();
 
@@ -24,7 +29,7 @@ export const DeleteJournalButton = ({ journal }: { journal: Journal }) => {
     return <div>Deleting...</div>;
   }
   if (mutation.isError) {
-    return <div>Error!</div>;
+    onError(mutation.error);
   }
 
   const confirm = () => {
