@@ -14,7 +14,7 @@ export const useGetJournals = (
   const { getToken } = useAuthState();
 
   return useQuery({
-    queryKey: ['journals', `journal-${query}-${currency}-${pageSize}-${page}`],
+    queryKey: ['journals', `journals-${query}-${currency}-${pageSize}-${page}`],
     queryFn: async () => {
       const accessToken = await getToken();
       return getJournals(accessToken!, query, currency, pageSize, page);
@@ -45,19 +45,36 @@ export const useSaveJournal = () => {
       return createJournal(accessToken!, journal);
     },
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({ queryKey: [`journal-${data._id}`] });
+      queryClient.invalidateQueries({
+        queryKey: [`journal-${data._id}`, 'all-journals'],
+      });
     },
   });
 };
 
 export const useDeleteJournal = () => {
   const { getToken } = useAuthState();
-
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['journals'],
     mutationFn: async (id: string) => {
       const accessToken = await getToken();
       return deleteJournal(accessToken!, id);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({ queryKey: ['all-journals'] });
+    },
+  });
+};
+
+export const useAllJournals = () => {
+  const { getToken } = useAuthState();
+
+  return useQuery({
+    queryKey: ['all-journals'],
+    queryFn: async () => {
+      const accessToken = await getToken();
+      return getAllJournals(accessToken!);
     },
   });
 };
@@ -120,6 +137,16 @@ const createJournal = (
 const deleteJournal = (accessToken: string, id: string): Promise<string> => {
   return fetch(`${config.api}/api/v1/journals/${id}`, {
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  }).then(responseOrError);
+};
+
+const getAllJournals = (accessToken: string): Promise<Journal[]> => {
+  return fetch(`${config.api}/api/v1/journals/all`, {
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',

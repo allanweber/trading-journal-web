@@ -1,8 +1,8 @@
 import { MessageDisplay } from 'components/MessageDisplay';
 import { PageHeader } from 'components/PageHeader';
-import { DeleteJournalButton } from 'components/journals/DeleteJournalButton';
-import { JournalForm } from 'components/journals/JournalForm';
 import { TableLoading } from 'components/table/TableLoading';
+import { DeleteJournalButton } from 'pages/app/journals/components/DeleteJournalButton';
+import { JournalForm } from 'pages/app/journals/components/JournalForm';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetJournal } from 'service/journalQueries';
@@ -27,8 +27,6 @@ export const EditJournal = () => {
   const onError = (error: any) => {
     setError(error);
   };
-
-  console.log('journal', error);
 
   return (
     <>

@@ -16,9 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
+    queries: {},
   },
   queryCache: new QueryCache({
     onError: (error) => {

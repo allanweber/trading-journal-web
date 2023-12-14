@@ -1,7 +1,7 @@
 import { PlusCircle } from 'lucide-react';
 import { getEntries } from 'model/entryType';
 import { NavLink } from 'react-router-dom';
-import { Button } from '../ui/button';
+import { Button } from '../../../../components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
+} from '../../../../components/ui/dropdown-menu';
 
 export const AddEntryButton = () => {
   return (

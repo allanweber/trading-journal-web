@@ -69,7 +69,7 @@ export function TablePagination(props: PaginatedParams) {
   return (
     <div className="flex items-center justify-between px-2">
       <div className="hidden md:flex flex-1 text-sm text-muted-foreground">
-        {total === 0 ? 'none row' : total === 1 ? '1 row' : `${total} rows`}
+        {total === 0 ? 'no rows' : total === 1 ? '1 row' : `${total} rows`}
       </div>
       <div className="flex items-center md:space-x-6 lg:space-x-8">
         <div className="hidden md:flex">

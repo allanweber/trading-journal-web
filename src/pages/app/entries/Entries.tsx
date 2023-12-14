@@ -1,5 +1,7 @@
-import { AddEntryButton } from 'components/entries/AddEntryButton';
 import { PageHeader } from 'components/PageHeader';
+import { AddEntryButton } from 'pages/app/entries/components/AddEntryButton';
+import { EntriesTable } from './components/EntriesTable';
+import { EntrySearch } from './components/EntrySearch';
 
 export const Entries = () => {
   return (
@@ -13,6 +15,8 @@ export const Entries = () => {
           <AddEntryButton />
         </PageHeader.Action>
       </PageHeader>
+      <EntrySearch />
+      <EntriesTable />
     </>
   );
 };

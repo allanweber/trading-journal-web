@@ -1,7 +1,7 @@
-import { AddJournalButton } from 'components/journals/AddJournalButton';
-import { JournalSearch } from 'components/journals/JournalSearch';
-import { JournalsTable } from 'components/journals/JournalsTable';
 import { PageHeader } from 'components/PageHeader';
+import { AddJournalButton } from 'pages/app/journals/components/AddJournalButton';
+import { JournalSearch } from 'pages/app/journals/components/JournalSearch';
+import { JournalsTable } from 'pages/app/journals/components/JournalsTable';
 
 export const Journals = () => {
   return (

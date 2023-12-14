@@ -10,12 +10,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { Entries } from './app/Entries';
-import { UserProfile } from './app/UserProfile';
-import { UserSettings } from './app/UserSettings';
+import { Entries } from './app/entries/Entries';
+import { NewEntry } from './app/entries/NewEntry';
 import { EditJournal } from './app/journals/EditJournal';
 import { Journals } from './app/journals/Journals';
 import { NewJournal } from './app/journals/NewJournal';
+import { UserProfile } from './app/user/UserProfile';
+import { UserSettings } from './app/user/UserSettings';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ export const router = createBrowserRouter(
         <Route path="journals/new" element={<NewJournal />} />
         <Route path="journals/:id" element={<EditJournal />} />
         <Route path="entries" element={<Entries />} />
+        <Route path="entries/new/:tradeType" element={<NewEntry />} />
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />
           <Route path="profile" element={<UserProfile />} />

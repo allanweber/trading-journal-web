@@ -1,5 +1,5 @@
 import { PageHeader } from 'components/PageHeader';
-import { JournalForm } from 'components/journals/JournalForm';
+import { JournalForm } from 'pages/app/journals/components/JournalForm';
 
 export const NewJournal = () => {
   return (

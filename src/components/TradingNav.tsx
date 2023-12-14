@@ -2,8 +2,8 @@ import { Disclosure } from '@headlessui/react';
 import { cn } from 'lib/utils';
 import { Menu, X } from 'lucide-react';
 import { NavLink, useLocation } from 'react-router-dom';
+import { UserNav } from '../pages/app/user/components/UserNav';
 import { Icons } from './icons';
-import { UserNav } from './user/UserNav';
 
 const items = [
   {
@@ -23,6 +23,17 @@ const items = [
 export default function TradingNav() {
   const location = useLocation();
   const { pathname } = location;
+
+  const isActive = (path: string) => {
+    const pathParts = path.split('/');
+    const pathNameParts = pathname.split('/');
+
+    if (pathParts.length > 2 && pathNameParts.length > 2) {
+      return pathNameParts[2].startsWith(pathParts[2]);
+    }
+
+    return path === pathname;
+  };
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -54,7 +65,7 @@ export default function TradingNav() {
                       key={item.name}
                       to={item.href}
                       className={cn(
-                        item.href === pathname
+                        isActive(item.href)
                           ? 'border-gray-900 text-gray-900'
                           : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
                         'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
@@ -80,7 +91,7 @@ export default function TradingNav() {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    item.href === pathname
+                    isActive(item.href)
                       ? 'bg-gray-50 border-gray-500 text-gray-700'
                       : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
                     'block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
