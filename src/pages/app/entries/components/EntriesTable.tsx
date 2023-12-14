@@ -71,7 +71,7 @@ export const EntriesTable = () => {
                     <div className="flex justify-end mb-2">
                       <NumberDisplay
                         value={entry.price}
-                        //   currency={entry.currency}
+                        currency={entry.journal.currency}
                       />
                     </div>
                   </div>
@@ -94,6 +94,7 @@ export const EntriesTable = () => {
             <TableRow>
               <TableHead>Symbol</TableHead>
               <TableHead>Entry Type</TableHead>
+              <TableHead>Journal</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Price</TableHead>
               <TableHead className="w-[100px]">Result</TableHead>
@@ -120,20 +121,21 @@ export const EntriesTable = () => {
                       </Link>
                     </TableCell>
                     <TableCell>{entry.entryType}</TableCell>
+                    <TableCell>{entry.journal.name}</TableCell>
                     <TableCell>
                       <DateDisplay value={entry.date} />
                     </TableCell>
                     <TableCell>
                       <NumberDisplay
                         value={entry.price}
-                        //   currency={entry.currency}
+                        currency={entry.journal.currency}
                       />
                     </TableCell>
                     <TableCell>
                       <ColoredNumber value={entry.result}>
                         <NumberDisplay
                           value={entry.result}
-                          //   currency={entry.currency}
+                          currency={entry.journal.currency}
                         />
                       </ColoredNumber>
                     </TableCell>

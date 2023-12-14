@@ -34,7 +34,7 @@ export default function JournalSelect(props: Props) {
         ) : isSuccess && journals ? (
           journals.map((journal) => (
             <SelectItem value={journal._id!} key={journal._id!}>
-              {journal.name} - {journal.description}: {journal.currency}
+              {journal.name} - {journal.description} ({journal.currency})
             </SelectItem>
           ))
         ) : (
