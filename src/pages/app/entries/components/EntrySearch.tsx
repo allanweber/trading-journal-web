@@ -44,5 +44,5 @@ export const EntrySearch = () => {
     filters.unshift(journalFilter);
   }
 
-  return <Search placeholder="Search entries" filters={filters} />;
+  return <Search placeholder="Search by symbol" filters={filters} />;
 };

@@ -35,6 +35,35 @@ export const useGetEntries = (
   });
 };
 
+export const useGetEntry = (id: string) => {
+  const { getToken } = useAuthState();
+
+  return useQuery({
+    queryKey: [`entry-${id}`],
+    queryFn: async () => {
+      const accessToken = await getToken();
+      return getEntry(accessToken!, id);
+    },
+  });
+};
+
+export const useDeleteEntry = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['entries'],
+    mutationFn: async (id: string) => {
+      const accessToken = await getToken();
+      return deleteEntry(accessToken!, id);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ['entries', `entry-${data}`],
+      });
+    },
+  });
+};
+
 export const useSaveWithdrawal = () => {
   const { getToken } = useAuthState();
   const queryClient = useQueryClient();
@@ -85,6 +114,26 @@ const getEntries = (
 
   return fetch(url, {
     method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  }).then(responseOrError);
+};
+
+const getEntry = (accessToken: string, id: string): Promise<Entry> => {
+  return fetch(`${config.api}/api/v1/entries/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  }).then(responseOrError);
+};
+
+const deleteEntry = (accessToken: string, id: string): Promise<string> => {
+  return fetch(`${config.api}/api/v1/entries/${id}`, {
+    method: 'DELETE',
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',

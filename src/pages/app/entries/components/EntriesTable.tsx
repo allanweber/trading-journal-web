@@ -1,10 +1,17 @@
-import { Separator } from '@radix-ui/react-dropdown-menu';
 import ColoredNumber from 'components/ColoredNumber';
 import DateDisplay from 'components/DateDisplay';
 import { MessageDisplay } from 'components/MessageDisplay';
 import NumberDisplay from 'components/NumberDisplay';
 import { TableLoading } from 'components/table/TableLoading';
 import { TablePagination } from 'components/table/TablePagination';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from 'components/ui/card';
 import {
   Table,
   TableBody,
@@ -14,6 +21,7 @@ import {
   TableRow,
 } from 'components/ui/table';
 import { EditIcon } from 'lucide-react';
+import { EntryType } from 'model/entryType';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useGetEntries } from 'service/entryQueries';
 
@@ -50,34 +58,40 @@ export const EntriesTable = () => {
           entries.data &&
           (entries.pagination.total > 0 ? (
             entries?.data?.map((entry) => (
-              <div
+              <Card
                 key={entry._id}
                 className="hover:bg-slate-200"
                 onClick={() => navigate(`/trading/entries/${entry._id}`)}
               >
-                <div className="mb-2 w-full rounded-md p-4">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xl font-medium">{entry.symbol}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm">{entry.entryType}</p>
-                  </div>
+                <CardHeader>
+                  <CardTitle>
+                    {entry.entryType === EntryType.Trade ? (
+                      <>{entry.symbol}</>
+                    ) : (
+                      <>{entry.entryType}</>
+                    )}
+                  </CardTitle>
+                  <CardDescription>{entry.journal.name}</CardDescription>
+                </CardHeader>
+                <CardContent>{/* <p>Card Content</p> */}</CardContent>
+                <CardFooter>
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
                       <p>
                         <DateDisplay value={entry.date} />
                       </p>
                     </div>
-                    <div className="flex justify-end mb-2">
-                      <NumberDisplay
-                        value={entry.price}
-                        currency={entry.journal.currency}
-                      />
+                    <div className="flex justify-end">
+                      <ColoredNumber value={entry.result}>
+                        <NumberDisplay
+                          value={entry.result}
+                          currency={entry.journal.currency}
+                        />
+                      </ColoredNumber>
                     </div>
                   </div>
-                </div>
-                <Separator />
-              </div>
+                </CardFooter>
+              </Card>
             ))
           ) : (
             <div className="mb-2 w-full rounded-md p-4">
@@ -97,8 +111,8 @@ export const EntriesTable = () => {
               <TableHead>Journal</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Price</TableHead>
-              <TableHead className="w-[100px]">Result</TableHead>
-              <TableHead className="w-[100px]"></TableHead>
+              <TableHead>Result</TableHead>
+              <TableHead className="w-[45px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

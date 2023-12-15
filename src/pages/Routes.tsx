@@ -10,6 +10,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+import { EditEntry } from './app/entries/EditEntry';
 import { Entries } from './app/entries/Entries';
 import { NewEntry } from './app/entries/NewEntry';
 import { EditJournal } from './app/journals/EditJournal';
@@ -33,6 +34,7 @@ export const router = createBrowserRouter(
         <Route path="journals/:id" element={<EditJournal />} />
         <Route path="entries" element={<Entries />} />
         <Route path="entries/new/:tradeType" element={<NewEntry />} />
+        <Route path="entries/:id" element={<EditEntry />} />
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />
           <Route path="profile" element={<UserProfile />} />

@@ -12,17 +12,18 @@ import {
 import { Button } from 'components/ui/button';
 import { toast } from 'components/ui/use-toast';
 import { TrashIcon } from 'lucide-react';
-import { Journal } from 'model/journal';
+import { Entry } from 'model/entry';
+import { EntryType } from 'model/entryType';
 import { useNavigate } from 'react-router-dom';
-import { useDeleteJournal } from 'service/journalQueries';
+import { useDeleteEntry } from 'service/entryQueries';
 
 type Props = {
-  journal: Journal;
+  entry: Entry;
   onError: (error: any) => void;
 };
 
-export const DeleteJournalButton = ({ journal, onError }: Props) => {
-  const mutation = useDeleteJournal();
+export const DeleteEntryButton = ({ entry, onError }: Props) => {
+  const mutation = useDeleteEntry();
   const navigate = useNavigate();
 
   if (mutation.isPending) {
@@ -33,13 +34,15 @@ export const DeleteJournalButton = ({ journal, onError }: Props) => {
   }
 
   const confirm = () => {
-    mutation.mutate(journal._id!, {
+    mutation.mutate(entry._id!, {
       onSuccess: () => {
         toast({
-          title: 'Journal Deleted',
-          description: `Your journal ${journal.name} was deleted successfully`,
+          title: 'Entry Deleted',
+          description: `Entry ${
+            entry.entryType === EntryType.Trade ? entry.symbol : entry.entryType
+          } from journal ${entry.journal.name} was deleted successfully`,
         });
-        navigate('/trading/journals');
+        navigate('/trading/entries');
       },
     });
   };
@@ -56,7 +59,11 @@ export const DeleteJournalButton = ({ journal, onError }: Props) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            {`This will permanently delete the journal "${journal.name}", and remove all of its data and entries.`}
+            {`This will permanently delete the entry "${
+              entry.entryType === EntryType.Trade
+                ? entry.symbol
+                : entry.entryType
+            }" from journal ${entry.journal.name}, and remove all of its data.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

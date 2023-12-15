@@ -3,15 +3,13 @@ import type { PropsWithChildren } from 'react';
 
 type Props = {
   value: number;
-  negativeColor?: string;
-  positiveColor?: string;
 };
 
 export default function ColoredNumber(props: PropsWithChildren<Props>) {
-  const { children, value, negativeColor, positiveColor } = props;
+  const { children, value } = props;
 
-  const positive = positiveColor ?? 'text-green-600';
-  const negative = negativeColor ?? 'text-red-600';
+  const positive = 'text-green-600';
+  const negative = 'text-red-600';
   const positiveValue = value >= 0;
 
   return (

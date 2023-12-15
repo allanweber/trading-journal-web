@@ -62,7 +62,9 @@ export const useDeleteJournal = () => {
       return deleteJournal(accessToken!, id);
     },
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({ queryKey: ['all-journals'] });
+      queryClient.invalidateQueries({
+        queryKey: ['all-journals', `journal-${data}`],
+      });
     },
   });
 };

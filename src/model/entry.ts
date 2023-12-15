@@ -90,7 +90,7 @@ export const depositSchema = z.object({
     })
     .min(1, { message: 'journal-required' }),
 
-  date: z.date({
+  date: z.coerce.date({
     required_error: 'date-required',
   }),
   price: z
@@ -119,7 +119,7 @@ export const withdrawalSchema = z.object({
       required_error: 'journal-required',
     })
     .min(1, { message: 'journal-required' }),
-  date: z.date({
+  date: z.coerce.date({
     required_error: 'date-required',
   }),
   price: z
@@ -148,7 +148,7 @@ export const taxesSchema = z.object({
       required_error: 'journal-required',
     })
     .min(1, { message: 'journal-required' }),
-  date: z.date({
+  date: z.coerce.date({
     required_error: 'date-required',
   }),
   price: z
@@ -177,7 +177,7 @@ export const dividendSchema = z.object({
       required_error: 'journal-required',
     })
     .min(1, { message: 'journal-required' }),
-  date: z.date({
+  date: z.coerce.date({
     required_error: 'date-required',
   }),
   price: z
@@ -214,7 +214,7 @@ export const entrySchema = z.object({
       required_error: 'journal-required',
     })
     .min(1, { message: 'journal-required' }),
-  date: z.date({
+  date: z.coerce.date({
     required_error: 'date-required',
   }),
   price: z
@@ -256,7 +256,7 @@ export const entrySchema = z.object({
     .positive({ message: 'loss-positive' })
     .max(9999999999, { message: 'loss-max' })
     .nullish(),
-  exitDate: z.date().nullish(),
+  exitDate: z.coerce.date().nullish(),
   exitPrice: z
     .number()
     .positive({ message: 'exitPrice-positive' })

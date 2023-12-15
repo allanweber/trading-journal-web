@@ -118,7 +118,7 @@ export const DateTimePicker = ({
       />
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant={'outline'} className="" {...rest}>
+          <Button variant={'outline'} className="" {...rest} tabIndex={-1}>
             <CalendarIcon className=" h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
