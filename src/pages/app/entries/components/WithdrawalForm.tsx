@@ -77,6 +77,7 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
                 <JournalSelect
                   onValueChange={field.onChange}
                   value={field.value}
+                  disabled={withdrawal}
                 />
                 <FormDescription>
                   This is the journal where your withdrawal takes place.
@@ -117,7 +118,7 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
                 <FormLabel>Withdrawal value</FormLabel>
                 <NumberInput {...field} disabled={withdrawal} />
                 <FormDescription>
-                  This is the value or your withdrawal, this is used to
+                  This is the value of your withdrawal, this is used to
                   calculate your balance, and can never be changed. (required)
                 </FormDescription>
                 <FormMessage />

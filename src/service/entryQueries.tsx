@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthState } from 'lib/authentication';
 import { config } from 'lib/config';
-import { Entry, Withdrawal } from 'model/entry';
+import { Deposit, Dividend, Entry, Taxes, Withdrawal } from 'model/entry';
 import { Paginated } from 'model/pagination';
 import { responseOrError } from './response';
 
@@ -72,7 +72,61 @@ export const useSaveWithdrawal = () => {
     mutationKey: ['entries'],
     mutationFn: async (withdrawal: Withdrawal) => {
       const accessToken = await getToken();
-      return createWithdrawal(accessToken!, withdrawal);
+      return saveWithdrawal(accessToken!, withdrawal);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      });
+    },
+  });
+};
+
+export const useSaveDeposit = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['entries'],
+    mutationFn: async (deposit: Deposit) => {
+      const accessToken = await getToken();
+      return saveDeposit(accessToken!, deposit);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      });
+    },
+  });
+};
+
+export const useSaveTaxes = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['entries'],
+    mutationFn: async (taxes: Taxes) => {
+      const accessToken = await getToken();
+      return saveTaxes(accessToken!, taxes);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      });
+    },
+  });
+};
+
+export const useSaveDividend = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['entries'],
+    mutationFn: async (dividend: Dividend) => {
+      const accessToken = await getToken();
+      return saveDividend(accessToken!, dividend);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
@@ -141,9 +195,9 @@ const deleteEntry = (accessToken: string, id: string): Promise<string> => {
   }).then(responseOrError);
 };
 
-const createWithdrawal = (
+const saveWithdrawal = (
   accessToken: string,
-  journal: Withdrawal
+  withdrawal: Withdrawal
 ): Promise<Withdrawal> => {
   return fetch(`${config.api}/api/v1/entries/withdrawals`, {
     method: 'POST',
@@ -151,6 +205,45 @@ const createWithdrawal = (
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(journal),
+    body: JSON.stringify(withdrawal),
+  }).then(responseOrError);
+};
+
+const saveDeposit = (
+  accessToken: string,
+  deposit: Deposit
+): Promise<Deposit> => {
+  return fetch(`${config.api}/api/v1/entries/deposits`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(deposit),
+  }).then(responseOrError);
+};
+
+const saveTaxes = (accessToken: string, taxes: Taxes): Promise<Taxes> => {
+  return fetch(`${config.api}/api/v1/entries/taxes`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(taxes),
+  }).then(responseOrError);
+};
+
+const saveDividend = (
+  accessToken: string,
+  dividend: Dividend
+): Promise<Dividend> => {
+  return fetch(`${config.api}/api/v1/entries/dividends`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dividend),
   }).then(responseOrError);
 };

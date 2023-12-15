@@ -130,7 +130,7 @@ export const EntriesTable = () => {
                 entries.data.map((entry) => (
                   <TableRow key={entry._id}>
                     <TableCell className="font-medium">
-                      <Link to={`/trading/journals/${entry._id}`}>
+                      <Link to={`/trading/entries/${entry._id}`}>
                         {entry.symbol}
                       </Link>
                     </TableCell>
