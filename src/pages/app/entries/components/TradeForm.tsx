@@ -16,15 +16,15 @@ import { EntryType } from 'model/entryType';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useSaveDeposit } from 'service/entryQueries';
+import { useSaveTrade } from 'service/entryQueries';
 
-import { Separator } from '@radix-ui/react-dropdown-menu';
 import { DateTimePicker } from 'components/DateTimePicker';
 import { DirectionSelect } from 'components/DirectionSelect';
 import JournalSelect from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
 import { Input } from 'components/ui/input';
+import { Separator } from 'components/ui/separator';
 import { Direction } from 'model/direction';
 import { NavLink } from 'react-router-dom';
 
@@ -44,7 +44,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const mutation = useSaveDeposit();
+  const mutation = useSaveTrade();
 
   useEffect(() => {
     if (trade) {
@@ -59,16 +59,15 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
   });
 
   function onSubmit(data: Trade) {
-    console.log(data);
-    // mutation.mutate(data, {
-    //   onSuccess: (data) => {
-    //     toast({
-    //       title: 'Trade saved',
-    //       description: `Your trade was saved successfully`,
-    //     });
-    //     navigate('/trading/entries');
-    //   },
-    // });
+    mutation.mutate(data, {
+      onSuccess: (data) => {
+        toast({
+          title: 'Trade saved',
+          description: `Your trade was saved successfully`,
+        });
+        navigate('/trading/entries');
+      },
+    });
   }
 
   return (
@@ -160,9 +159,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       />
 
                       <FormDescription>
-                        This is the date when your trade takes place, this is
-                        used to calculate your balance, and can never be
-                        changed. (required)
+                        This is the date when your trade started. (required)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -183,9 +180,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       </FormControl>
 
                       <FormDescription>
-                        This is the value of your trade, this is used to
-                        calculate your balance, and can never be changed.
-                        (required)
+                        This is the value of your trade. (required)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -206,9 +201,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       </FormControl>
 
                       <FormDescription>
-                        This is the size of your trade, how many shares are you
-                        buying or selling, this is used to calculate your
-                        balance, and can never be changed. (required)
+                        How many shares are you buying or selling. (required)
                       </FormDescription>
                     </FormItem>
                   )}
@@ -216,8 +209,8 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
               </div>
 
               <div className="col-span-12">
-                <Separator className="mb-3" />
-                <h3 className="-ml-1">Risk Management</h3>
+                <Separator />
+                <h3 className="-ml-1 mt-1">Risk Management</h3>
               </div>
 
               <div className="col-span-12 md:col-span-6 lg:col-span-4">
@@ -283,7 +276,6 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                         withTime
                         setDate={field.onChange}
                         date={field.value ?? undefined}
-                        disabled={trade}
                       />
 
                       <FormDescription>
@@ -329,8 +321,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       </FormControl>
 
                       <FormDescription>
-                        If there are some costs for this trade you can inform it
-                        there (optional)
+                        Possible costs for this trade. there (optional)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

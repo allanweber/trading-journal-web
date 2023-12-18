@@ -1,7 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthState } from 'lib/authentication';
 import { config } from 'lib/config';
-import { Deposit, Dividend, Entry, Taxes, Withdrawal } from 'model/entry';
+import {
+  Deposit,
+  Dividend,
+  Entry,
+  Taxes,
+  Trade,
+  Withdrawal,
+} from 'model/entry';
 import { Paginated } from 'model/pagination';
 import { responseOrError } from './response';
 
@@ -136,6 +143,24 @@ export const useSaveDividend = () => {
   });
 };
 
+export const useSaveTrade = () => {
+  const { getToken } = useAuthState();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['entries'],
+    mutationFn: async (trade: Trade) => {
+      const accessToken = await getToken();
+      return saveTrade(accessToken!, trade);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ['entries'],
+      });
+    },
+  });
+};
+
 const getEntries = (
   accessToken: string,
   query?: string,
@@ -239,6 +264,17 @@ const saveDividend = (
   dividend: Dividend
 ): Promise<Dividend> => {
   return fetch(`${config.api}/api/v1/entries/dividends`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dividend),
+  }).then(responseOrError);
+};
+
+const saveTrade = (accessToken: string, dividend: Trade): Promise<Trade> => {
+  return fetch(`${config.api}/api/v1/entries/trades`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${accessToken}`,

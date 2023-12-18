@@ -78,7 +78,7 @@ export const EntriesTable = () => {
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
                       <p>
-                        <DateDisplay value={entry.date} />
+                        <DateDisplay withTime value={entry.date} />
                       </p>
                     </div>
                     <div className="flex justify-end">
@@ -137,7 +137,7 @@ export const EntriesTable = () => {
                     <TableCell>{entry.entryType}</TableCell>
                     <TableCell>{entry.journal.name}</TableCell>
                     <TableCell>
-                      <DateDisplay value={entry.date} />
+                      <DateDisplay withTime value={entry.date} />
                     </TableCell>
                     <TableCell>
                       <NumberDisplay
