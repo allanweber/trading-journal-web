@@ -35,7 +35,7 @@ export const DateTimePicker = ({
   }
   const dateFormat = withTime ? dateFnsWithTimeFormat : dateFnsFormat;
 
-  const [month, setMonth] = useState<Date>(date ?? new Date());
+  const [month, setMonth] = useState<Date | undefined>(date);
 
   const [opts] = useState({
     mask: withTime ? maskFormatWithTime : maskFormat,
@@ -106,10 +106,8 @@ export const DateTimePicker = ({
   return (
     <div className="w-full flex justify-normal items-center space-x-2">
       <input
-        defaultValue={format(date || new Date(), dateFormat)}
-        placeholder={
-          placeholder || withTime ? dateFnsWithTimeFormat : dateFnsFormat
-        }
+        defaultValue={date ? format(date, dateFormat) : undefined}
+        placeholder={placeholder || 'DD/MM/YYYY' + (withTime ? ' HH:mm' : '')}
         type={'text'}
         className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         ref={ref as LegacyRef<HTMLInputElement>}
