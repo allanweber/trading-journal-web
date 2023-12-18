@@ -256,7 +256,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
               </div>
 
               <div className="col-span-12 md:col-span-6 lg:col-span-4">
-                {/* TODO: Slider for Risk Reward */}
+                {/* Add strategy here */}
               </div>
 
               <div className="col-span-12">
