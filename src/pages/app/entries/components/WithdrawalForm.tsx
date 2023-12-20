@@ -22,6 +22,8 @@ import { DateTimePicker } from 'components/DateTimePicker';
 import JournalSelect from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
+import { getSymbol } from 'model/currency';
+import { Journal } from 'model/journal';
 import { NavLink } from 'react-router-dom';
 
 export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
@@ -34,6 +36,7 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
   };
 
   const [values, setValues] = useState<Withdrawal>(withdrawal || startValues);
+  const [journal, setJournal] = useState<Journal | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -78,6 +81,7 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
                   onValueChange={field.onChange}
                   value={field.value}
                   disabled={withdrawal}
+                  onJournalChange={(journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your withdrawal takes place.
@@ -116,7 +120,12 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Withdrawal value</FormLabel>
-                <NumberInput {...field} disabled={withdrawal} />
+                <NumberInput
+                  disabled={withdrawal}
+                  onChange={field.onChange}
+                  value={field.value}
+                  currency={getSymbol(journal?.currency || '$')}
+                />
                 <FormDescription>
                   This is the value of your withdrawal, this is used to
                   calculate your balance, and can never be changed. (required)

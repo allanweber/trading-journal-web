@@ -1,3 +1,4 @@
+import { Journal } from 'model/journal';
 import { useAllJournals } from 'service/journalQueries';
 import { FormControl } from './ui/form';
 import {
@@ -11,18 +12,35 @@ import {
 type Props = {
   onValueChange: (value: string) => void;
   value: string;
+  onJournalChange?: (journal: Journal) => void;
   placeholder?: string;
   [x: string]: any;
 };
 
 export default function JournalSelect(props: Props) {
-  const { onValueChange, value: defaultValue, placeholder, ...rest } = props;
+  const {
+    onValueChange,
+    value: defaultValue,
+    onJournalChange,
+    placeholder,
+    ...rest
+  } = props;
   const currentPlaceholder = placeholder || 'Select a Journal';
 
   const { data: journals, isLoading, isSuccess } = useAllJournals();
 
+  const select = (value: string) => {
+    onValueChange(value);
+    if (onJournalChange) {
+      const journal = journals?.find((j) => j._id === value);
+      if (journal) {
+        onJournalChange(journal);
+      }
+    }
+  };
+
   return (
-    <Select onValueChange={onValueChange} value={defaultValue} {...rest}>
+    <Select onValueChange={select} value={defaultValue} {...rest}>
       <FormControl>
         <SelectTrigger>
           <SelectValue placeholder={currentPlaceholder} />

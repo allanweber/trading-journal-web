@@ -9,21 +9,22 @@ type Props = {
 
 export default function JournalBalanceStatus(props: Props) {
   const { journal } = props;
-  const growing =
-    (journal.balance ? journal.balance.current : 0) >= journal.startBalance;
+  const startBalance = journal.startBalance;
+  const currentBalance = journal.balance?.current ?? 0;
+
   return (
     <div className="flex space-y-2">
-      {growing ? (
+      {currentBalance > startBalance ? (
         <TrendingUp
           className="h-5 w-5 text-green-600 mt-2 mr-2"
           aria-hidden="true"
         />
-      ) : (
+      ) : currentBalance < startBalance ? (
         <TrendingDown
           className="h-5 w-5 text-red-600 mt-2 mr-2"
           aria-hidden="true"
         />
-      )}
+      ) : null}
       {journal.balance && (
         <ColoredNumber value={journal.balance.current}>
           <NumberDisplay

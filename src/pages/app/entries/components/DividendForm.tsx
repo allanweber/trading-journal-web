@@ -23,6 +23,8 @@ import JournalSelect from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
 import { Input } from 'components/ui/input';
+import { getSymbol } from 'model/currency';
+import { Journal } from 'model/journal';
 import { NavLink } from 'react-router-dom';
 
 export default function DividendForm({ dividend }: { dividend?: Dividend }) {
@@ -36,6 +38,7 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
   };
 
   const [values, setValues] = useState<Dividend>(dividend || startValues);
+  const [journal, setJournal] = useState<Journal | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -80,6 +83,7 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
                   onValueChange={field.onChange}
                   value={field.value}
                   disabled={dividend}
+                  onJournalChange={(journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your dividend takes place.
@@ -136,7 +140,12 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Dividend value</FormLabel>
-                <NumberInput {...field} disabled={dividend} />
+                <NumberInput
+                  disabled={dividend}
+                  onChange={field.onChange}
+                  value={field.value}
+                  currency={getSymbol(journal?.currency || '$')}
+                />
                 <FormDescription>
                   This is the value of your dividend, this is used to calculate
                   your balance, and can never be changed. (required)

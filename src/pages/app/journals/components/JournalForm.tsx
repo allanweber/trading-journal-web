@@ -17,6 +17,7 @@ import CurrencySelect from 'components/CurrencySelect';
 import { DateTimePicker } from 'components/DateTimePicker';
 import { MessageDisplay } from 'components/MessageDisplay';
 import { NumberInput } from 'components/NumberInput';
+import { getSymbol } from 'model/currency';
 import { Journal, journalSchema } from 'model/journal';
 import { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -125,7 +126,12 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Start Balance</FormLabel>
-                <NumberInput {...field} disabled={journal} />
+                <NumberInput
+                  onChange={field.onChange}
+                  value={field.value}
+                  disabled={journal}
+                  currency={getSymbol(form.getValues('currency') || '$')}
+                />
                 <FormDescription>
                   This is the balance of your account at the start of your
                   journal, and can never be changed. (required)

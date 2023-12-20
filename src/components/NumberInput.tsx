@@ -1,4 +1,4 @@
-import { LegacyRef, useState } from 'react';
+import { LegacyRef, useEffect, useState } from 'react';
 import { useIMask } from 'react-imask';
 
 type Props = {
@@ -25,7 +25,7 @@ export const NumberInput = ({
 }: Props) => {
   const [opts, setOps] = useState({
     mask: currency ? `${currency} num` : 'num',
-    lazy: false,
+    lazy: true,
     blocks: {
       num: {
         mask: Number,
@@ -39,29 +39,33 @@ export const NumberInput = ({
     },
   });
 
-  // useEffect(() => {
-  //   setOps({
-  //     mask: currency ? `${currency} num` : 'num',
-  //     lazy: false,
-  //     blocks: {
-  //       num: {
-  //         mask: Number,
-  //         radix: ',',
-  //         thousandsSeparator: '.',
-  //         mapToRadix: ['.', ','],
-  //         scale: scale,
-  //         padFractionalZeros: false,
-  //         normalizeZeros: true,
-  //         max: Number.MAX_VALUE,
-  //         min: 0,
-  //       },
-  //     },
-  //   });
-  // }, [currency, scale]);
+  useEffect(() => {
+    setOps({
+      mask: currency ? `${currency} num` : 'num',
+      lazy: true,
+      blocks: {
+        num: {
+          mask: Number,
+          radix: ',',
+          thousandsSeparator: '.',
+          mapToRadix: ['.'],
+          scale: scale,
+          padFractionalZeros: true,
+          normalizeZeros: true,
+        },
+      },
+    });
+  }, [currency, scale]);
 
   const { ref } = useIMask(opts, {
     onAccept: (val) => {
-      const num = parseFloat(val.replace('.', '').replace(',', '.'));
+      const num = parseFloat(
+        val
+          .replace(currency || '$', '')
+          .trim()
+          .replace('.', '')
+          .replace(',', '.')
+      );
       onChange(num);
     },
   });
@@ -70,7 +74,7 @@ export const NumberInput = ({
     <div className="pt-2">
       <input
         defaultValue={value || ''}
-        placeholder={placeholder || '0'}
+        placeholder={placeholder || (currency ? `${currency} 0,00` : '0,00')}
         type={'text'}
         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         ref={ref as LegacyRef<HTMLInputElement>}

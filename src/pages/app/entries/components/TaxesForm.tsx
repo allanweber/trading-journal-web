@@ -22,6 +22,8 @@ import { DateTimePicker } from 'components/DateTimePicker';
 import JournalSelect from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
+import { getSymbol } from 'model/currency';
+import { Journal } from 'model/journal';
 import { NavLink } from 'react-router-dom';
 
 export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
@@ -34,6 +36,7 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
   };
 
   const [values, setValues] = useState<Taxes>(taxes || startValues);
+  const [journal, setJournal] = useState<Journal | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -78,6 +81,7 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
                   onValueChange={field.onChange}
                   value={field.value}
                   disabled={taxes}
+                  onJournalChange={(journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your taxes takes place. (required)
@@ -114,7 +118,12 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Taxes value</FormLabel>
-                <NumberInput {...field} disabled={taxes} />
+                <NumberInput
+                  disabled={taxes}
+                  onChange={field.onChange}
+                  value={field.value}
+                  currency={getSymbol(journal?.currency || '$')}
+                />
                 <FormDescription>
                   This is the value of your taxes, this is used to calculate
                   your balance, and can never be changed. (required)

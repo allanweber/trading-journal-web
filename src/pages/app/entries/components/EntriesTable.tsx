@@ -49,7 +49,9 @@ const ResultChange = ({ entry }: { entry: Entry }) => {
 const Dates = ({ entry }: { entry: Entry }) => {
   return (
     <div className="flex flex-col space-y-2">
-      <DateDisplay withTime value={entry.date} />
+      <div>
+        <DateDisplay withTime value={entry.date} />
+      </div>
       <div>
         {entry.exitDate && <DateDisplay withTime value={entry.exitDate} />}
       </div>
@@ -109,9 +111,7 @@ export const EntriesTable = () => {
                 <CardFooter>
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
-                      <p>
-                        <Dates entry={entry} />
-                      </p>
+                      <Dates entry={entry} />
                     </div>
                     <div className="flex justify-end">
                       <ResultChange entry={entry} />

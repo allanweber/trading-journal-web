@@ -22,6 +22,8 @@ import { DateTimePicker } from 'components/DateTimePicker';
 import JournalSelect from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
+import { getSymbol } from 'model/currency';
+import { Journal } from 'model/journal';
 import { NavLink } from 'react-router-dom';
 
 export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
@@ -34,6 +36,7 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
   };
 
   const [values, setValues] = useState<Deposit>(deposit || startValues);
+  const [journal, setJournal] = useState<Journal | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -78,6 +81,7 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
                   onValueChange={field.onChange}
                   value={field.value}
                   disabled={deposit}
+                  onJournalChange={(journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your deposit takes place. (required)
@@ -115,7 +119,12 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Deposit value</FormLabel>
-                <NumberInput {...field} disabled={deposit} />
+                <NumberInput
+                  disabled={deposit}
+                  onChange={field.onChange}
+                  value={field.value}
+                  currency={getSymbol(journal?.currency || '$')}
+                />
                 <FormDescription>
                   This is the value o5 your deposit, this is used to calculate
                   your balance, and can never be changed. (required)
