@@ -21,9 +21,41 @@ import {
   TableRow,
 } from 'components/ui/table';
 import { EditIcon } from 'lucide-react';
+import { Entry } from 'model/entry';
 import { EntryType } from 'model/entryType';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useGetEntries } from 'service/entryQueries';
+
+const ResultChange = ({ entry }: { entry: Entry }) => {
+  if (!entry.result) return <span className="text-muted-foreground">Open</span>;
+
+  return (
+    <div className="flex flex-col space-y-2">
+      <ColoredNumber value={entry.result}>
+        <NumberDisplay value={entry.result} currency={entry.journal.currency} />
+      </ColoredNumber>
+      {entry.accountChange && (
+        <ColoredNumber value={entry.accountChange}>
+          <NumberDisplay
+            value={entry.accountChange}
+            isPercentage
+          ></NumberDisplay>
+        </ColoredNumber>
+      )}
+    </div>
+  );
+};
+
+const Dates = ({ entry }: { entry: Entry }) => {
+  return (
+    <div className="flex flex-col space-y-2">
+      <DateDisplay withTime value={entry.date} />
+      <div>
+        {entry.exitDate && <DateDisplay withTime value={entry.exitDate} />}
+      </div>
+    </div>
+  );
+};
 
 export const EntriesTable = () => {
   const [searchParams] = useSearchParams();
@@ -78,16 +110,11 @@ export const EntriesTable = () => {
                   <div className="flex w-full items-center justify-between pt-4">
                     <div>
                       <p>
-                        <DateDisplay withTime value={entry.date} />
+                        <Dates entry={entry} />
                       </p>
                     </div>
                     <div className="flex justify-end">
-                      <ColoredNumber value={entry.result}>
-                        <NumberDisplay
-                          value={entry.result}
-                          currency={entry.journal.currency}
-                        />
-                      </ColoredNumber>
+                      <ResultChange entry={entry} />
                     </div>
                   </div>
                 </CardFooter>
@@ -109,9 +136,9 @@ export const EntriesTable = () => {
               <TableHead>Symbol</TableHead>
               <TableHead>Entry Type</TableHead>
               <TableHead>Journal</TableHead>
-              <TableHead>Date</TableHead>
+              <TableHead>Start/Exit Dates</TableHead>
               <TableHead>Price</TableHead>
-              <TableHead>Result</TableHead>
+              <TableHead>Result/Change</TableHead>
               <TableHead className="w-[45px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -137,7 +164,7 @@ export const EntriesTable = () => {
                     <TableCell>{entry.entryType}</TableCell>
                     <TableCell>{entry.journal.name}</TableCell>
                     <TableCell>
-                      <DateDisplay withTime value={entry.date} />
+                      <Dates entry={entry} />
                     </TableCell>
                     <TableCell>
                       <NumberDisplay
@@ -146,12 +173,7 @@ export const EntriesTable = () => {
                       />
                     </TableCell>
                     <TableCell>
-                      <ColoredNumber value={entry.result}>
-                        <NumberDisplay
-                          value={entry.result}
-                          currency={entry.journal.currency}
-                        />
-                      </ColoredNumber>
+                      <ResultChange entry={entry} />
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="max-w-[45px] flex justify-end">
