@@ -16,7 +16,7 @@ import { EntryType } from 'model/entryType';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useSaveDeposit } from 'service/entryQueries';
+import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
 import JournalSelect from 'components/JournalSelect';
@@ -37,7 +37,7 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const mutation = useSaveDeposit();
+  const mutation = useSaveEntry();
 
   useEffect(() => {
     if (deposit) {

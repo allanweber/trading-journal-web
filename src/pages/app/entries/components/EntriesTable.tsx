@@ -136,7 +136,7 @@ export const EntriesTable = () => {
               <TableHead>Symbol</TableHead>
               <TableHead>Entry Type</TableHead>
               <TableHead>Journal</TableHead>
-              <TableHead>Start/Exit Dates</TableHead>
+              <TableHead>Start/Exit Date</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Result/Change</TableHead>
               <TableHead className="w-[45px]"></TableHead>

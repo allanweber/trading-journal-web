@@ -16,7 +16,7 @@ import { EntryType } from 'model/entryType';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useSaveTrade } from 'service/entryQueries';
+import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
 import { DirectionSelect } from 'components/DirectionSelect';
@@ -44,7 +44,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const mutation = useSaveTrade();
+  const mutation = useSaveEntry();
 
   useEffect(() => {
     if (trade) {

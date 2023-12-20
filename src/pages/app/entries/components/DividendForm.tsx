@@ -16,7 +16,7 @@ import { EntryType } from 'model/entryType';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useSaveDividend } from 'service/entryQueries';
+import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
 import JournalSelect from 'components/JournalSelect';
@@ -39,7 +39,7 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const mutation = useSaveDividend();
+  const mutation = useSaveEntry();
 
   useEffect(() => {
     if (dividend) {
