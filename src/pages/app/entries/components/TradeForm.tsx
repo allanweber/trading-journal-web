@@ -57,7 +57,6 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
   const form = useForm<Trade>({
     resolver: zodResolver(tradeSchema),
-    defaultValues: values,
     values,
   });
 

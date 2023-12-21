@@ -21,6 +21,7 @@ import { TradeForm } from './components/TradeForm';
 import { WithdrawalForm } from './components/WithdrawalForm';
 
 const EntryForm = ({ entry }: { entry: Entry }) => {
+  console.log(entry);
   switch (entry.entryType) {
     case EntryType.Trade:
       return <TradeForm trade={tradeSchema.parse(entry)} />;
@@ -41,26 +42,21 @@ export const EditEntry = () => {
   const { id } = useParams();
 
   const [error, setError] = useState<any>(null);
-  const {
-    data: entry,
-    isLoading,
-    isSuccess,
-    error: queryError,
-  } = useGetEntry(id!);
+  const { data, isLoading, isSuccess, error: queryError } = useGetEntry(id!);
 
   if (isLoading) {
     return <TableLoading />;
-  }
-
-  if (queryError) {
-    setError(queryError);
   }
 
   if (error) {
     return <MessageDisplay message={error} variant="destructive" />;
   }
 
-  if (isSuccess && !entry) {
+  if (queryError) {
+    return <MessageDisplay message={queryError} variant="destructive" />;
+  }
+
+  if (isSuccess && !data) {
     return <MessageDisplay message="Entry not found" variant="destructive" />;
   }
 
@@ -73,16 +69,16 @@ export const EditEntry = () => {
       <PageHeader>
         <PageHeader.Title>
           Edit{' '}
-          {entry?.entryType === EntryType.Trade ? entry.symbol : 'Withdrawal'}
+          {data?.entryType === EntryType.Trade ? data.symbol : 'Withdrawal'}
         </PageHeader.Title>
         <PageHeader.Subtitle>
-          Entry from {entry?.journal.name} journal
+          Entry from {data?.journal.name} journal
         </PageHeader.Subtitle>
         <PageHeader.Action>
-          <DeleteEntryButton entry={entry!} onError={onError} />
+          <DeleteEntryButton entry={data!} onError={onError} />
         </PageHeader.Action>
       </PageHeader>
-      <EntryForm entry={entry!} />
+      <EntryForm entry={data!} />
     </>
   );
 };

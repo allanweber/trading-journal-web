@@ -53,7 +53,9 @@ const Dates = ({ entry }: { entry: Entry }) => {
         <DateDisplay withTime value={entry.date} />
       </div>
       <div>
-        {entry.exitDate && <DateDisplay withTime value={entry.exitDate} />}
+        {entry.exitDate && entry.entryType === EntryType.Trade && (
+          <DateDisplay withTime value={entry.exitDate} />
+        )}
       </div>
     </div>
   );

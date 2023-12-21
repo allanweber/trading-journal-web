@@ -3,6 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { inject } from '@vercel/analytics';
 import { Toaster } from 'components/ui/toaster';
 import { AuthContext } from 'contexts/AuthContext';
@@ -17,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false,
+      // refetchOnWindowFocus: false,
     },
   },
   queryCache: new QueryCache({
@@ -35,6 +36,7 @@ function App() {
       <AuthContext>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </AuthContext>
       <Toaster />
