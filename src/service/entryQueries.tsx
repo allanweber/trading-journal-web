@@ -58,13 +58,12 @@ export const useDeleteEntry = () => {
   const { getToken } = useAuthState();
   const queryClient = useQueryClient();
   return useMutation({
-    // mutationKey: ['entries'],
     mutationFn: async (id: string) => {
       const accessToken = await getToken();
       return deleteEntry(accessToken!, id);
     },
     onSuccess(data, variables, context) {
-      queryClient.removeQueries({
+      queryClient.invalidateQueries({
         queryKey: ['entries', `entry-${data}`],
       });
     },
@@ -76,7 +75,6 @@ export const useSaveEntry = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    // mutationKey: ['entries'],
     mutationFn: async (
       entry: Trade | Deposit | Withdrawal | Taxes | Dividend
     ) => {
@@ -84,8 +82,8 @@ export const useSaveEntry = () => {
       return saveEntry(accessToken!, entry);
     },
     onSuccess(data, variables, context) {
-      queryClient.removeQueries({
-        queryKey: [`entry-${data._id}`],
+      queryClient.invalidateQueries({
+        queryKey: ['entries', `entry-${data}`],
       });
     },
   });

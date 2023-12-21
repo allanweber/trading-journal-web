@@ -21,7 +21,6 @@ import { TradeForm } from './components/TradeForm';
 import { WithdrawalForm } from './components/WithdrawalForm';
 
 const EntryForm = ({ entry }: { entry: Entry }) => {
-  console.log(entry);
   switch (entry.entryType) {
     case EntryType.Trade:
       return <TradeForm trade={tradeSchema.parse(entry)} />;
