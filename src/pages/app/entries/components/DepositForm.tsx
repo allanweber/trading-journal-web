@@ -120,11 +120,13 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
               <FormItem className="flex flex-col">
                 <FormLabel>Deposit value</FormLabel>
                 <NumberInput
+                  key="price"
                   disabled={deposit}
                   onChange={field.onChange}
                   value={field.value}
                   currency={getSymbol(journal?.currency || '$')}
                 />
+
                 <FormDescription>
                   This is the value o5 your deposit, this is used to calculate
                   your balance, and can never be changed. (required)
