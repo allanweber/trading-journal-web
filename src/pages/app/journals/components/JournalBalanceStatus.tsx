@@ -10,7 +10,7 @@ type Props = {
 export default function JournalBalanceStatus(props: Props) {
   const { journal } = props;
   const startBalance = journal.startBalance;
-  const currentBalance = journal.balance?.current ?? 0;
+  const currentBalance = journal.currentBalance ?? 0;
 
   return (
     <div className="flex space-y-2">
@@ -25,10 +25,10 @@ export default function JournalBalanceStatus(props: Props) {
           aria-hidden="true"
         />
       ) : null}
-      {journal.balance && (
-        <ColoredNumber value={journal.balance.current}>
+      {journal.currentBalance && (
+        <ColoredNumber value={journal.currentBalance}>
           <NumberDisplay
-            value={journal.balance.current}
+            value={journal.currentBalance}
             currency={journal.currency}
           />
         </ColoredNumber>

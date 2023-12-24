@@ -46,7 +46,7 @@ export const useSaveJournal = () => {
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: [`journal-${data._id}`, 'all-journals'],
+        queryKey: [`journal-${data.id}`, 'all-journals'],
       });
     },
   });

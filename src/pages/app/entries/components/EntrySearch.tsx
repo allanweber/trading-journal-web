@@ -37,7 +37,7 @@ export const EntrySearch = () => {
       options: journals.map((journal) => {
         return {
           label: journal.name!,
-          value: journal._id!,
+          value: journal.id!,
         };
       }),
     };

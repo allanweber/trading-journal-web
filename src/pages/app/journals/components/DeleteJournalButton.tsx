@@ -33,7 +33,7 @@ export const DeleteJournalButton = ({ journal, onError }: Props) => {
   }
 
   const confirm = () => {
-    mutation.mutate(journal._id!, {
+    mutation.mutate(journal.id!, {
       onSuccess: () => {
         toast({
           title: 'Journal Deleted',

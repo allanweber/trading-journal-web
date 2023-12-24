@@ -45,9 +45,9 @@ export const JournalsTable = () => {
           isSuccess &&
           journals?.data?.map((journal) => (
             <div
-              key={journal._id}
+              key={journal.id}
               className="hover:bg-slate-200"
-              onClick={() => navigate(`/trading/journals/${journal._id}`)}
+              onClick={() => navigate(`/trading/journals/${journal.id}`)}
             >
               <div className="mb-2 w-full rounded-md p-4">
                 <div className="flex items-center justify-between">
@@ -97,9 +97,9 @@ export const JournalsTable = () => {
               journals.data &&
               (journals.pagination.total > 0 ? (
                 journals.data.map((journal) => (
-                  <TableRow key={journal._id}>
+                  <TableRow key={journal.id}>
                     <TableCell className="font-medium">
-                      <Link to={`/trading/journals/${journal._id}`}>
+                      <Link to={`/trading/journals/${journal.id}`}>
                         {journal.name}
                       </Link>
                     </TableCell>
@@ -113,7 +113,7 @@ export const JournalsTable = () => {
                     <TableCell>{journal.currency}</TableCell>
                     <TableCell className="text-right">
                       <div className="max-w-[45px] flex justify-end">
-                        <Link to={`/trading/journals/${journal._id}`}>
+                        <Link to={`/trading/journals/${journal.id}`}>
                           <EditIcon className="h-4 w-4" />
                         </Link>
                       </div>

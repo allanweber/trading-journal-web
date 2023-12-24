@@ -16,12 +16,12 @@ export const EditJournal = () => {
     return <TableLoading />;
   }
 
-  if (queryError) {
-    setError(queryError);
-  }
-
   if (error) {
     return <MessageDisplay message={error} variant="destructive" />;
+  }
+
+  if (queryError) {
+    return <MessageDisplay message={queryError} variant="destructive" />;
   }
 
   const onError = (error: any) => {

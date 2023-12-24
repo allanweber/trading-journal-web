@@ -12,7 +12,7 @@ export const balanceSchema = z.object({
 export type Balance = z.infer<typeof balanceSchema>;
 
 export const journalSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   name: z
     .string({
       required_error: 'name-required',
@@ -27,7 +27,7 @@ export const journalSchema = z.object({
   startDate: z.coerce.date({
     required_error: 'start-date-required',
   }),
-  startBalance: z
+  startBalance: z.coerce
     .number({
       required_error: 'start-balance-required',
       invalid_type_error: 'start-balance-positive',
@@ -37,7 +37,7 @@ export const journalSchema = z.object({
   currency: z.string({
     required_error: 'currency-required',
   }),
-  balance: balanceSchema.optional(),
+  currentBalance: z.coerce.number().optional(),
 });
 
 export type Journal = z.infer<typeof journalSchema>;

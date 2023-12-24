@@ -32,7 +32,7 @@ export default function JournalSelect(props: Props) {
   const select = (value: string) => {
     onValueChange(value);
     if (onJournalChange) {
-      const journal = journals?.find((j) => j._id === value);
+      const journal = journals?.find((journal) => journal.id === value);
       if (journal) {
         onJournalChange(journal);
       }
@@ -51,7 +51,7 @@ export default function JournalSelect(props: Props) {
           <SelectItem value="loading">Loading...</SelectItem>
         ) : isSuccess && journals ? (
           journals.map((journal) => (
-            <SelectItem value={journal._id!} key={journal._id!}>
+            <SelectItem value={journal.id!} key={journal.id!}>
               {journal.name} - {journal.description} ({journal.currency})
             </SelectItem>
           ))

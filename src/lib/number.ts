@@ -45,6 +45,9 @@ export const numberFormat = (
   if (value === undefined) {
     value = 0;
   }
+  if (typeof value !== 'number') {
+    value = Number(value);
+  }
 
   options = { ...defaultOptions, ...options };
   const fixed = value.toFixed(options.digits);
