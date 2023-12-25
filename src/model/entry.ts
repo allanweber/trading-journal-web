@@ -5,7 +5,7 @@ import { journalSchema } from './journal';
 
 export const tradeSchema = z
   .object({
-    _id: z.string().optional(),
+    id: z.string().optional(),
     journalId: z
       .string({
         required_error: 'journal-required',
@@ -49,27 +49,27 @@ export const tradeSchema = z
       })
       .positive({ message: 'size-positive' })
       .max(9999999999, { message: 'size-max' }),
-    profit: z
+    profit: z.coerce
       .number()
       .positive({ message: 'profit-positive' })
       .max(9999999999, { message: 'profit-max' })
-      .optional(),
-    loss: z
+      .nullish(),
+    loss: z.coerce
       .number()
       .positive({ message: 'loss-positive' })
       .max(9999999999, { message: 'loss-max' })
-      .optional(),
-    exitDate: z.coerce.date().optional(),
-    exitPrice: z
+      .nullish(),
+    exitDate: z.coerce.date().nullish(),
+    exitPrice: z.coerce
       .number()
       .positive({ message: 'exitPrice-positive' })
       .max(9999999999, { message: 'exitPrice-max' })
-      .optional(),
-    costs: z
+      .nullish(),
+    costs: z.coerce
       .number()
       .positive({ message: 'costs-positive' })
       .max(9999999999, { message: 'costs-max' })
-      .optional(),
+      .nullish(),
   })
   .superRefine(({ date, exitDate }, context) => {
     if (exitDate && exitDate < date) {
@@ -82,7 +82,7 @@ export const tradeSchema = z
   });
 
 export const depositSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   journalId: z
     .string({
       required_error: 'journal-required',
@@ -112,7 +112,7 @@ export const depositSchema = z.object({
 });
 
 export const withdrawalSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   journalId: z
     .string({
       required_error: 'journal-required',
@@ -141,7 +141,7 @@ export const withdrawalSchema = z.object({
 });
 
 export const taxesSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   journalId: z
     .string({
       required_error: 'journal-required',
@@ -170,7 +170,7 @@ export const taxesSchema = z.object({
 });
 
 export const dividendSchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   journalId: z
     .string({
       required_error: 'journal-required',
@@ -207,7 +207,7 @@ export const dividendSchema = z.object({
 });
 
 export const entrySchema = z.object({
-  _id: z.string().optional(),
+  id: z.string().optional(),
   journalId: z
     .string({
       required_error: 'journal-required',
@@ -245,23 +245,23 @@ export const entrySchema = z.object({
     .positive({ message: 'size-positive' })
     .max(9999999999, { message: 'size-max' })
     .optional(),
-  profit: z
+  profit: z.coerce
     .number()
     .positive({ message: 'profit-positive' })
     .max(9999999999, { message: 'profit-max' })
     .optional(),
-  loss: z
+  loss: z.coerce
     .number()
     .positive({ message: 'loss-positive' })
     .max(9999999999, { message: 'loss-max' })
     .optional(),
   exitDate: z.coerce.date().optional(),
-  exitPrice: z
+  exitPrice: z.coerce
     .number()
     .positive({ message: 'exitPrice-positive' })
     .max(9999999999, { message: 'exitPrice-max' })
     .optional(),
-  costs: z
+  costs: z.coerce
     .number()
     .positive({ message: 'costs-positive' })
     .max(9999999999, { message: 'costs-max' })

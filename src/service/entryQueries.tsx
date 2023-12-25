@@ -83,7 +83,7 @@ export const useSaveEntry = () => {
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ['entries', `entry-${data}`],
+        queryKey: ['entries', `entry-${data.id}`],
       });
     },
   });

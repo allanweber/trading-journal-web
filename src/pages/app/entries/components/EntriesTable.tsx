@@ -95,9 +95,9 @@ export const EntriesTable = () => {
           (entries.pagination.total > 0 ? (
             entries?.data?.map((entry) => (
               <Card
-                key={entry._id}
+                key={entry.id}
                 className="hover:bg-slate-200"
-                onClick={() => navigate(`/trading/entries/${entry._id}`)}
+                onClick={() => navigate(`/trading/entries/${entry.id}`)}
               >
                 <CardHeader>
                   <CardTitle>
@@ -157,9 +157,9 @@ export const EntriesTable = () => {
               entries.data &&
               (entries.pagination.total > 0 ? (
                 entries.data.map((entry) => (
-                  <TableRow key={entry._id}>
+                  <TableRow key={entry.id}>
                     <TableCell className="font-medium">
-                      <Link to={`/trading/entries/${entry._id}`}>
+                      <Link to={`/trading/entries/${entry.id}`}>
                         {entry.symbol}
                       </Link>
                     </TableCell>
@@ -179,7 +179,7 @@ export const EntriesTable = () => {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="max-w-[45px] flex justify-end">
-                        <Link to={`/trading/entries/${entry._id}`}>
+                        <Link to={`/trading/entries/${entry.id}`}>
                           <EditIcon className="h-4 w-4" />
                         </Link>
                       </div>

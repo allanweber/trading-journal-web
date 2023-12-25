@@ -34,7 +34,7 @@ export const DeleteEntryButton = ({ entry, onError }: Props) => {
   }
 
   const confirm = () => {
-    mutation.mutate(entry._id!, {
+    mutation.mutate(entry.id!, {
       onSuccess: () => {
         toast({
           title: 'Entry Deleted',
