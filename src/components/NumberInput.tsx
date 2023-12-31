@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IMaskInput } from 'react-imask';
 
 type Props = {
@@ -17,15 +17,15 @@ const defaultOpts: Partial<Props> = {
 
 export const NumberInput = (props: Props) => {
   const { onChange, value, currency, placeholder, scale, ...rest } = props;
-  const ref = useRef(null);
-  const inputRef = useRef(null);
 
-  const [first, setFirst] = useState<string | undefined>(
-    value ? value.toString() : undefined
-  );
+  const [current, setCurrent] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setFirst(value ? value.toString() : undefined);
+    if (value === undefined || value === null) {
+      setCurrent(undefined);
+    } else {
+      setCurrent(value.toString());
+    }
   }, [value]);
 
   return (
@@ -43,17 +43,15 @@ export const NumberInput = (props: Props) => {
             normalizeZeros: true,
           },
         }}
-        value={first}
+        value={current}
         unmask={'typed'}
-        ref={ref}
-        inputRef={inputRef}
-        onAccept={(value) => {
-          const num = parseFloat(value);
+        onAccept={(val) => {
+          const num = parseFloat(val);
           if (isNaN(num)) {
-            setFirst(undefined);
+            setCurrent(undefined);
             onChange(undefined);
           } else {
-            setFirst(value);
+            setCurrent(val);
             onChange(num);
           }
         }}

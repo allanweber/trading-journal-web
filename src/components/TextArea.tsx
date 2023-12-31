@@ -18,6 +18,7 @@ export const TextArea = forwardRef(function TextArea(props: Props, ref) {
   }
 
   const handleChange = (value: string | undefined) => {
+    console.log('value', value);
     if (value === '') value = undefined;
     onChange(value);
   };

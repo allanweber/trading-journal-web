@@ -77,7 +77,7 @@ export const EditEntry = () => {
           <DeleteEntryButton entry={data!} onError={onError} />
         </PageHeader.Action>
       </PageHeader>
-      <EntryForm entry={data!} />
+      {data && <EntryForm entry={data} />}
     </>
   );
 };
