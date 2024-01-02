@@ -180,8 +180,8 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
+                          disabled={trade}
+                          {...field}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>
@@ -204,10 +204,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       <FormLabel>Size</FormLabel>
 
                       <FormControl>
-                        <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
-                        />
+                        <NumberInput disabled={trade} {...field} />
                       </FormControl>
 
                       <FormDescription>
@@ -233,8 +230,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
+                          {...field}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>
@@ -258,8 +254,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
+                          {...field}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>
@@ -315,8 +310,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
+                          {...field}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>
@@ -340,8 +334,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          onChange={field.onChange}
-                          value={field.value}
+                          {...field}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>

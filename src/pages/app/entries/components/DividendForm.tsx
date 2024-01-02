@@ -142,8 +142,7 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
                 <FormLabel>Dividend value</FormLabel>
                 <NumberInput
                   disabled={dividend}
-                  onChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   currency={getSymbol(journal?.currency || '$')}
                 />
                 <FormDescription>

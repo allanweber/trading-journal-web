@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import { IMaskInput } from 'react-imask';
 
 type Props = {
@@ -15,7 +15,7 @@ const defaultOpts: Partial<Props> = {
   scale: 2,
 };
 
-export const NumberInput = (props: Props) => {
+export const NumberInput = forwardRef(function NumberInput(props: Props, ref) {
   const { onChange, value, currency, placeholder, scale, ...rest } = props;
 
   const [current, setCurrent] = useState<string | undefined>(undefined);
@@ -31,6 +31,7 @@ export const NumberInput = (props: Props) => {
   return (
     <div className="pt-2">
       <IMaskInput
+        ref={ref}
         mask={currency ? `${currency} num` : 'num'}
         blocks={{
           num: {
@@ -62,6 +63,6 @@ export const NumberInput = (props: Props) => {
       />
     </div>
   );
-};
+});
 
 NumberInput.defaultProps = defaultOpts;

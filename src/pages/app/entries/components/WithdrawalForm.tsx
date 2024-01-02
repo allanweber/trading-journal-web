@@ -122,8 +122,7 @@ export const WithdrawalForm = ({ withdrawal }: { withdrawal?: Withdrawal }) => {
                 <FormLabel>Withdrawal value</FormLabel>
                 <NumberInput
                   disabled={withdrawal}
-                  onChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   currency={getSymbol(journal?.currency || '$')}
                 />
                 <FormDescription>

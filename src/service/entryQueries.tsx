@@ -64,7 +64,7 @@ export const useDeleteEntry = () => {
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ['entries', `entry-${data}`],
+        queryKey: [`entry-${data}`, 'entries'],
       });
     },
   });
@@ -83,7 +83,7 @@ export const useSaveEntry = () => {
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ['entries', `entry-${data.id}`],
+        queryKey: [`entry-${data.id}`],
       });
     },
   });

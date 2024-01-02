@@ -120,8 +120,7 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
                 <FormLabel>Taxes value</FormLabel>
                 <NumberInput
                   disabled={taxes}
-                  onChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   currency={getSymbol(journal?.currency || '$')}
                 />
                 <FormDescription>

@@ -120,10 +120,8 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
               <FormItem className="flex flex-col">
                 <FormLabel>Deposit value</FormLabel>
                 <NumberInput
-                  key="price"
                   disabled={deposit}
-                  onChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   currency={getSymbol(journal?.currency || '$')}
                 />
 

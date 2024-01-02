@@ -127,8 +127,7 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
               <FormItem className="flex flex-col">
                 <FormLabel>Start Balance</FormLabel>
                 <NumberInput
-                  onChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   disabled={journal}
                   currency={getSymbol(form.getValues('currency') || '$')}
                 />
