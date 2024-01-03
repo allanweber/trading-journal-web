@@ -118,12 +118,7 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Dividend Date</FormLabel>
-                <DateTimePicker
-                  withTime
-                  setDate={field.onChange}
-                  date={field.value}
-                  disabled={dividend}
-                />
+                <DateTimePicker withTime {...field} disabled={dividend} />
                 <FormDescription>
                   This is the date when you received do your dividend, this is
                   used to calculate your balance, and can never be changed.

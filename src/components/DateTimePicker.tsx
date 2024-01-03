@@ -7,13 +7,13 @@ import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover';
 import { format, parse } from 'date-fns';
 import { enGB } from 'date-fns/locale';
 import parseJSON from 'date-fns/parseJSON';
-import { LegacyRef, useState } from 'react';
-import { IMask, useIMask } from 'react-imask';
+import { forwardRef, useEffect, useState } from 'react';
+import { IMask, IMaskInput } from 'react-imask';
 import { TimePicker } from './TimePicker';
 
 interface Props {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
   withTime?: boolean;
   placeholder?: string;
   [x: string]: any;
@@ -23,95 +23,91 @@ const maskFormatWithTime = 'DD/MM/YYYY HH:mm';
 const dateFnsWithTimeFormat = 'dd/MM/yyyy HH:mm';
 const dateFnsFormat = 'dd/MM/yyyy';
 
-export const DateTimePicker = ({
-  date,
-  setDate,
-  withTime,
-  placeholder,
-  ...rest
-}: Props) => {
-  if (typeof date === 'string') {
-    date = parseJSON(date);
-  }
+export const DateTimePicker = forwardRef(function DateTimePicker(
+  props: Props,
+  ref
+) {
+  let { value, onChange, withTime, placeholder, ...rest } = props;
+  const [current, setCurrent] = useState<Date | undefined>(undefined);
+
+  useEffect(() => {
+    if (value === undefined || value === null) {
+      setCurrent(undefined);
+    } else {
+      if (typeof value === 'string') {
+        setCurrent(parseJSON(value));
+      } else {
+        setCurrent(value);
+      }
+    }
+  }, [value]);
+
   const dateFormat = withTime ? dateFnsWithTimeFormat : dateFnsFormat;
 
-  const [month, setMonth] = useState<Date | undefined>(date);
-
-  const [opts] = useState({
-    mask: withTime ? maskFormatWithTime : maskFormat,
-    lazy: true,
-    unmask: 'false',
-    blocks: {
-      DD: {
-        mask: IMask.MaskedRange,
-        from: 1,
-        to: 31,
-      },
-      MM: {
-        mask: IMask.MaskedRange,
-        from: 1,
-        to: 12,
-      },
-      YYYY: {
-        mask: IMask.MaskedRange,
-        from: 1970,
-        to: 2030,
-      },
-      HH: {
-        mask: IMask.MaskedRange,
-        from: 0,
-        to: 23,
-      },
-      mm: {
-        mask: IMask.MaskedRange,
-        from: 0,
-        to: 59,
-      },
-    },
-  });
-
-  const onComplete = (value: string) => {
-    if (withTime && value.length < 16) return;
-    if (value.length < 10) return;
-    const parsedDate = parse(value, dateFormat, new Date());
-    if (parsedDate) {
-      setDate(parsedDate);
-    }
-  };
-
-  const { ref, setValue } = useIMask(opts, {
-    onComplete: onComplete,
-    onAccept: onComplete,
-  });
+  const [month, setMonth] = useState<Date>(current || new Date());
 
   const todayClick = () => {
-    setDate(new Date());
+    onChange(new Date());
     setMonth(new Date());
-    setAfterSelect(new Date());
   };
 
   const onSelect = (date: Date | undefined) => {
-    setAfterSelect(date);
-    setDate(date);
-  };
-
-  const setAfterSelect = (date: Date | undefined) => {
-    if (date) {
-      setValue(format(date, withTime ? dateFnsWithTimeFormat : dateFnsFormat));
-    } else {
-      setValue('');
-    }
+    onChange(date);
   };
 
   return (
     <div className="w-full flex justify-normal items-center space-x-2">
-      <input
-        defaultValue={date ? format(date, dateFormat) : undefined}
-        placeholder={placeholder || 'DD/MM/YYYY' + (withTime ? ' HH:mm' : '')}
-        type={'text'}
-        className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-        ref={ref as LegacyRef<HTMLInputElement>}
+      <IMaskInput
+        ref={ref}
+        mask={withTime ? maskFormatWithTime : maskFormat}
+        lazy={true}
+        unmask={false}
+        blocks={{
+          DD: {
+            mask: IMask.MaskedRange,
+            from: 1,
+            to: 31,
+          },
+          MM: {
+            mask: IMask.MaskedRange,
+            from: 1,
+            to: 12,
+          },
+          YYYY: {
+            mask: IMask.MaskedRange,
+            from: 1970,
+            to: 2030,
+          },
+          HH: {
+            mask: IMask.MaskedRange,
+            from: 0,
+            to: 23,
+          },
+          mm: {
+            mask: IMask.MaskedRange,
+            from: 0,
+            to: 59,
+          },
+        }}
+        value={current ? format(current, dateFormat) : undefined}
+        onAccept={(val) => {
+          if (!val || val.length === 0) {
+            setCurrent((e) => undefined);
+            setMonth(new Date());
+            onChange(undefined);
+          } else {
+            if (withTime && val.length < 16) return;
+            if (val.length < 10) return;
+            const parsedDate = parse(val, dateFormat, new Date());
+            if (parsedDate) {
+              setMonth(parsedDate);
+              onChange(parsedDate);
+            }
+          }
+        }}
         onFocus={(e) => e.target.select()}
+        placeholder={placeholder || 'DD/MM/YYYY' + (withTime ? ' HH:mm' : '')}
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         {...rest}
       />
       <Popover>
@@ -123,7 +119,7 @@ export const DateTimePicker = ({
         <PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={date}
+            selected={current}
             onSelect={onSelect}
             locale={enGB}
             onMonthChange={setMonth}
@@ -132,7 +128,7 @@ export const DateTimePicker = ({
               <div>
                 {withTime && (
                   <div className="p-3 border-t border-border">
-                    <TimePicker setDate={setDate} date={date} />
+                    <TimePicker setDate={onChange} date={current} />
                   </div>
                 )}
                 <Separator className="mb-2 mt-2" />
@@ -148,4 +144,4 @@ export const DateTimePicker = ({
       </Popover>
     </div>
   );
-};
+});

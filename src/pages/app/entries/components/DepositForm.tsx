@@ -97,12 +97,7 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Deposit Date</FormLabel>
-                <DateTimePicker
-                  withTime
-                  setDate={field.onChange}
-                  date={field.value}
-                  disabled={deposit}
-                />
+                <DateTimePicker withTime {...field} disabled={deposit} />
                 <FormDescription>
                   This is the date when you did or will do your deposit, this is
                   used to calculate your balance, and can never be changed.

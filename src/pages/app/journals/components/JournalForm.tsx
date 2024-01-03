@@ -106,11 +106,7 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Start Date</FormLabel>
-                <DateTimePicker
-                  setDate={field.onChange}
-                  date={field.value}
-                  disabled={journal}
-                />
+                <DateTimePicker {...field} disabled={journal} />
                 <FormDescription>
                   This is the date when you started your journal used to
                   calculate your balance, and can never be changed. (required)

@@ -97,12 +97,7 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Taxes Date</FormLabel>
-                <DateTimePicker
-                  withTime
-                  setDate={field.onChange}
-                  date={field.value}
-                  disabled={taxes}
-                />
+                <DateTimePicker withTime {...field} disabled={taxes} />
                 <FormDescription>
                   This is the date when you declared your taxes, this is used to
                   calculate your balance, and can never be changed. (required)

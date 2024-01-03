@@ -154,12 +154,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                     <FormItem className="flex flex-col">
                       <FormLabel className="mb-2">Date</FormLabel>
 
-                      <DateTimePicker
-                        withTime
-                        setDate={field.onChange}
-                        date={field.value}
-                        disabled={trade}
-                      />
+                      <DateTimePicker withTime {...field} disabled={trade} />
 
                       <FormDescription>
                         This is the date when your trade started. (required)
@@ -180,8 +175,8 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                       <FormControl>
                         <NumberInput
-                          disabled={trade}
                           {...field}
+                          disabled={trade}
                           currency={getSymbol(journal?.currency || '$')}
                         />
                       </FormControl>
@@ -204,7 +199,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       <FormLabel>Size</FormLabel>
 
                       <FormControl>
-                        <NumberInput disabled={trade} {...field} />
+                        <NumberInput {...field} disabled={trade} />
                       </FormControl>
 
                       <FormDescription>
@@ -285,11 +280,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                     <FormItem className="flex flex-col">
                       <FormLabel className="mb-2">Exit Date</FormLabel>
 
-                      <DateTimePicker
-                        withTime
-                        setDate={field.onChange}
-                        date={field.value ?? undefined}
-                      />
+                      <DateTimePicker {...field} withTime />
 
                       <FormDescription>
                         This is the date when you closed your trade (optional)
