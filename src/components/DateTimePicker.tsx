@@ -4,11 +4,10 @@ import { Separator } from '@radix-ui/react-dropdown-menu';
 import { Button } from 'components/ui/button';
 import { Calendar } from 'components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from 'components/ui/popover';
-import { format, parse } from 'date-fns';
+import { format, isDate, isValid, parse } from 'date-fns';
 import { enGB } from 'date-fns/locale';
-import parseJSON from 'date-fns/parseJSON';
-import { forwardRef, useEffect, useState } from 'react';
-import { IMask, IMaskInput } from 'react-imask';
+import { forwardRef, useState } from 'react';
+import InputMask from 'react-input-mask';
 import { TimePicker } from './TimePicker';
 
 interface Props {
@@ -18,8 +17,6 @@ interface Props {
   placeholder?: string;
   [x: string]: any;
 }
-const maskFormat = 'DD/MM/YYYY';
-const maskFormatWithTime = 'DD/MM/YYYY HH:mm';
 const dateFnsWithTimeFormat = 'dd/MM/yyyy HH:mm';
 const dateFnsFormat = 'dd/MM/yyyy';
 
@@ -28,85 +25,66 @@ export const DateTimePicker = forwardRef(function DateTimePicker(
   ref
 ) {
   let { value, onChange, withTime, placeholder, ...rest } = props;
-  const [current, setCurrent] = useState<Date | undefined>(undefined);
 
-  useEffect(() => {
-    if (value === undefined || value === null) {
-      setCurrent(undefined);
-    } else {
-      if (typeof value === 'string') {
-        setCurrent(parseJSON(value));
-      } else {
-        setCurrent(value);
-      }
-    }
-  }, [value]);
+  if (typeof value === 'string') {
+    value = new Date(value);
+  }
 
   const dateFormat = withTime ? dateFnsWithTimeFormat : dateFnsFormat;
+  const mask = withTime ? '99/99/9999 99:99' : '99/99/9999';
 
-  const [month, setMonth] = useState<Date>(current || new Date());
+  const [stringDate, setStringDate] = useState(
+    value && isDate(value) && isValid(value) ? format(value, dateFormat) : ''
+  );
+
+  const [month, setMonth] = useState<Date>(value || new Date());
 
   const todayClick = () => {
+    setStringDate(format(new Date(), dateFormat));
     onChange(new Date());
     setMonth(new Date());
   };
 
-  const onSelect = (date: Date | undefined) => {
+  const setTime = (date: Date | undefined) => {
+    setStringDate(date ? format(date, dateFormat) : '');
     onChange(date);
+    setMonth(date || new Date());
+  };
+
+  const onSelect = (date: Date | undefined) => {
+    setStringDate(date ? format(date, dateFormat) : '');
+    onChange(date);
+  };
+
+  const validateDateTime = (inputDateTime: string) => {
+    if (inputDateTime.length === 0) {
+      onChange(undefined);
+    } else {
+      const parsedDateTime = parse(inputDateTime, dateFormat, new Date());
+
+      if (isDate(parsedDateTime) && isValid(parsedDateTime)) {
+        onChange(parsedDateTime);
+      } else {
+        onChange(undefined);
+      }
+    }
+  };
+
+  const handleDateTimeChange = (e: { target: { value: string } }) => {
+    const inputDateTime = e.target.value;
+    setStringDate(inputDateTime);
+    validateDateTime(inputDateTime);
   };
 
   return (
     <div className="w-full flex justify-normal items-center space-x-2">
-      <IMaskInput
-        ref={ref}
-        mask={withTime ? maskFormatWithTime : maskFormat}
-        lazy={true}
-        unmask={false}
-        blocks={{
-          DD: {
-            mask: IMask.MaskedRange,
-            from: 1,
-            to: 31,
-          },
-          MM: {
-            mask: IMask.MaskedRange,
-            from: 1,
-            to: 12,
-          },
-          YYYY: {
-            mask: IMask.MaskedRange,
-            from: 1970,
-            to: 2030,
-          },
-          HH: {
-            mask: IMask.MaskedRange,
-            from: 0,
-            to: 23,
-          },
-          mm: {
-            mask: IMask.MaskedRange,
-            from: 0,
-            to: 59,
-          },
-        }}
-        value={current ? format(current, dateFormat) : undefined}
-        onAccept={(val) => {
-          if (!val || val.length === 0) {
-            setCurrent((e) => undefined);
-            setMonth(new Date());
-            onChange(undefined);
-          } else {
-            if (withTime && val.length < 16) return;
-            if (val.length < 10) return;
-            const parsedDate = parse(val, dateFormat, new Date());
-            if (parsedDate) {
-              setMonth(parsedDate);
-              onChange(parsedDate);
-            }
-          }
-        }}
-        onFocus={(e) => e.target.select()}
+      <InputMask
+        mask={mask}
         placeholder={placeholder || 'DD/MM/YYYY' + (withTime ? ' HH:mm' : '')}
+        value={stringDate}
+        onChange={handleDateTimeChange}
+        onFocus={(e) => e.target.select()}
+        alwaysShowMask={false}
         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         {...rest}
       />
@@ -119,7 +97,7 @@ export const DateTimePicker = forwardRef(function DateTimePicker(
         <PopoverContent className="w-auto p-0">
           <Calendar
             mode="single"
-            selected={current}
+            selected={value}
             onSelect={onSelect}
             locale={enGB}
             onMonthChange={setMonth}
@@ -128,7 +106,7 @@ export const DateTimePicker = forwardRef(function DateTimePicker(
               <div>
                 {withTime && (
                   <div className="p-3 border-t border-border">
-                    <TimePicker setDate={onChange} date={current} />
+                    <TimePicker setDate={setTime} date={value || new Date()} />
                   </div>
                 )}
                 <Separator className="mb-2 mt-2" />
