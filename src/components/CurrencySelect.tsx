@@ -1,4 +1,5 @@
 import { currencies } from 'model/currency';
+import { forwardRef } from 'react';
 import { FormControl } from './ui/form';
 import {
   Select,
@@ -9,18 +10,21 @@ import {
 } from './ui/select';
 
 type Props = {
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   value: string;
   placeholder?: string;
   [x: string]: any;
 };
 
-export default function CurrencySelect(props: Props) {
-  const { onValueChange, value: defaultValue, placeholder, ...rest } = props;
+export const CurrencySelect = forwardRef(function CurrencySelect(
+  props: Props,
+  ref
+) {
+  const { onChange, value: defaultValue, placeholder, ...rest } = props;
   const currentPlaceholder = placeholder || 'Select Currency';
 
   return (
-    <Select onValueChange={onValueChange} value={defaultValue} {...rest}>
+    <Select onValueChange={onChange} value={defaultValue} {...rest}>
       <FormControl>
         <SelectTrigger>
           <SelectValue placeholder={currentPlaceholder} />
@@ -35,4 +39,4 @@ export default function CurrencySelect(props: Props) {
       </SelectContent>
     </Select>
   );
-}
+});

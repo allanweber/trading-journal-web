@@ -20,7 +20,7 @@ import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
 import { DirectionSelect } from 'components/DirectionSelect';
-import JournalSelect from 'components/JournalSelect';
+import { JournalSelect } from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
 import { Input } from 'components/ui/input';
@@ -88,10 +88,11 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                       <FormLabel>Journal Name</FormLabel>
                       <FormControl>
                         <JournalSelect
-                          onValueChange={field.onChange}
-                          value={field.value}
+                          {...field}
                           disabled={trade}
-                          onJournalChange={(journal) => setJournal(journal)}
+                          onJournalChange={(journal: Journal) =>
+                            setJournal(journal)
+                          }
                         />
                       </FormControl>
                       <FormDescription>
@@ -132,10 +133,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                     <FormItem>
                       <FormLabel>Direction</FormLabel>
                       <FormControl>
-                        <DirectionSelect
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        />
+                        <DirectionSelect {...field} />
                       </FormControl>
                       <FormDescription>
                         This is the direction of your trade. (required)

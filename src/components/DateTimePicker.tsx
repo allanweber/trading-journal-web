@@ -106,7 +106,10 @@ export const DateTimePicker = forwardRef(function DateTimePicker(
               <div>
                 {withTime && (
                   <div className="p-3 border-t border-border">
-                    <TimePicker setDate={setTime} date={value || new Date()} />
+                    <TimePicker
+                      onChange={setTime}
+                      value={value || new Date()}
+                    />
                   </div>
                 )}
                 <Separator className="mb-2 mt-2" />

@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
-import JournalSelect from 'components/JournalSelect';
+import { JournalSelect } from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
 import { getSymbol } from 'model/currency';
@@ -78,10 +78,9 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
               <FormItem>
                 <FormLabel>Journal Name</FormLabel>
                 <JournalSelect
-                  onValueChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   disabled={deposit}
-                  onJournalChange={(journal) => setJournal(journal)}
+                  onJournalChange={(journal: Journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your deposit takes place. (required)

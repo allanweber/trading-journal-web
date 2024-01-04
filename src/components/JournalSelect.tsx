@@ -1,4 +1,5 @@
 import { Journal } from 'model/journal';
+import { forwardRef } from 'react';
 import { useAllJournals } from 'service/journalQueries';
 import { FormControl } from './ui/form';
 import {
@@ -10,16 +11,19 @@ import {
 } from './ui/select';
 
 type Props = {
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   value: string;
   onJournalChange?: (journal: Journal) => void;
   placeholder?: string;
   [x: string]: any;
 };
 
-export default function JournalSelect(props: Props) {
+export const JournalSelect = forwardRef(function JournalSelect(
+  props: Props,
+  ref
+) {
   const {
-    onValueChange,
+    onChange,
     value: defaultValue,
     onJournalChange,
     placeholder,
@@ -30,7 +34,7 @@ export default function JournalSelect(props: Props) {
   const { data: journals, isLoading, isSuccess } = useAllJournals();
 
   const select = (value: string) => {
-    onValueChange(value);
+    onChange(value);
     if (onJournalChange) {
       const journal = journals?.find((journal) => journal.id === value);
       if (journal) {
@@ -61,4 +65,4 @@ export default function JournalSelect(props: Props) {
       </SelectContent>
     </Select>
   );
-}
+});

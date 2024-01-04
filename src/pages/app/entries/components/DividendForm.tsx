@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSaveEntry } from 'service/entryQueries';
 
 import { DateTimePicker } from 'components/DateTimePicker';
-import JournalSelect from 'components/JournalSelect';
+import { JournalSelect } from 'components/JournalSelect';
 import { NumberInput } from 'components/NumberInput';
 import { TextArea } from 'components/TextArea';
 import { Input } from 'components/ui/input';
@@ -80,10 +80,9 @@ export default function DividendForm({ dividend }: { dividend?: Dividend }) {
               <FormItem>
                 <FormLabel>Journal Name</FormLabel>
                 <JournalSelect
-                  onValueChange={field.onChange}
-                  value={field.value}
+                  {...field}
                   disabled={dividend}
-                  onJournalChange={(journal) => setJournal(journal)}
+                  onJournalChange={(journal: Journal) => setJournal(journal)}
                 />
                 <FormDescription>
                   This is the journal where your dividend takes place.

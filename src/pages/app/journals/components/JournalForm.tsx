@@ -13,7 +13,7 @@ import { Input } from 'components/ui/input';
 import { useToast } from 'components/ui/use-toast';
 import { useForm } from 'react-hook-form';
 
-import CurrencySelect from 'components/CurrencySelect';
+import { CurrencySelect } from 'components/CurrencySelect';
 import { DateTimePicker } from 'components/DateTimePicker';
 import { MessageDisplay } from 'components/MessageDisplay';
 import { NumberInput } from 'components/NumberInput';
@@ -142,10 +142,7 @@ export const JournalForm = ({ journal }: { journal?: Journal }) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Journal Currency</FormLabel>
-                <CurrencySelect
-                  onValueChange={field.onChange}
-                  value={field.value}
-                />
+                <CurrencySelect {...field} />
                 <FormDescription>
                   This is the currency of your journal that will be shown for
                   all your trades. (required)

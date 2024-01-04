@@ -5,19 +5,19 @@ import { TimePickerInput } from './TimePickerInput';
 import { Button } from './ui/button';
 
 interface Props {
-  date: Date | undefined;
-  setDate: (date: Date | undefined) => void;
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
 }
 
-export const TimePicker = ({ date, setDate }: Props) => {
+export const TimePicker = ({ value, onChange }: Props) => {
   const minuteRef = useRef<HTMLInputElement>(null);
   const hourRef = useRef<HTMLInputElement>(null);
   const secondRef = useRef<HTMLInputElement>(null);
 
   const nowClick = () => {
     const now = new Date();
-    date?.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
-    setDate(date);
+    value?.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
+    onChange(value);
   };
 
   return (
@@ -28,8 +28,8 @@ export const TimePicker = ({ date, setDate }: Props) => {
         </Label>
         <TimePickerInput
           picker="hours"
-          date={date}
-          setDate={setDate}
+          date={value}
+          setDate={onChange}
           ref={hourRef}
           onRightFocus={() => minuteRef.current?.focus()}
         />
@@ -40,8 +40,8 @@ export const TimePicker = ({ date, setDate }: Props) => {
         </Label>
         <TimePickerInput
           picker="minutes"
-          date={date}
-          setDate={setDate}
+          date={value}
+          setDate={onChange}
           ref={minuteRef}
           onLeftFocus={() => hourRef.current?.focus()}
           onRightFocus={() => secondRef.current?.focus()}
@@ -53,14 +53,13 @@ export const TimePicker = ({ date, setDate }: Props) => {
         </Label>
         <TimePickerInput
           picker="seconds"
-          date={date}
-          setDate={setDate}
+          date={value}
+          setDate={onChange}
           ref={secondRef}
           onLeftFocus={() => minuteRef.current?.focus()}
         />
       </div>
       <div className="flex h-10 items-center">
-        {/* <Clock className="ml-2 h-4 w-4" /> */}
         <Button variant="outline" size="sm" onClick={nowClick}>
           Now
         </Button>
