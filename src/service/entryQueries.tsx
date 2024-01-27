@@ -1,70 +1,65 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAuthState } from 'lib/authentication';
-import { config } from 'lib/config';
-import {
-  Deposit,
-  Dividend,
-  Entry,
-  Taxes,
-  Trade,
-  Withdrawal,
-} from 'model/entry';
-import { Paginated } from 'model/pagination';
-import { responseOrError } from './response';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { usePortfolioContext } from "contexts/PortfolioContext";
+import { useAuthState } from "lib/authentication";
+import { config } from "lib/config";
+import { Deposit, Dividend, Entry, Taxes, Trade, Withdrawal } from "model/entry";
+import { Paginated } from "model/pagination";
+import { responseOrError } from "./response";
 
 export const useGetEntries = (
   query?: string,
-  journal?: string,
   type?: string,
   direction?: string,
   pageSize?: string,
   page?: string
 ) => {
   const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
 
   return useQuery({
     queryKey: [
-      'entries',
-      `entries-${query}-${journal}-${type}-${direction}-${pageSize}-${page}`,
+      "entries",
+      `entries-${query}-${portfolio?.id}-${type}-${direction}-${pageSize}-${page}`,
     ],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getEntries(
-        accessToken!,
-        query,
-        journal,
-        type,
-        direction,
-        pageSize,
-        page
-      );
+      return getEntries(accessToken!, portfolio?.id!, query, type, direction, pageSize, page);
     },
   });
 };
 
 export const useGetEntry = (id: string) => {
   const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
 
   return useQuery({
     queryKey: [`entry-${id}`],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getEntry(accessToken!, id);
+      return getEntry(accessToken!, portfolio?.id!, id);
     },
   });
 };
 
 export const useDeleteEntry = () => {
   const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const accessToken = await getToken();
-      return deleteEntry(accessToken!, id);
+      return deleteEntry(accessToken!, portfolio?.id!, id);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: [`entry-${data}`, 'entries'],
+        queryKey: ["entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`balance-${portfolio?.id}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${data}`],
       });
     },
   });
@@ -72,16 +67,22 @@ export const useDeleteEntry = () => {
 
 export const useSaveEntry = () => {
   const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (
-      entry: Trade | Deposit | Withdrawal | Taxes | Dividend
-    ) => {
+    mutationFn: async (entry: Trade | Deposit | Withdrawal | Taxes | Dividend) => {
       const accessToken = await getToken();
-      return saveEntry(accessToken!, entry);
+      return saveEntry(accessToken!, portfolio?.id!, entry);
     },
     onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`balance-${portfolio?.id}`],
+      });
       queryClient.invalidateQueries({
         queryKey: [`entry-${data.id}`],
       });
@@ -91,20 +92,17 @@ export const useSaveEntry = () => {
 
 const getEntries = (
   accessToken: string,
+  portfolioId: string,
   query?: string,
-  journal?: string,
   type?: string,
   direction?: string,
   pageSize?: string,
   page?: string
 ): Promise<Paginated<Entry>> => {
-  let url = `${config.api}/api/v1/entries?`;
+  let url = `${config.api}/api/v1/portfolios/${portfolioId}/entries?`;
 
   if (query) {
     url = `${url}query=${query}&`;
-  }
-  if (journal) {
-    url = `${url}journal=${journal}&`;
   }
   if (type) {
     url = `${url}type=${type}&`;
@@ -120,43 +118,44 @@ const getEntries = (
   }
 
   return fetch(url, {
-    method: 'GET',
+    method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   }).then(responseOrError);
 };
 
-const getEntry = (accessToken: string, id: string): Promise<Entry> => {
-  return fetch(`${config.api}/api/v1/entries/${id}`, {
-    method: 'GET',
+const getEntry = (accessToken: string, portfolioId: string, id: string): Promise<Entry> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${id}`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   }).then(responseOrError);
 };
 
-const deleteEntry = (accessToken: string, id: string): Promise<string> => {
-  return fetch(`${config.api}/api/v1/entries/${id}`, {
-    method: 'DELETE',
+const deleteEntry = (accessToken: string, portfolioId: string, id: string): Promise<string> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${id}`, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   }).then(responseOrError);
 };
 
 const saveEntry = (
   accessToken: string,
+  portfolioId: string,
   dividend: Trade | Deposit | Withdrawal | Taxes | Dividend
 ): Promise<Entry> => {
-  return fetch(`${config.api}/api/v1/entries`, {
-    method: 'POST',
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(dividend),
   }).then(responseOrError);

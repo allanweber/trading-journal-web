@@ -1,40 +1,53 @@
-import {
-  CandlestickChart,
-  Landmark,
-  Percent,
-  PiggyBank,
-  Wallet,
-} from 'lucide-react';
+import { BadgePercent, CandlestickChart, Coins, Landmark, PiggyBank, Wallet } from "lucide-react";
+
 export enum EntryType {
-  Trade = 'TRADE',
-  Withdrawal = 'WITHDRAWAL',
-  Deposit = 'DEPOSIT',
-  Taxes = 'TAXES',
-  Dividend = 'DIVIDEND',
+  STOCK = "STOCK",
+  DIVIDEND = "DIVIDEND",
+  WITHDRAWAL = "WITHDRAWAL",
+  DEPOSIT = "DEPOSIT",
+  TAXES = "TAXES",
+  FEES = "FEES",
 }
 
 export const getEntries = [
   {
-    type: EntryType.Trade,
+    type: EntryType.STOCK,
     icon: CandlestickChart,
   },
   {
-    type: EntryType.Withdrawal,
+    type: EntryType.DIVIDEND,
+    icon: Coins,
+  },
+  {
+    type: EntryType.WITHDRAWAL,
     icon: Wallet,
   },
   {
-    type: EntryType.Deposit,
+    type: EntryType.DEPOSIT,
     icon: PiggyBank,
   },
   {
-    type: EntryType.Taxes,
+    type: EntryType.TAXES,
     icon: Landmark,
   },
   {
-    type: EntryType.Dividend,
-    icon: Percent,
+    type: EntryType.FEES,
+    icon: BadgePercent,
   },
 ];
 
-export const getEntryType = (type: EntryType) =>
-  getEntries.find((d) => d.type === type);
+export const getEntryType = (type: EntryType) => getEntries.find((d) => d.type === type);
+
+export const onlyPortfolioBalances = () => {
+  return getEntries.filter(
+    (d) =>
+      d.type === EntryType.WITHDRAWAL ||
+      d.type === EntryType.DEPOSIT ||
+      d.type === EntryType.TAXES ||
+      d.type === EntryType.FEES
+  );
+};
+
+export const onlyTrades = () => {
+  return getEntries.filter((d) => d.type === EntryType.STOCK || d.type === EntryType.DIVIDEND);
+};

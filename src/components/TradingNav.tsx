@@ -1,32 +1,49 @@
-import { Disclosure } from '@headlessui/react';
-import { cn } from 'lib/utils';
-import { Menu, X } from 'lucide-react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { UserNav } from '../pages/app/user/components/UserNav';
-import { Icons } from './icons';
+import { Disclosure } from "@headlessui/react";
+import { usePortfolioContext } from "contexts/PortfolioContext";
+import { cn } from "lib/utils";
+import { Menu, X } from "lucide-react";
+import { AddPortfolioBalance } from "pages/app/portfolios/components/AddPortfolioBalance";
+import PortfolioBalanceStatus from "pages/app/portfolios/components/PortfolioBalanceStatus";
+import { NavLink, useLocation } from "react-router-dom";
+import { UserNav } from "../pages/app/user/components/UserNav";
+import { Icons } from "./icons";
+import PortfolioSwitcher from "./portfolio/PortfolioSwitcher";
 
 const items = [
   {
-    name: 'Dashboard',
-    href: '/trading',
+    name: "Dashboard",
+    href: "/trading",
   },
   {
-    name: 'Journals',
-    href: '/trading/journals',
-  },
-  {
-    name: 'Entries',
-    href: '/trading/entries',
+    name: "Entries",
+    href: "/trading/entries",
   },
 ];
 
+const Balance = () => {
+  const { portfolio } = usePortfolioContext();
+  return (
+    <>
+      {portfolio && (
+        <>
+          <div className="flex items-center">
+            <PortfolioBalanceStatus className="text-lg" />
+            <AddPortfolioBalance showEditIcon />
+          </div>
+        </>
+      )}
+    </>
+  );
+};
+
 export default function TradingNav() {
+  const { portfolio } = usePortfolioContext();
   const location = useLocation();
   const { pathname } = location;
 
   const isActive = (path: string) => {
-    const pathParts = path.split('/');
-    const pathNameParts = pathname.split('/');
+    const pathParts = path.split("/");
+    const pathNameParts = pathname.split("/");
 
     if (pathParts.length > 2 && pathNameParts.length > 2) {
       return pathNameParts[2].startsWith(pathParts[2]);
@@ -58,26 +75,33 @@ export default function TradingNav() {
                     <Icons.Logo className="h-8 w-auto" />
                   </NavLink>
                 </div>
+                <div className="flex h-16 items-center px-4">
+                  <PortfolioSwitcher />
+                </div>
 
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                  {items.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.href}
-                      className={cn(
-                        isActive(item.href)
-                          ? 'border-gray-900 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
-                        'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
-                      )}
-                      aria-current={item.href === pathname ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </NavLink>
-                  ))}
+                  {portfolio &&
+                    items.map((item) => (
+                      <NavLink
+                        key={item.name}
+                        to={item.href}
+                        className={cn(
+                          isActive(item.href)
+                            ? "border-gray-900 text-gray-900"
+                            : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                          "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                        )}
+                        aria-current={item.href === pathname ? "page" : undefined}
+                      >
+                        {item.name}
+                      </NavLink>
+                    ))}
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <div className="hidden md:block mr-5">
+                  <Balance />
+                </div>
                 <UserNav />
               </div>
             </div>
@@ -85,22 +109,26 @@ export default function TradingNav() {
 
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-4 space-y-1">
-              {items.map((item) => (
-                <NavLink
-                  onClick={() => close()}
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    isActive(item.href)
-                      ? 'bg-gray-50 border-gray-500 text-gray-700'
-                      : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700',
-                    'block pl-3 pr-4 py-2 border-l-4 text-base font-medium'
-                  )}
-                  aria-current={item.href === pathname ? 'page' : undefined}
-                >
-                  {item.name}
-                </NavLink>
-              ))}
+              <div className="pl-3 pr-4 py-2">
+                <Balance />
+              </div>
+              {portfolio &&
+                items.map((item) => (
+                  <NavLink
+                    onClick={() => close()}
+                    key={item.name}
+                    to={item.href}
+                    className={cn(
+                      isActive(item.href)
+                        ? "bg-gray-50 border-gray-500 text-gray-700"
+                        : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700",
+                      "block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                    )}
+                    aria-current={item.href === pathname ? "page" : undefined}
+                  >
+                    {item.name}
+                  </NavLink>
+                ))}
             </div>
           </Disclosure.Panel>
         </>

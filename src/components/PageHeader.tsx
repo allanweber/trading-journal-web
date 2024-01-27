@@ -1,5 +1,5 @@
-import type { PropsWithChildren } from 'react';
-import React, { useEffect, useState } from 'react';
+import type { PropsWithChildren } from "react";
+import React, { useEffect, useState } from "react";
 
 export const PageHeader = (props: PropsWithChildren) => {
   const { children } = props;
@@ -22,11 +22,11 @@ export const PageHeader = (props: PropsWithChildren) => {
   return (
     <div className="flex items-center justify-between space-y-2">
       <div>
-        <h2 className="text-xl font-medium">{title}</h2>
-        <h3 className="text-muted-foreground">{subtitle}</h3>
+        <h2 className="text-2xl font-medium">{title}</h2>
+        <h3 className="text-sm text-muted-foreground">{subtitle}</h3>
       </div>
       <div className="flex items-center space-x-2">
-        <div className="sm:mt-0 sm:ml-16 ">{action}</div>
+        <div className="sm:mt-0 sm:ml-16">{action}</div>
       </div>
     </div>
   );

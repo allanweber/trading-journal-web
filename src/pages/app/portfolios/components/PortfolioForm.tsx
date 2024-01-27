@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MessageDisplay } from "components/MessageDisplay";
 import { Button } from "components/ui/button";
 import {
   Form,
@@ -10,64 +9,61 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
+import { Input } from "components/ui/input";
 import { useToast } from "components/ui/use-toast";
-import { Dividend, Entry, dividendSchema } from "model/entry";
-import { EntryType } from "model/entryType";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSaveEntry } from "service/entryQueries";
 
+import { CurrencySelect } from "components/CurrencySelect";
 import { DateTimePicker } from "components/DateTimePicker";
+import { MessageDisplay } from "components/MessageDisplay";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
-import { TextArea } from "components/TextArea";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
-import { Input } from "components/ui/input";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
-import { NavLink, useNavigate } from "react-router-dom";
-import { DeleteEntryButton } from "./DeleteEntryButton";
+import { Portfolio, portfolioSchema } from "model/portfolio";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSavePortfolio } from "service/portfolioQueries";
+import { DeletePortfolioButton } from "./DeletePortfolioButton";
 
-type Props = {
-  dividend?: Dividend;
-};
-
-export default function DividendForm({ dividend }: Props) {
-  const startValues: Dividend = {
-    symbol: "",
-    notes: "",
-    date: new Date(),
-    price: 0,
-    entryType: EntryType.DIVIDEND,
+export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
+  const startValues = {
+    name: "",
+    description: "",
+    startDate: new Date(),
+    startBalance: 0,
+    currency: "USD",
   };
 
-  const { portfolio } = usePortfolioContext();
-  const [values, setValues] = useState<Dividend>(dividend || startValues);
+  const [values, setValues] = useState<Portfolio>(portfolio || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const mutation = useSaveEntry();
+  const { setPortfolio } = usePortfolioContext();
 
+  const mutation = useSavePortfolio();
   useEffect(() => {
-    if (dividend) {
-      setValues(dividend);
+    if (portfolio) {
+      setValues(portfolio);
     }
-  }, [dividend]);
+  }, [portfolio]);
 
-  const form = useForm<Dividend>({
-    resolver: zodResolver(dividendSchema),
+  const form = useForm<Portfolio>({
+    resolver: zodResolver(portfolioSchema),
     defaultValues: values,
     values,
   });
 
-  function onSubmit(data: Dividend) {
+  function onSubmit(data: Portfolio) {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: "Dividend saved",
-          description: `Your dividend was saved successfully`,
+          title: "Portfolio saved",
+          description: `Your portfolio ${data.name} was saved successfully`,
         });
-        navigate("/trading/entries");
+        setPortfolio(data);
+        navigate("/trading");
       },
     });
   }
@@ -80,13 +76,12 @@ export default function DividendForm({ dividend }: Props) {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>{dividend ? "Edit" : "Add a new"} Dividend</PageHeader.Title>
+              <PageHeader.Title>{portfolio ? "Edit" : "Add a new"} Portfolio</PageHeader.Title>
               <PageHeader.Action>
-                {dividend && (
-                  <DeleteEntryButton
-                    entry={dividend as Entry}
+                {portfolio && (
+                  <DeletePortfolioButton
+                    portfolio={portfolio!}
                     onError={(error) => setDeleteError(error)}
-                    onSuccess={() => navigate("/trading/entries")}
                   />
                 )}
               </PageHeader.Action>
@@ -98,68 +93,84 @@ export default function DividendForm({ dividend }: Props) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="symbol"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Dividend Symbol</FormLabel>
+                    <FormLabel>Portfolio Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Dividend Symbol" {...field} />
+                      <Input placeholder="Portfolio Name" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is the trade symbol from where you received your dividend. (required)
+                      This is the name of your portfolio that will be displayed everywhere.
+                      (required)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Dividend Date</FormLabel>
-                    <DateTimePicker withTime {...field} disabled={dividend} />
-                    <FormDescription>
-                      This is the date when you received do your dividend, this is used to calculate
-                      your balance, and can never be changed. (required)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Dividend value</FormLabel>
-                    <NumberInput
-                      disabled={dividend}
-                      {...field}
-                      currency={getSymbol(portfolio?.currency || "$")}
-                    />
-                    <FormDescription>
-                      This is the value of your dividend, this is used to calculate your balance,
-                      and can never be changed. (required)
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="notes"
+                name="description"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <TextArea placeholder="Notes" {...field} />
+                      <Input placeholder="Portfolio Description" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is just a brief description of your dividend. (optional)
+                      This is just a brief description of your portfolio. (optional)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="startDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Start Date</FormLabel>
+                    <DateTimePicker {...field} disabled={portfolio} />
+                    <FormDescription>
+                      This is the date when you started your portfolio, used to calculate your
+                      balance, and can never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="startBalance"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Start Balance</FormLabel>
+                    <NumberInput
+                      {...field}
+                      disabled={portfolio}
+                      currency={getSymbol(form.getValues("currency") || "$")}
+                    />
+                    <FormDescription>
+                      This is the balance of your account at the start of your portfolio, and can
+                      never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="currency"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Portfolio Currency</FormLabel>
+                    <CurrencySelect {...field} />
+                    <FormDescription>
+                      This is the currency of your portfolio that will be shown for all your trades.
+                      (required)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -167,10 +178,13 @@ export default function DividendForm({ dividend }: Props) {
               />
 
               <div className="flex flex-wrap sm:justify-end">
-                <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to="/trading/entries">Cancel</NavLink>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
                 </Button>
-
                 <Button
                   type="submit"
                   className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
@@ -185,4 +199,4 @@ export default function DividendForm({ dividend }: Props) {
       </Card>
     </>
   );
-}
+};

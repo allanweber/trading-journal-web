@@ -5,11 +5,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'components/ui/dialog';
-import { PlusCircle } from 'lucide-react';
-import { getEntries } from 'model/entryType';
-import { NavLink } from 'react-router-dom';
-import { Button } from '../../../../components/ui/button';
+} from "components/ui/dialog";
+import { PlusCircle } from "lucide-react";
+import { onlyTrades } from "model/entryType";
+import { NavLink } from "react-router-dom";
+import { Button } from "../../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,9 +17,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../../../components/ui/dropdown-menu';
+} from "../../../../components/ui/dropdown-menu";
 
 export const AddEntryButton = () => {
+  const entryTypes = onlyTrades();
   return (
     <>
       <div className="flex md:hidden">
@@ -36,18 +37,11 @@ export const AddEntryButton = () => {
             </DialogHeader>
             <DialogDescription>
               <div className="flex flex-col space-y-2">
-                {getEntries.map((entryType: any) => (
-                  <Button
-                    asChild
-                    key={entryType.type}
-                    className="w-full"
-                    variant="outline"
-                  >
+                {entryTypes.map((entryType: any) => (
+                  <Button asChild key={entryType.type} className="w-full" variant="outline">
                     <NavLink to={`/trading/entries/new/${entryType.type}`}>
                       <entryType.icon className="mr-2 h-4 w-4" />
-                      <span className="capitalize">
-                        {entryType.type.toLowerCase()}
-                      </span>
+                      <span className="capitalize">{entryType.type.toLowerCase()}</span>
                     </NavLink>
                   </Button>
                 ))}
@@ -68,13 +62,11 @@ export const AddEntryButton = () => {
             <DropdownMenuLabel>Add by type</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            {getEntries.map((entryType: any) => (
+            {entryTypes.map((entryType: any) => (
               <DropdownMenuItem key={entryType.type} asChild>
                 <NavLink to={`/trading/entries/new/${entryType.type}`}>
                   <entryType.icon className="mr-2 h-4 w-4" />
-                  <span className="capitalize">
-                    {entryType.type.toLowerCase()}
-                  </span>
+                  <span className="capitalize">{entryType.type.toLowerCase()}</span>
                 </NavLink>
               </DropdownMenuItem>
             ))}

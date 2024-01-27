@@ -13,9 +13,9 @@ import {
 import { EditEntry } from './app/entries/EditEntry';
 import { Entries } from './app/entries/Entries';
 import { NewEntry } from './app/entries/NewEntry';
-import { EditJournal } from './app/journals/EditJournal';
-import { Journals } from './app/journals/Journals';
-import { NewJournal } from './app/journals/NewJournal';
+import { EditPortfolio } from './app/portfolios/EditPortfolio';
+import { NewPortfolio } from './app/portfolios/NewPortfolio';
+import { Portfolios } from './app/portfolios/Portfolios';
 import { UserProfile } from './app/user/UserProfile';
 import { UserSettings } from './app/user/UserSettings';
 
@@ -29,9 +29,9 @@ export const router = createBrowserRouter(
       </Route>
       <Route path="trading" element={<AppLayout />}>
         <Route index element={<Trading />} />
-        <Route path="journals" element={<Journals />} />
-        <Route path="journals/new" element={<NewJournal />} />
-        <Route path="journals/:id" element={<EditJournal />} />
+        <Route path="portfolios" element={<Portfolios />} />
+        <Route path="portfolios/new" element={<NewPortfolio />} />
+        <Route path="portfolios/:id" element={<EditPortfolio />} />
         <Route path="entries" element={<Entries />} />
         <Route path="entries/new/:tradeType" element={<NewEntry />} />
         <Route path="entries/:id" element={<EditEntry />} />

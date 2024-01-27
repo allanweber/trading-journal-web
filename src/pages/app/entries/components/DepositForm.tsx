@@ -1,6 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { MessageDisplay } from 'components/MessageDisplay';
-import { Button } from 'components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MessageDisplay } from "components/MessageDisplay";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import {
   Form,
   FormControl,
@@ -9,35 +10,38 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from 'components/ui/form';
-import { useToast } from 'components/ui/use-toast';
-import { Deposit, depositSchema } from 'model/entry';
-import { EntryType } from 'model/entryType';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useSaveEntry } from 'service/entryQueries';
+} from "components/ui/form";
+import { useToast } from "components/ui/use-toast";
+import { Deposit, Entry, depositSchema } from "model/entry";
+import { EntryType } from "model/entryType";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSaveEntry } from "service/entryQueries";
 
-import { DateTimePicker } from 'components/DateTimePicker';
-import { JournalSelect } from 'components/JournalSelect';
-import { NumberInput } from 'components/NumberInput';
-import { TextArea } from 'components/TextArea';
-import { getSymbol } from 'model/currency';
-import { Journal } from 'model/journal';
-import { NavLink } from 'react-router-dom';
+import { DateTimePicker } from "components/DateTimePicker";
+import { NumberInput } from "components/NumberInput";
+import { PageHeader } from "components/PageHeader";
+import { TextArea } from "components/TextArea";
+import { usePortfolioContext } from "contexts/PortfolioContext";
+import { getSymbol } from "model/currency";
+import { DeleteEntryButton } from "./DeleteEntryButton";
 
-export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
+type Props = {
+  deposit?: Deposit;
+  onChange: (data: Deposit | undefined) => void;
+};
+
+export const DepositForm = ({ deposit, onChange }: Props) => {
   const startValues: Deposit = {
-    description: '',
-    journalId: '',
+    notes: "",
     date: new Date(),
     price: 0,
-    entryType: EntryType.Deposit,
+    entryType: EntryType.DEPOSIT,
   };
 
+  const { portfolio } = usePortfolioContext();
   const [values, setValues] = useState<Deposit>(deposit || startValues);
-  const [journal, setJournal] = useState<Journal | undefined>(undefined);
-  const navigate = useNavigate();
+  const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry();
@@ -58,10 +62,10 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: 'Deposit saved',
+          title: "Deposit saved",
           description: `Your deposit was saved successfully`,
         });
-        navigate('/trading/entries');
+        onChange(data);
       },
     });
   }
@@ -69,96 +73,101 @@ export const DepositForm = ({ deposit }: { deposit?: Deposit }) => {
   return (
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="journalId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Journal Name</FormLabel>
-                <JournalSelect
-                  {...field}
-                  disabled={deposit}
-                  onJournalChange={(journal: Journal) => setJournal(journal)}
-                />
-                <FormDescription>
-                  This is the journal where your deposit takes place. (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <MessageDisplay message={deleteError} variant="destructive" />
+      <Card className="col-span-4">
+        <CardHeader>
+          <CardTitle>
+            <PageHeader>
+              <PageHeader.Title>{deposit ? "Edit" : "Add a new"} Deposit</PageHeader.Title>
+              <PageHeader.Action>
+                {deposit && (
+                  <DeleteEntryButton
+                    entry={deposit as Entry}
+                    onError={(error) => setDeleteError(error)}
+                    onSuccess={() => onChange(undefined)}
+                  />
+                )}
+              </PageHeader.Action>
+            </PageHeader>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pl-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Deposit Date</FormLabel>
+                    <DateTimePicker withTime {...field} disabled={deposit} />
+                    <FormDescription>
+                      This is the date when you did or will do your deposit, this is used to
+                      calculate your balance, and can never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Deposit Date</FormLabel>
-                <DateTimePicker withTime {...field} disabled={deposit} />
-                <FormDescription>
-                  This is the date when you did or will do your deposit, this is
-                  used to calculate your balance, and can never be changed.
-                  (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Deposit value</FormLabel>
+                    <NumberInput
+                      disabled={deposit}
+                      {...field}
+                      currency={getSymbol(portfolio?.currency || "$")}
+                    />
 
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Deposit value</FormLabel>
-                <NumberInput
-                  disabled={deposit}
-                  {...field}
-                  currency={getSymbol(journal?.currency || '$')}
-                />
+                    <FormDescription>
+                      This is the value o5 your deposit, this is used to calculate your balance, and
+                      can never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-                <FormDescription>
-                  This is the value o5 your deposit, this is used to calculate
-                  your balance, and can never be changed. (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <TextArea placeholder="Notes" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is just a brief description of your deposit. (optional)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <TextArea placeholder="Description" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is just a brief description of your deposit. (optional)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-wrap sm:justify-end">
-            <Button asChild variant="outline" className="w-full sm:w-[200px]">
-              <NavLink to="/trading/entries">Cancel</NavLink>
-            </Button>
-            <Button
-              type="submit"
-              className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
-              disabled={mutation.isPending}
-            >
-              Save
-            </Button>
-          </div>
-        </form>
-      </Form>
+              <div className="flex flex-wrap sm:justify-end">
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => onChange(undefined)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
+                  disabled={mutation.isPending}
+                >
+                  Save
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </>
   );
 };

@@ -1,30 +1,19 @@
-import ColoredNumber from 'components/ColoredNumber';
-import DateDisplay from 'components/DateDisplay';
-import { MessageDisplay } from 'components/MessageDisplay';
-import NumberDisplay from 'components/NumberDisplay';
-import { TableLoading } from 'components/table/TableLoading';
-import { TablePagination } from 'components/table/TablePagination';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from 'components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from 'components/ui/table';
-import { EditIcon } from 'lucide-react';
-import { Entry } from 'model/entry';
-import { EntryType } from 'model/entryType';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useGetEntries } from 'service/entryQueries';
+import ColoredNumber from "components/ColoredNumber";
+import DateDisplay from "components/DateDisplay";
+import { MessageDisplay } from "components/MessageDisplay";
+import NumberDisplay from "components/NumberDisplay";
+import { TableLoading } from "components/table/TableLoading";
+import { TablePagination } from "components/table/TablePagination";
+import { Button } from "components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
+import { EditIcon } from "lucide-react";
+import { Entry } from "model/entry";
+import { EntryType } from "model/entryType";
+import { useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useGetEntries } from "service/entryQueries";
+import { DeleteEntryButton } from "./DeleteEntryButton";
 
 const ResultChange = ({ entry }: { entry: Entry }) => {
   if (!entry.result) return <span className="text-muted-foreground">Open</span>;
@@ -32,14 +21,11 @@ const ResultChange = ({ entry }: { entry: Entry }) => {
   return (
     <div className="flex flex-col space-y-2">
       <ColoredNumber value={entry.result}>
-        <NumberDisplay value={entry.result} currency={entry.journal.currency} />
+        <NumberDisplay value={entry.result} currency={entry.portfolio.currency} />
       </ColoredNumber>
       {entry.accountChange && (
         <ColoredNumber value={entry.accountChange}>
-          <NumberDisplay
-            value={entry.accountChange}
-            isPercentage
-          ></NumberDisplay>
+          <NumberDisplay value={entry.accountChange} isPercentage></NumberDisplay>
         </ColoredNumber>
       )}
     </div>
@@ -53,7 +39,7 @@ const Dates = ({ entry }: { entry: Entry }) => {
         <DateDisplay withTime value={entry.date} />
       </div>
       <div>
-        {entry.exitDate && entry.entryType === EntryType.Trade && (
+        {entry.exitDate && entry.entryType === EntryType.STOCK && (
           <DateDisplay withTime value={entry.exitDate} />
         )}
       </div>
@@ -64,6 +50,7 @@ const Dates = ({ entry }: { entry: Entry }) => {
 export const EntriesTable = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [deleteError, setDeleteError] = useState<any>(null);
 
   const {
     data: entries,
@@ -71,12 +58,11 @@ export const EntriesTable = () => {
     isLoading,
     isSuccess,
   } = useGetEntries(
-    searchParams.get('query') || undefined,
-    searchParams.get('journal') || undefined,
-    searchParams.get('entryType') || undefined,
-    searchParams.get('direction') || undefined,
-    searchParams.get('pageSize') || undefined,
-    searchParams.get('page') || undefined
+    searchParams.get("query") || undefined,
+    searchParams.get("entryType") || undefined,
+    searchParams.get("direction") || undefined,
+    searchParams.get("pageSize") || undefined,
+    searchParams.get("page") || undefined
   );
 
   if (error) {
@@ -86,6 +72,7 @@ export const EntriesTable = () => {
   return (
     <>
       <div className="md:hidden rounded-md border min-w-full">
+        <MessageDisplay message={deleteError} variant="destructive" />
         {isLoading && isSuccess ? (
           <TableLoading />
         ) : (
@@ -101,13 +88,13 @@ export const EntriesTable = () => {
               >
                 <CardHeader>
                   <CardTitle>
-                    {entry.entryType === EntryType.Trade ? (
+                    {entry.entryType === EntryType.STOCK ? (
                       <>{entry.symbol}</>
                     ) : (
                       <>{entry.entryType}</>
                     )}
                   </CardTitle>
-                  <CardDescription>{entry.journal.name}</CardDescription>
+                  {/* <CardDescription>{entry.portfolio.name}</CardDescription> */}
                 </CardHeader>
                 <CardContent>{/* <p>Card Content</p> */}</CardContent>
                 <CardFooter>
@@ -137,7 +124,6 @@ export const EntriesTable = () => {
             <TableRow>
               <TableHead>Symbol</TableHead>
               <TableHead>Entry Type</TableHead>
-              <TableHead>Journal</TableHead>
               <TableHead>Start/Exit Date</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Result/Change</TableHead>
@@ -159,29 +145,30 @@ export const EntriesTable = () => {
                 entries.data.map((entry) => (
                   <TableRow key={entry.id}>
                     <TableCell className="font-medium">
-                      <Link to={`/trading/entries/${entry.id}`}>
-                        {entry.symbol}
-                      </Link>
+                      <Link to={`/trading/entries/${entry.id}`}>{entry.symbol}</Link>
                     </TableCell>
                     <TableCell>{entry.entryType}</TableCell>
-                    <TableCell>{entry.journal.name}</TableCell>
                     <TableCell>
                       <Dates entry={entry} />
                     </TableCell>
                     <TableCell>
-                      <NumberDisplay
-                        value={entry.price}
-                        currency={entry.journal.currency}
-                      />
+                      <NumberDisplay value={entry.price} currency={entry.portfolio.currency} />
                     </TableCell>
                     <TableCell>
                       <ResultChange entry={entry} />
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="max-w-[45px] flex justify-end">
-                        <Link to={`/trading/entries/${entry.id}`}>
-                          <EditIcon className="h-4 w-4" />
-                        </Link>
+                      <div className="flex justify-end">
+                        <Button variant="ghost" size="sm">
+                          <Link to={`/trading/entries/${entry.id}`}>
+                            <EditIcon className="h-4 w-4" />
+                          </Link>
+                        </Button>
+                        <DeleteEntryButton
+                          entry={entry}
+                          onError={(error) => setDeleteError(error)}
+                          onSuccess={() => {}}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>

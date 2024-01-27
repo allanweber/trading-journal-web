@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { MessageDisplay } from 'components/MessageDisplay';
-import { Button } from 'components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { MessageDisplay } from "components/MessageDisplay";
+import { Button } from "components/ui/button";
 import {
   Form,
   FormControl,
@@ -9,35 +9,39 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from 'components/ui/form';
-import { useToast } from 'components/ui/use-toast';
-import { Taxes, taxesSchema } from 'model/entry';
-import { EntryType } from 'model/entryType';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useSaveEntry } from 'service/entryQueries';
+} from "components/ui/form";
+import { useToast } from "components/ui/use-toast";
+import { Entry, Taxes, taxesSchema } from "model/entry";
+import { EntryType } from "model/entryType";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useSaveEntry } from "service/entryQueries";
 
-import { DateTimePicker } from 'components/DateTimePicker';
-import { JournalSelect } from 'components/JournalSelect';
-import { NumberInput } from 'components/NumberInput';
-import { TextArea } from 'components/TextArea';
-import { getSymbol } from 'model/currency';
-import { Journal } from 'model/journal';
-import { NavLink } from 'react-router-dom';
+import { DateTimePicker } from "components/DateTimePicker";
+import { NumberInput } from "components/NumberInput";
+import { PageHeader } from "components/PageHeader";
+import { TextArea } from "components/TextArea";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
+import { usePortfolioContext } from "contexts/PortfolioContext";
+import { getSymbol } from "model/currency";
+import { DeleteEntryButton } from "./DeleteEntryButton";
 
-export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
+type Props = {
+  taxes?: Taxes;
+  onChange: (data: Taxes | undefined) => void;
+};
+
+export const TaxesForm = ({ taxes, onChange }: Props) => {
   const startValues: Taxes = {
-    description: '',
-    journalId: '',
+    notes: "",
     date: new Date(),
     price: 0,
-    entryType: EntryType.Taxes,
+    entryType: EntryType.TAXES,
   };
 
+  const { portfolio } = usePortfolioContext();
   const [values, setValues] = useState<Taxes>(taxes || startValues);
-  const [journal, setJournal] = useState<Journal | undefined>(undefined);
-  const navigate = useNavigate();
+  const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry();
@@ -58,10 +62,10 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: 'Taxes saved',
+          title: "Taxes saved",
           description: `Your taxes were saved successfully`,
         });
-        navigate('/trading/entries');
+        onChange(data);
       },
     });
   }
@@ -69,94 +73,100 @@ export const TaxesForm = ({ taxes }: { taxes?: Taxes }) => {
   return (
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="journalId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Journal Name</FormLabel>
-                <JournalSelect
-                  {...field}
-                  disabled={taxes}
-                  onJournalChange={(journal: Journal) => setJournal(journal)}
-                />
-                <FormDescription>
-                  This is the journal where your taxes takes place. (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <MessageDisplay message={deleteError} variant="destructive" />
+      <Card className="col-span-4">
+        <CardHeader>
+          <CardTitle>
+            <PageHeader>
+              <PageHeader.Title>{taxes ? "Edit" : "Add a new"} Tax</PageHeader.Title>
+              <PageHeader.Action>
+                {taxes && (
+                  <DeleteEntryButton
+                    entry={taxes as Entry}
+                    onError={(error) => setDeleteError(error)}
+                    onSuccess={() => onChange(undefined)}
+                  />
+                )}
+              </PageHeader.Action>
+            </PageHeader>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pl-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Taxes Date</FormLabel>
+                    <DateTimePicker withTime {...field} disabled={taxes} />
+                    <FormDescription>
+                      This is the date when you declared your taxes, this is used to calculate your
+                      balance, and can never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Taxes Date</FormLabel>
-                <DateTimePicker withTime {...field} disabled={taxes} />
-                <FormDescription>
-                  This is the date when you declared your taxes, this is used to
-                  calculate your balance, and can never be changed. (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Taxes value</FormLabel>
+                    <NumberInput
+                      disabled={taxes}
+                      {...field}
+                      currency={getSymbol(portfolio?.currency || "$")}
+                    />
+                    <FormDescription>
+                      This is the value of your taxes, this is used to calculate your balance, and
+                      can never be changed. (required)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="price"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Taxes value</FormLabel>
-                <NumberInput
-                  disabled={taxes}
-                  {...field}
-                  currency={getSymbol(journal?.currency || '$')}
-                />
-                <FormDescription>
-                  This is the value of your taxes, this is used to calculate
-                  your balance, and can never be changed. (required)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <TextArea placeholder="Notes" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is just a brief description of your taxes. (optional)
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <TextArea placeholder="Description" {...field} />
-                </FormControl>
-                <FormDescription>
-                  This is just a brief description of your taxes. (optional)
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-wrap sm:justify-end">
-            <Button asChild variant="outline" className="w-full sm:w-[200px]">
-              <NavLink to="/trading/entries">Cancel</NavLink>
-            </Button>
-            <Button
-              type="submit"
-              className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
-              disabled={mutation.isPending}
-            >
-              Save
-            </Button>
-          </div>
-        </form>
-      </Form>
+              <div className="flex flex-wrap sm:justify-end">
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => onChange(undefined)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
+                  disabled={mutation.isPending}
+                >
+                  Save
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </>
   );
 };

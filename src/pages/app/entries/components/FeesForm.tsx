@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "components/ui/form";
 import { useToast } from "components/ui/use-toast";
-import { Entry, Withdrawal, withdrawalSchema } from "model/entry";
+import { Entry, Fees, Withdrawal, feesSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,43 +27,43 @@ import { getSymbol } from "model/currency";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 
 type Props = {
-  withdrawal?: Withdrawal;
-  onChange: (data: Withdrawal | undefined) => void;
+  fees?: Fees;
+  onChange: (data: Fees | undefined) => void;
 };
 
-export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
-  const startValues: Withdrawal = {
+export const FeesForm = ({ fees, onChange }: Props) => {
+  const startValues: Fees = {
     notes: "",
     date: new Date(),
     price: 0,
-    entryType: EntryType.WITHDRAWAL,
+    entryType: EntryType.FEES,
   };
 
   const { portfolio } = usePortfolioContext();
-  const [values, setValues] = useState<Withdrawal>(withdrawal || startValues);
+  const [values, setValues] = useState<Withdrawal>(fees || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry();
 
   useEffect(() => {
-    if (withdrawal) {
-      setValues(withdrawal);
+    if (fees) {
+      setValues(fees);
     }
-  }, [withdrawal]);
+  }, [fees]);
 
-  const form = useForm<Withdrawal>({
-    resolver: zodResolver(withdrawalSchema),
+  const form = useForm<Fees>({
+    resolver: zodResolver(feesSchema),
     defaultValues: values,
     values,
   });
 
-  function onSubmit(data: Withdrawal) {
+  function onSubmit(data: Fees) {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: "Withdrawal saved",
-          description: `Your withdrawal was saved successfully`,
+          title: "Fee saved",
+          description: `Your fee was saved successfully`,
         });
         onChange(data);
       },
@@ -78,11 +78,11 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>{withdrawal ? "Edit" : "Add a new"} Withdrawal</PageHeader.Title>
+              <PageHeader.Title>{fees ? "Edit" : "Add a new"} Fee</PageHeader.Title>
               <PageHeader.Action>
-                {withdrawal && (
+                {fees && (
                   <DeleteEntryButton
-                    entry={withdrawal as Entry}
+                    entry={fees as Entry}
                     onError={(error) => setDeleteError(error)}
                     onSuccess={() => onChange(undefined)}
                   />
@@ -99,11 +99,11 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Withdrawal Date</FormLabel>
-                    <DateTimePicker withTime {...field} disabled={withdrawal} />
+                    <FormLabel>Fee Date</FormLabel>
+                    <DateTimePicker withTime {...field} disabled={fees} />
                     <FormDescription>
-                      This is the date when you did or will do your withdrawal, this is used to
-                      calculate your balance, and can never be changed. (required)
+                      This is the date when you did or will do your fee, this is used to calculate
+                      your balance, and can never be changed. (required)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -115,15 +115,15 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
                 name="price"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Withdrawal value</FormLabel>
+                    <FormLabel>Fee value</FormLabel>
                     <NumberInput
-                      disabled={withdrawal}
+                      disabled={fees}
                       {...field}
                       currency={getSymbol(portfolio?.currency || "$")}
                     />
                     <FormDescription>
-                      This is the value of your withdrawal, this is used to calculate your balance,
-                      and can never be changed. (required)
+                      This is the value of your fee, this is used to calculate your balance, and can
+                      never be changed. (required)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -140,7 +140,7 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
                       <TextArea placeholder="Notes" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is just a brief description of your withdrawal. (optional)
+                      This is just a brief description of your fee. (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

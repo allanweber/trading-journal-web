@@ -1,4 +1,5 @@
 import TradingNav from 'components/TradingNav';
+import { PortfolioProvider } from 'contexts/PortfolioContext';
 import { useAuthState } from 'lib/authentication';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -11,10 +12,12 @@ export const AppLayout = () => {
 
   return (
     <>
-      <TradingNav />
-      <div className="flex-1 space-y-4 p-2 md:p-4 pt-2 md:pt-6">
-        <Outlet />
-      </div>
+      <PortfolioProvider>
+        <TradingNav />
+        <div className="flex-1 space-y-4 p-2 md:p-4 pt-2 md:pt-6">
+          <Outlet />
+        </div>
+      </PortfolioProvider>
     </>
   );
 };
