@@ -11,7 +11,7 @@ import {
   FormMessage,
 } from "components/ui/form";
 import { useToast } from "components/ui/use-toast";
-import { Dividend, Entry, dividendSchema } from "model/entry";
+import { Entry, dividendSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -29,24 +29,25 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 
 type Props = {
-  dividend?: Dividend;
+  dividend?: Entry;
 };
 
 export default function DividendForm({ dividend }: Props) {
-  const startValues: Dividend = {
+  const { portfolio } = usePortfolioContext();
+  const startValues: Entry = {
     symbol: "",
     notes: "",
     date: new Date(),
     price: 0,
     entryType: EntryType.DIVIDEND,
+    result: 0,
+    portfolio: portfolio!,
   };
-
-  const { portfolio } = usePortfolioContext();
-  const [values, setValues] = useState<Dividend>(dividend || startValues);
+  const [values, setValues] = useState<Entry>(dividend || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const mutation = useSaveEntry();
+  const mutation = useSaveEntry(dividend?.id);
 
   useEffect(() => {
     if (dividend) {
@@ -54,18 +55,18 @@ export default function DividendForm({ dividend }: Props) {
     }
   }, [dividend]);
 
-  const form = useForm<Dividend>({
+  const form = useForm<Entry>({
     resolver: zodResolver(dividendSchema),
     defaultValues: values,
     values,
   });
 
-  function onSubmit(data: Dividend) {
+  function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
           title: "Dividend saved",
-          description: `Your dividend was saved successfully`,
+          description: `Dividend was saved successfully`,
         });
         navigate("/trading/entries");
       },
@@ -136,9 +137,9 @@ export default function DividendForm({ dividend }: Props) {
                   <FormItem className="flex flex-col">
                     <FormLabel>Dividend value</FormLabel>
                     <NumberInput
-                      disabled={dividend}
                       {...field}
                       currency={getSymbol(portfolio?.currency || "$")}
+                      disabled={dividend}
                     />
                     <FormDescription>
                       This is the value of your dividend, this is used to calculate your balance,

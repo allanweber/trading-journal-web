@@ -46,8 +46,6 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess }: Props) => {
     });
   };
 
-  console.log("entry", entry);
-
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>

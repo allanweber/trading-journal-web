@@ -1,18 +1,18 @@
 import { MessageDisplay } from "components/MessageDisplay";
 import { TableLoading } from "components/table/TableLoading";
-import { Entry, dividendSchema, tradeSchema } from "model/entry";
+import { Entry } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useParams } from "react-router-dom";
 import { useGetEntry } from "service/entryQueries";
 import DividendForm from "./components/DividendForm";
-import { TradeForm } from "./components/TradeForm";
+import { StockForm } from "./components/StockForm";
 
 const EntryForm = ({ entry }: { entry: Entry }) => {
   switch (entry.entryType) {
     case EntryType.STOCK:
-      return <TradeForm trade={tradeSchema.parse(entry)} />;
+      return <StockForm stock={entry} />;
     case EntryType.DIVIDEND:
-      return <DividendForm dividend={dividendSchema.parse(entry)} />;
+      return <DividendForm dividend={entry} />;
     default:
       throw new Error(`Invalid entry type: ${entry.entryType}`);
   }

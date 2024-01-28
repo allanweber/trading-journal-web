@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "components/ui/form";
 import { useToast } from "components/ui/use-toast";
-import { Entry, Trade, tradeSchema } from "model/entry";
+import { Entry, tradeSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -32,8 +32,9 @@ import { Direction } from "model/direction";
 import { NavLink } from "react-router-dom";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 
-export const TradeForm = ({ trade }: { trade?: Trade }) => {
-  const startValues: Trade = {
+export const StockForm = ({ stock }: { stock?: Entry }) => {
+  const { portfolio } = usePortfolioContext();
+  const startValues: Entry = {
     date: new Date(),
     price: 0,
     entryType: EntryType.STOCK,
@@ -41,33 +42,35 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
     direction: Direction.Long,
     size: 0,
     notes: "",
+    result: 0,
+    portfolio: portfolio!,
   };
 
-  const { portfolio } = usePortfolioContext();
-  const [values, setValues] = useState<Trade>(trade || startValues);
+  const [values, setValues] = useState<Entry>(stock || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const mutation = useSaveEntry();
+  const mutation = useSaveEntry(stock?.id);
 
   useEffect(() => {
-    if (trade) {
-      setValues(trade);
+    if (stock) {
+      setValues(stock);
     }
-  }, [trade]);
+  }, [stock]);
 
-  const form = useForm<Trade>({
+  const form = useForm<Entry>({
     resolver: zodResolver(tradeSchema),
+    defaultValues: values,
     values,
   });
 
-  function onSubmit(data: Trade) {
+  function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: "Trade saved",
-          description: `Your trade was saved successfully`,
+          title: "Stock saved",
+          description: `Stock was saved successfully`,
         });
         navigate("/trading/entries");
       },
@@ -82,11 +85,11 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>{trade ? "Edit" : "Add a new"} Stock Trade</PageHeader.Title>
+              <PageHeader.Title>{stock ? "Edit" : "Add a new"} Stock Trade</PageHeader.Title>
               <PageHeader.Action>
-                {trade && (
+                {stock && (
                   <DeleteEntryButton
-                    entry={trade as Entry}
+                    entry={stock as Entry}
                     onError={(error) => setDeleteError(error)}
                     onSuccess={() => navigate("/trading/entries")}
                   />
@@ -108,10 +111,10 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                         <FormItem>
                           <FormLabel>Symbol</FormLabel>
                           <FormControl>
-                            <Input placeholder="Trade symbol" {...field} />
+                            <Input placeholder="Stock symbol" {...field} />
                           </FormControl>
                           <FormDescription>
-                            This is the trade symbol your are buying or selling. (required)
+                            This is the stock symbol your are buying or selling. (required)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -130,7 +133,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                             <DirectionSelect {...field} />
                           </FormControl>
                           <FormDescription>
-                            This is the direction of your trade. (required)
+                            This is the direction of your stock trade. (required)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -150,10 +153,10 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                         <FormItem className="flex flex-col">
                           <FormLabel className="mb-2">Date</FormLabel>
 
-                          <DateTimePicker withTime {...field} disabled={trade} />
+                          <DateTimePicker withTime {...field} disabled={stock} />
 
                           <FormDescription>
-                            This is the date when your trade started. (required)
+                            This is the date when your stock trade started. (required)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -172,13 +175,13 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                           <FormControl>
                             <NumberInput
                               {...field}
-                              disabled={trade}
+                              disabled={stock}
                               currency={getSymbol(portfolio?.currency || "$")}
                             />
                           </FormControl>
 
                           <FormDescription>
-                            This is the value of your trade. (required)
+                            This is the value of your stock trade. (required)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -195,7 +198,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                           <FormLabel>Size</FormLabel>
 
                           <FormControl>
-                            <NumberInput {...field} disabled={trade} />
+                            <NumberInput {...field} disabled={stock} />
                           </FormControl>
 
                           <FormDescription>
@@ -267,7 +270,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
 
                   <div className="col-span-12">
                     <Separator className="mb-3" />
-                    <h3 className="-ml-1">Close Trade</h3>
+                    <h3 className="-ml-1">Close Stock</h3>
                   </div>
 
                   <div className="col-span-12 md:col-span-6 lg:col-span-4">
@@ -281,7 +284,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                           <DateTimePicker {...field} withTime />
 
                           <FormDescription>
-                            This is the date when you closed your trade (optional)
+                            This is the date when you closed your stock trade (optional)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -305,7 +308,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                           </FormControl>
 
                           <FormDescription>
-                            This is the price when you closed your trade (optional)
+                            This is the price when you closed your stock trade (optional)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -328,9 +331,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                             />
                           </FormControl>
 
-                          <FormDescription>
-                            Possible costs for this trade. there (optional)
-                          </FormDescription>
+                          <FormDescription>Costs for this stock trade (optional)</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -353,7 +354,7 @@ export const TradeForm = ({ trade }: { trade?: Trade }) => {
                             <TextArea placeholder="Notes" {...field} />
                           </FormControl>
                           <FormDescription>
-                            This is just a brief description of your trade. (optional)
+                            This is just a brief description of your stock trade. (optional)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>

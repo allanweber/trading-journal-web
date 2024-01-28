@@ -1,12 +1,12 @@
 import { EntryType } from "model/entryType";
 import { useNavigate, useParams } from "react-router-dom";
 import DividendForm from "./components/DividendForm";
-import { TradeForm } from "./components/TradeForm";
+import { StockForm } from "./components/StockForm";
 
 const EntryForm = ({ entryType }: { entryType: EntryType }) => {
   switch (entryType) {
     case EntryType.STOCK:
-      return <TradeForm />;
+      return <StockForm />;
     case EntryType.DIVIDEND:
       return <DividendForm />;
     default:

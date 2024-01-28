@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { useAuthState } from "lib/authentication";
 import { config } from "lib/config";
-import { Deposit, Dividend, Entry, Taxes, Trade, Withdrawal } from "model/entry";
+import { Deposit, Dividend, Entry, Stock, Taxes, Withdrawal } from "model/entry";
 import { Paginated } from "model/pagination";
 import { responseOrError } from "./response";
 
@@ -58,23 +58,23 @@ export const useDeleteEntry = () => {
       queryClient.invalidateQueries({
         queryKey: [`balance-${portfolio?.id}`],
       });
-      queryClient.invalidateQueries({
-        queryKey: [`entry-${data}`],
-      });
     },
   });
 };
 
-export const useSaveEntry = () => {
+export const useSaveEntry = (id: string | undefined) => {
   const { getToken } = useAuthState();
   const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (entry: Trade | Deposit | Withdrawal | Taxes | Dividend) => {
+    mutationFn: async (entry: Stock | Deposit | Withdrawal | Taxes | Dividend) => {
       const accessToken = await getToken();
-      return saveEntry(accessToken!, portfolio?.id!, entry);
+      if (id) {
+        return editEntry(accessToken!, portfolio?.id!, id, entry);
+      }
+      return createEntry(accessToken!, portfolio?.id!, entry);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
@@ -146,13 +146,29 @@ const deleteEntry = (accessToken: string, portfolioId: string, id: string): Prom
   }).then(responseOrError);
 };
 
-const saveEntry = (
+const createEntry = (
   accessToken: string,
   portfolioId: string,
-  dividend: Trade | Deposit | Withdrawal | Taxes | Dividend
+  dividend: Stock | Deposit | Withdrawal | Taxes | Dividend
 ): Promise<Entry> => {
   return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dividend),
+  }).then(responseOrError);
+};
+
+const editEntry = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string,
+  dividend: Stock | Deposit | Withdrawal | Taxes | Dividend
+): Promise<Entry> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}`, {
+    method: "PATCH",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",

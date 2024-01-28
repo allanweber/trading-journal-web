@@ -271,7 +271,7 @@ export const entrySchema = z.object({
   portfolio: portfolioSchema,
 });
 
-export type Trade = z.infer<typeof tradeSchema>;
+export type Stock = z.infer<typeof tradeSchema>;
 export type Deposit = z.infer<typeof depositSchema>;
 export type Withdrawal = z.infer<typeof withdrawalSchema>;
 export type Fees = z.infer<typeof feesSchema>;
