@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
+import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
@@ -104,11 +105,12 @@ export default function DividendForm({ dividend }: Props) {
                   <FormItem>
                     <FormLabel>Dividend Symbol</FormLabel>
                     <FormControl>
-                      <Input placeholder="Dividend Symbol" {...field} />
+                      <Input placeholder="Dividend Symbol" {...field}>
+                        <HelperText>
+                          This is the trade symbol from where you received your dividend. (required)
+                        </HelperText>
+                      </Input>
                     </FormControl>
-                    <FormDescription>
-                      This is the trade symbol from where you received your dividend. (required)
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -120,11 +122,12 @@ export default function DividendForm({ dividend }: Props) {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Dividend Date</FormLabel>
-                    <DateTimePicker withTime {...field} disabled={dividend} />
-                    <FormDescription>
-                      This is the date when you received do your dividend, this is used to calculate
-                      your balance, and can never be changed. (required)
-                    </FormDescription>
+                    <DateTimePicker withTime {...field} disabled={dividend}>
+                      <HelperText>
+                        This is the date when you received do your dividend, this is used to
+                        calculate your balance, and can never be changed. (required)
+                      </HelperText>
+                    </DateTimePicker>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -140,11 +143,12 @@ export default function DividendForm({ dividend }: Props) {
                       {...field}
                       currency={getSymbol(portfolio?.currency || "$")}
                       disabled={dividend}
-                    />
-                    <FormDescription>
-                      This is the value of your dividend, this is used to calculate your balance,
-                      and can never be changed. (required)
-                    </FormDescription>
+                    >
+                      <HelperText>
+                        This is the value of your dividend, this is used to calculate your balance,
+                        and can never be changed. (required)
+                      </HelperText>
+                    </NumberInput>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
+import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
@@ -79,13 +80,12 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Withdrawal Date</FormLabel>
-                <DateTimePicker
-                  withTime
-                  {...field}
-                  disabled={withdrawal}
-                  helperText=" This is the date when you did or will do your withdrawal, this is used to
-                      calculate your balance, and can never be changed. (required)"
-                />
+                <DateTimePicker withTime {...field} disabled={withdrawal}>
+                  <HelperText>
+                    This is the date when you did or will do your withdrawal, this is used to
+                    calculate your balance, and can never be changed. (required)
+                  </HelperText>
+                </DateTimePicker>
                 <FormMessage />
               </FormItem>
             )}
@@ -101,11 +101,12 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
                   {...field}
                   currency={getSymbol(portfolio?.currency || "$")}
                   disabled={withdrawal}
-                />
-                <FormDescription>
-                  This is the value of your withdrawal, this is used to calculate your balance, and
-                  can never be changed. (required)
-                </FormDescription>
+                >
+                  <HelperText>
+                    This is the value of your withdrawal, this is used to calculate your balance,
+                    and can never be changed. (required)
+                  </HelperText>
+                </NumberInput>
                 <FormMessage />
               </FormItem>
             )}

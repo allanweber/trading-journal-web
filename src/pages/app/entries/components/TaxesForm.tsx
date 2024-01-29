@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
+import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
@@ -79,11 +80,12 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Taxes Date</FormLabel>
-                <DateTimePicker withTime {...field} disabled={taxes} />
-                <FormDescription>
-                  This is the date when you declared your taxes, this is used to calculate your
-                  balance, and can never be changed. (required)
-                </FormDescription>
+                <DateTimePicker withTime {...field} disabled={taxes}>
+                  <HelperText>
+                    This is the date when you declared your taxes, this is used to calculate your
+                    balance, and can never be changed. (required)
+                  </HelperText>
+                </DateTimePicker>
                 <FormMessage />
               </FormItem>
             )}
@@ -99,11 +101,12 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
                   {...field}
                   currency={getSymbol(portfolio?.currency || "$")}
                   disabled={taxes}
-                />
-                <FormDescription>
-                  This is the value of your taxes, this is used to calculate your balance, and can
-                  never be changed. (required)
-                </FormDescription>
+                >
+                  <HelperText>
+                    This is the value of your taxes, this is used to calculate your balance, and can
+                    never be changed. (required)
+                  </HelperText>
+                </NumberInput>
                 <FormMessage />
               </FormItem>
             )}

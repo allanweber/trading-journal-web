@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
+import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
@@ -79,11 +80,12 @@ export const FeesForm = ({ fees, onChange }: Props) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Fee Date</FormLabel>
-                <DateTimePicker withTime {...field} disabled={fees} />
-                <FormDescription>
-                  This is the date when you did or will do your fee, this is used to calculate your
-                  balance, and can never be changed. (required)
-                </FormDescription>
+                <DateTimePicker withTime {...field} disabled={fees}>
+                  <HelperText>
+                    This is the date when you did or will do your fee, this is used to calculate
+                    your balance, and can never be changed. (required)
+                  </HelperText>
+                </DateTimePicker>
                 <FormMessage />
               </FormItem>
             )}
@@ -99,11 +101,12 @@ export const FeesForm = ({ fees, onChange }: Props) => {
                   {...field}
                   currency={getSymbol(portfolio?.currency || "$")}
                   disabled={fees}
-                />
-                <FormDescription>
-                  This is the value of your fee, this is used to calculate your balance, and can
-                  never be changed. (required)
-                </FormDescription>
+                >
+                  <HelperText>
+                    This is the value of your fee, this is used to calculate your balance, and can
+                    never be changed. (required)
+                  </HelperText>
+                </NumberInput>
                 <FormMessage />
               </FormItem>
             )}

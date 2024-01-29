@@ -1,28 +1,29 @@
-import { Calendar as CalendarIcon, Info } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Button } from "components/ui/button";
 import { Calendar } from "components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
+
 import { format, isDate, isValid, parse } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { forwardRef, useState } from "react";
 import InputMask from "react-input-mask";
 import { TimePicker } from "./TimePicker";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 interface Props {
   value: Date | undefined;
   onChange: (date: Date | undefined) => void;
   withTime?: boolean;
   placeholder?: string;
-  helperText?: string;
+  children?: React.ReactNode;
   [x: string]: any;
 }
 const dateFnsWithTimeFormat = "dd/MM/yyyy HH:mm";
 const dateFnsFormat = "dd/MM/yyyy";
 
 export const DateTimePicker = forwardRef(function DateTimePicker(props: Props, ref) {
-  let { value, onChange, withTime, placeholder, helperText, ...rest } = props;
+  let { value, onChange, withTime, placeholder, children, ...rest } = props;
 
   if (typeof value === "string") {
     value = new Date(value);
@@ -86,19 +87,8 @@ export const DateTimePicker = forwardRef(function DateTimePicker(props: Props, r
             onFocus={(e) => e.target.select()}
             alwaysShowMask={false}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            {...rest}
           />
-          {helperText && (
-            <Popover>
-              <PopoverTrigger className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                <Info className="h-4 w-4 text-muted-foreground" />
-              </PopoverTrigger>
-              <PopoverContent>
-                This is the date when you did or will do your withdrawal, this is used to calculate
-                your balance, and can never be changed. (required)
-              </PopoverContent>
-            </Popover>
-          )}
+          {children}
         </div>
       </div>
       <Popover>

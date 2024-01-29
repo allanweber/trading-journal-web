@@ -21,6 +21,7 @@ import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
 import { DirectionSelect } from "components/DirectionSelect";
+import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
 import { Input } from "components/ui/input";
@@ -98,7 +99,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
             </PageHeader>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-6">
+        <CardContent className="pl-3 pr-3 sm:pr-6">
           <Form {...form}>
             <div className="mt-5 md:mt-0 md:col-span-2">
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -111,11 +112,12 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                         <FormItem>
                           <FormLabel>Symbol</FormLabel>
                           <FormControl>
-                            <Input placeholder="Stock symbol" {...field} />
+                            <Input placeholder="Stock symbol" {...field}>
+                              <HelperText>
+                                This is the stock symbol your are buying or selling. (required)
+                              </HelperText>
+                            </Input>
                           </FormControl>
-                          <FormDescription>
-                            This is the stock symbol your are buying or selling. (required)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -132,9 +134,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                           <FormControl>
                             <DirectionSelect {...field} />
                           </FormControl>
-                          <FormDescription>
-                            This is the direction of your stock trade. (required)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -152,12 +151,11 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="mb-2">Date</FormLabel>
-
-                          <DateTimePicker withTime {...field} disabled={stock} />
-
-                          <FormDescription>
-                            This is the date when your stock trade started. (required)
-                          </FormDescription>
+                          <DateTimePicker withTime {...field} disabled={stock}>
+                            <HelperText>
+                              This is the date when your stock trade started. (required)
+                            </HelperText>
+                          </DateTimePicker>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -171,18 +169,17 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Price</FormLabel>
-
                           <FormControl>
                             <NumberInput
                               {...field}
                               disabled={stock}
                               currency={getSymbol(portfolio?.currency || "$")}
-                            />
+                            >
+                              <HelperText>
+                                This is the price of your stock trade. (required)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>
-                            This is the value of your stock trade. (required)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -196,14 +193,13 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Size</FormLabel>
-
                           <FormControl>
-                            <NumberInput {...field} disabled={stock} />
+                            <NumberInput {...field} disabled={stock}>
+                              <HelperText>
+                                How many shares are you buying or selling. (required)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>
-                            How many shares are you buying or selling. (required)
-                          </FormDescription>
                         </FormItem>
                       )}
                     />
@@ -221,17 +217,16 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Take Profit</FormLabel>
-
                           <FormControl>
                             <NumberInput
                               {...field}
                               currency={getSymbol(portfolio?.currency || "$")}
-                            />
+                            >
+                              <HelperText>
+                                This is the value of your take profit (optional)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>
-                            This is the value of your take profit (optional)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -245,17 +240,16 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Stop Loss</FormLabel>
-
                           <FormControl>
                             <NumberInput
                               {...field}
                               currency={getSymbol(portfolio?.currency || "$")}
-                            />
+                            >
+                              <HelperText>
+                                This is the value of your stop loss (optional)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>
-                            This is the value of your stop loss (optional)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -280,12 +274,11 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel className="mb-2">Exit Date</FormLabel>
-
-                          <DateTimePicker {...field} withTime />
-
-                          <FormDescription>
-                            This is the date when you closed your stock trade (optional)
-                          </FormDescription>
+                          <DateTimePicker {...field} withTime>
+                            <HelperText>
+                              This is the date when you closed your stock trade (optional)
+                            </HelperText>
+                          </DateTimePicker>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -299,17 +292,16 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Exit price</FormLabel>
-
                           <FormControl>
                             <NumberInput
                               {...field}
                               currency={getSymbol(portfolio?.currency || "$")}
-                            />
+                            >
+                              <HelperText>
+                                This is the price when you closed your stock trade (optional)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>
-                            This is the price when you closed your stock trade (optional)
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -323,15 +315,16 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       render={({ field }) => (
                         <FormItem className="flex flex-col">
                           <FormLabel>Costs</FormLabel>
-
                           <FormControl>
                             <NumberInput
                               {...field}
                               currency={getSymbol(portfolio?.currency || "$")}
-                            />
+                            >
+                              <HelperText>
+                                This is the costs for this stock trade (optional)
+                              </HelperText>
+                            </NumberInput>
                           </FormControl>
-
-                          <FormDescription>Costs for this stock trade (optional)</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

@@ -1,20 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
 import { useToast } from "components/ui/use-toast";
 import { useForm } from "react-hook-form";
 
 import { CurrencySelect } from "components/CurrencySelect";
 import { DateTimePicker } from "components/DateTimePicker";
+import { HelperText } from "components/HelperText";
 import { MessageDisplay } from "components/MessageDisplay";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
@@ -98,12 +91,13 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
                   <FormItem>
                     <FormLabel>Portfolio Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Portfolio Name" {...field} />
+                      <Input placeholder="Portfolio Name" {...field}>
+                        <HelperText>
+                          This is the name of your portfolio that will be displayed everywhere.
+                          (required)
+                        </HelperText>
+                      </Input>
                     </FormControl>
-                    <FormDescription>
-                      This is the name of your portfolio that will be displayed everywhere.
-                      (required)
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -115,11 +109,12 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Input placeholder="Portfolio Description" {...field} />
+                      <Input placeholder="Portfolio Description" {...field}>
+                        <HelperText>
+                          This is just a brief description of your portfolio. (optional)
+                        </HelperText>
+                      </Input>
                     </FormControl>
-                    <FormDescription>
-                      This is just a brief description of your portfolio. (optional)
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -131,11 +126,13 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Start Date</FormLabel>
-                    <DateTimePicker {...field} disabled={portfolio} />
-                    <FormDescription>
-                      This is the date when you started your portfolio, used to calculate your
-                      balance, and can never be changed. (required)
-                    </FormDescription>
+                    <DateTimePicker {...field} disabled={portfolio}>
+                      <HelperText>
+                        This is the date when you started your portfolio, used to calculate your
+                        balance, and can never be changed. (required)
+                      </HelperText>
+                    </DateTimePicker>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -151,11 +148,12 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
                       {...field}
                       disabled={portfolio}
                       currency={getSymbol(form.getValues("currency") || "$")}
-                    />
-                    <FormDescription>
-                      This is the balance of your account at the start of your portfolio, and can
-                      never be changed. (required)
-                    </FormDescription>
+                    >
+                      <HelperText>
+                        This is the balance of your account at the start of your portfolio, and can
+                        never be changed. (required)
+                      </HelperText>
+                    </NumberInput>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -167,11 +165,12 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Portfolio Currency</FormLabel>
-                    <CurrencySelect {...field} />
-                    <FormDescription>
-                      This is the currency of your portfolio that will be shown for all your trades.
-                      (required)
-                    </FormDescription>
+                    <CurrencySelect {...field}>
+                      <HelperText className="right-9">
+                        This is the currency of your portfolio that will be shown for all your
+                        trades. (required)
+                      </HelperText>
+                    </CurrencySelect>
                     <FormMessage />
                   </FormItem>
                 )}
