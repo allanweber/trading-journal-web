@@ -1,8 +1,8 @@
-import { format } from 'date-fns';
-import { enGB } from 'date-fns/locale';
+import { format } from "date-fns";
+import { enGB } from "date-fns/locale";
 
-const withTimeFormat = 'PPP hh:mm b';
-const dateFormat = 'PPP';
+const withTimeFormat = "PP hh:mm";
+const dateFormat = "PP";
 
 type Props = {
   value: Date | string | undefined;
@@ -17,7 +17,7 @@ export default function DateDisplay(props: Props) {
   if (!value) return null;
 
   let date;
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     date = new Date(value);
   } else {
     date = value;

@@ -40,7 +40,6 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
   };
 
   const [values, setValues] = useState<Entry>(taxes || startValues);
-  const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry(taxes?.id);
@@ -72,8 +71,6 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
   return (
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
-      <MessageDisplay message={deleteError} variant="destructive" />
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

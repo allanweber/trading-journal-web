@@ -1,19 +1,41 @@
 import Search from "components/table/Search";
+import { Award, BookmarkMinus, Circle } from "lucide-react";
 import { directions } from "model/direction";
-import { getEntries } from "model/entryType";
+import { onlyTrades } from "model/entryType";
 
 export const EntrySearch = () => {
-  let filters: any[] = [
+  const filters: any[] = [
     {
       filterId: "entryType",
       title: "Entry Type",
-      options: getEntries.map((entry) => {
+      options: onlyTrades().map((entry) => {
         return {
           label: entry.type,
           value: entry.type,
           icon: entry.icon,
         };
       }),
+    },
+    {
+      filterId: "status",
+      title: "Status",
+      options: [
+        {
+          label: "Win",
+          value: "win",
+          icon: Award,
+        },
+        {
+          label: "Loss",
+          value: "loss",
+          icon: BookmarkMinus,
+        },
+        {
+          label: "Open",
+          value: "open",
+          icon: Circle,
+        },
+      ],
     },
     {
       filterId: "direction",

@@ -1,6 +1,16 @@
-import { Direction, getDirection } from 'model/direction';
+import { cn } from "lib/utils";
+import { Direction, getDirection } from "model/direction";
+import { Size } from "model/size";
 
-export const DirectionDisplay = ({ direction }: { direction: Direction }) => {
+type Props = {
+  direction?: Direction;
+  withLabel?: boolean;
+  size?: Size.SMALL | Size.LARGE;
+};
+
+export const DirectionDisplay = ({ direction, withLabel = true, size = Size.SMALL }: Props) => {
+  if (!direction) return <></>;
+
   const directionEntry = getDirection(direction);
   return (
     <>
@@ -8,9 +18,9 @@ export const DirectionDisplay = ({ direction }: { direction: Direction }) => {
         <div className="flex flex-row items-center">
           <directionEntry.icon
             color={directionEntry.color}
-            className="mr-1 h-4 w-4"
+            className={cn(size === Size.SMALL ? "h-4 w-4" : "h-6 w-6", withLabel ? "mr-1" : "")}
           />
-          <span>{direction}</span>
+          {withLabel && <span>{direction}</span>}
         </div>
       )}
     </>

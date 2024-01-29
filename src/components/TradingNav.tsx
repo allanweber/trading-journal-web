@@ -3,8 +3,9 @@ import { usePortfolioContext } from "contexts/PortfolioContext";
 import { cn } from "lib/utils";
 import { Menu, X } from "lucide-react";
 import { AddPortfolioBalance } from "pages/app/portfolios/components/AddPortfolioBalance";
-import PortfolioBalanceStatus from "pages/app/portfolios/components/PortfolioBalanceStatus";
+import { PortfolioBalance } from "pages/app/portfolios/components/PortfolioBalance";
 import { NavLink, useLocation } from "react-router-dom";
+import { useGetPortfolioBalance } from "service/portfolioQueries";
 import { UserNav } from "../pages/app/user/components/UserNav";
 import { Icons } from "./icons";
 import PortfolioSwitcher from "./portfolio/PortfolioSwitcher";
@@ -20,14 +21,34 @@ const items = [
   },
 ];
 
-const Balance = () => {
+const Balance = ({ close }: { close?: any }) => {
   const { portfolio } = usePortfolioContext();
+  const { data, isSuccess } = useGetPortfolioBalance(portfolio?.id!);
   return (
     <>
       {portfolio && (
         <>
           <div className="flex items-center">
-            <PortfolioBalanceStatus className="text-lg" />
+            <>
+              {isSuccess && (
+                <NavLink
+                  to={`/trading/portfolios/${portfolio?.id}`}
+                  onClick={() => {
+                    if (close) {
+                      close();
+                    }
+                  }}
+                >
+                  <PortfolioBalance
+                    balance={data.balance!}
+                    startBalance={data.startBalance}
+                    currency={portfolio?.currency!}
+                    className="text-lg"
+                  />
+                </NavLink>
+              )}
+            </>
+
             <AddPortfolioBalance showEditIcon />
           </div>
         </>
@@ -110,7 +131,7 @@ export default function TradingNav() {
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-4 space-y-1">
               <div className="pl-3 pr-4 py-2">
-                <Balance />
+                <Balance close={close} />
               </div>
               {portfolio &&
                 items.map((item) => (

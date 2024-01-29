@@ -40,7 +40,6 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
   };
 
   const [values, setValues] = useState<Entry>(withdrawal || startValues);
-  const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry(withdrawal?.id);
@@ -72,7 +71,6 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
   return (
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
-      <MessageDisplay message={deleteError} variant="destructive" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

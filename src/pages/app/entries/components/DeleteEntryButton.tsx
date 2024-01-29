@@ -50,7 +50,7 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess }: Props) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="sm">
-          <TrashIcon className="mr-2 h-4 w-4" />
+          <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

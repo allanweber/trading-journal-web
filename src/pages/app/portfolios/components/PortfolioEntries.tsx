@@ -60,7 +60,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
 
   return (
     <>
-      <Card className="col-span-4">
+      <Card>
         <CardHeader>
           <CardTitle>
             <PageHeader>
@@ -72,7 +72,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
           </CardTitle>
           <CardDescription>Summary of your manual entries</CardDescription>
         </CardHeader>
-        <CardContent className="pl-6">
+        <CardContent className="pl-2 md:pl-6 pr-1">
           <MessageDisplay message={error} variant="destructive" />
           <MessageDisplay message={deleteError} variant="destructive" />
           <div className="space-y-8">
@@ -82,7 +82,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
               isSuccess &&
               entries.map((entry) => (
                 <div
-                  className="flex items-center rounded-md p-1 transition-all hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                  className="flex items-center pt-1 pb-1 rounded-md transition-all hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
                   key={entry.id}
                   onClick={() => {
                     setFormOpen(true);
@@ -100,13 +100,15 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                   </div>
                   <div className="ml-auto">
                     {entry.notes && (
-                      <span className="mr-1 text-sm text-muted-foreground">There are notes</span>
+                      <span className="hidden sm:flex mr-1 text-sm text-muted-foreground">
+                        There are notes
+                      </span>
                     )}
                   </div>
                   <div className="ml-auto font-medium">
                     <div className="flex items-center">
                       <div>
-                        <ColoredNumber value={entry.result!} className="text-base">
+                        <ColoredNumber value={entry.result!}>
                           <NumberDisplay
                             value={entry.result}
                             currency={portfolio.currency}
@@ -114,7 +116,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                           />
                         </ColoredNumber>
                       </div>
-                      <div>
+                      <div className="ml-1" onClick={(e) => e.stopPropagation()}>
                         <DeleteEntryButton
                           entry={entry}
                           onError={setDeleteError}

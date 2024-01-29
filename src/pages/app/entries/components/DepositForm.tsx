@@ -40,7 +40,6 @@ export const DepositForm = ({ deposit, onChange }: Props) => {
   };
 
   const [values, setValues] = useState<Entry>(deposit || startValues);
-  const [deleteError, setDeleteError] = useState<any>(null);
   const { toast } = useToast();
 
   const mutation = useSaveEntry(deposit?.id);
@@ -72,8 +71,6 @@ export const DepositForm = ({ deposit, onChange }: Props) => {
   return (
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
-      <MessageDisplay message={deleteError} variant="destructive" />
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

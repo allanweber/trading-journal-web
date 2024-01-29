@@ -2,10 +2,8 @@ import DateDisplay from "components/DateDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import { PageHeader } from "components/PageHeader";
 import { TableLoading } from "components/table/TableLoading";
-import { Button } from "components/ui/button";
 import { Separator } from "components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
-import { EditIcon } from "lucide-react";
 import { AddPortfolioButton } from "pages/app/portfolios/components/AddPortfolioButton";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -94,7 +92,11 @@ export const Portfolios = () => {
               portfolios &&
               (portfolios.length > 0 ? (
                 portfolios.map((portfolio) => (
-                  <TableRow key={portfolio.id}>
+                  <TableRow
+                    key={portfolio.id}
+                    onClick={() => navigate(`/trading/portfolios/${portfolio.id}`)}
+                    className="hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                  >
                     <TableCell className="font-medium">
                       <Link to={`/trading/portfolios/${portfolio.id}`}>{portfolio.name}</Link>
                     </TableCell>
@@ -111,18 +113,10 @@ export const Portfolios = () => {
                     </TableCell>
                     <TableCell>{portfolio.currency}</TableCell>
                     <TableCell className="text-right">
-                      <div className="flex justify-end">
-                        <Button variant="ghost" size="sm">
-                          <Link to={`/trading/portfolios/${portfolio.id}`}>
-                            <EditIcon className="h-4 w-4" />
-                          </Link>
-                        </Button>
-
-                        <DeletePortfolioButton
-                          portfolio={portfolio}
-                          onError={(error) => setDeleteError(error)}
-                        />
-                      </div>
+                      <DeletePortfolioButton
+                        portfolio={portfolio}
+                        onError={(error) => setDeleteError(error)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))

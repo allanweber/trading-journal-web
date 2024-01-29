@@ -9,8 +9,8 @@ type Props = {
 export default function ColoredNumber(props: PropsWithChildren<Props>) {
   const { children, value, className } = props;
 
-  const positive = "text-green-600";
-  const negative = "text-red-600";
+  const positive = "text-emerald-600";
+  const negative = "text-red-500";
   const positiveValue = value >= 0;
 
   return (
