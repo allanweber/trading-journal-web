@@ -79,11 +79,13 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Withdrawal Date</FormLabel>
-                <DateTimePicker withTime {...field} disabled={withdrawal} />
-                <FormDescription>
-                  This is the date when you did or will do your withdrawal, this is used to
-                  calculate your balance, and can never be changed. (required)
-                </FormDescription>
+                <DateTimePicker
+                  withTime
+                  {...field}
+                  disabled={withdrawal}
+                  helperText=" This is the date when you did or will do your withdrawal, this is used to
+                      calculate your balance, and can never be changed. (required)"
+                />
                 <FormMessage />
               </FormItem>
             )}
