@@ -20,9 +20,9 @@ import { useSaveEntry } from "service/entryQueries";
 import { DateTimePicker } from "components/DateTimePicker";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
-import { TextArea } from "components/TextArea";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
+import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -157,7 +157,7 @@ export default function DividendForm({ dividend }: Props) {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <TextArea placeholder="Notes" {...field} />
+                      <Textarea placeholder="Notes" {...field} />
                     </FormControl>
                     <FormDescription>
                       This is just a brief description of your dividend. (optional)

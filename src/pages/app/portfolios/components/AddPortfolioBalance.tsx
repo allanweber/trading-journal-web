@@ -1,10 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "components/ui/dialog";
 import { Edit, PlusCircle } from "lucide-react";
 
 import { Button } from "components/ui/button";
@@ -88,7 +82,6 @@ export const AddPortfolioBalance = ({ showEditIcon }: Props) => {
         <DialogContent className="max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{`Add a new ${entryType}`}</DialogTitle>
-            <DialogDescription></DialogDescription>
           </DialogHeader>
           <EntryForm />
         </DialogContent>

@@ -19,7 +19,7 @@ import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
 import { NumberInput } from "components/NumberInput";
-import { TextArea } from "components/TextArea";
+import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 
@@ -119,7 +119,7 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <TextArea placeholder="Notes" {...field} />
+                  <Textarea placeholder="Notes" {...field} />
                 </FormControl>
                 <FormDescription>
                   This is just a brief description of your taxes. (optional)

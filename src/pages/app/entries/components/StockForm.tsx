@@ -23,9 +23,9 @@ import { DateTimePicker } from "components/DateTimePicker";
 import { DirectionSelect } from "components/DirectionSelect";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
-import { TextArea } from "components/TextArea";
 import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
+import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
@@ -351,7 +351,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                         <FormItem>
                           <FormLabel>Description</FormLabel>
                           <FormControl>
-                            <TextArea placeholder="Notes" {...field} />
+                            <Textarea placeholder="Notes" {...field} />
                           </FormControl>
                           <FormDescription>
                             This is just a brief description of your stock trade. (optional)

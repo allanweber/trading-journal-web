@@ -28,6 +28,19 @@ export const useGetEntries = (
   });
 };
 
+export const useGetPortfolioEntries = () => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  return useQuery({
+    queryKey: ["portfolio-entries"],
+    queryFn: async () => {
+      const accessToken = await getToken();
+      return getPortfolioEntries(accessToken!, portfolio?.id!);
+    },
+  });
+};
+
 export const useGetEntry = (id: string) => {
   const { getToken } = useAuthState();
   const { portfolio } = usePortfolioContext();
@@ -56,6 +69,9 @@ export const useDeleteEntry = () => {
         queryKey: ["entries"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["portfolio-entries"],
+      });
+      queryClient.invalidateQueries({
         queryKey: [`balance-${portfolio?.id}`],
       });
     },
@@ -79,6 +95,9 @@ export const useSaveEntry = (id: string | undefined) => {
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
         queryKey: ["entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["portfolio-entries"],
       });
       queryClient.invalidateQueries({
         queryKey: [`balance-${portfolio?.id}`],
@@ -139,6 +158,16 @@ const getEntry = (accessToken: string, portfolioId: string, id: string): Promise
 const deleteEntry = (accessToken: string, portfolioId: string, id: string): Promise<string> => {
   return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  }).then(responseOrError);
+};
+
+const getPortfolioEntries = (accessToken: string, portfolioId: string): Promise<Entry[]> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/balances`, {
+    method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",

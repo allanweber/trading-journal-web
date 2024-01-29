@@ -1,4 +1,5 @@
 import { usePortfolioContext } from "contexts/PortfolioContext";
+import { NavLink } from "react-router-dom";
 import { useGetPortfolioBalance } from "service/portfolioQueries";
 import { PortfolioBalance } from "./PortfolioBalance";
 
@@ -13,12 +14,14 @@ export default function PortfolioBalanceStatus({ className }: Props) {
   return (
     <>
       {isSuccess && (
-        <PortfolioBalance
-          balance={data.balance!}
-          startBalance={data.startBalance}
-          currency={portfolio?.currency!}
-          className={className}
-        />
+        <NavLink to={`/trading/portfolios/${portfolio?.id}`}>
+          <PortfolioBalance
+            balance={data.balance!}
+            startBalance={data.startBalance}
+            currency={portfolio?.currency!}
+            className={className}
+          />
+        </NavLink>
       )}
     </>
   );
