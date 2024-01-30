@@ -15,9 +15,9 @@ export const PortfolioBalance = (props: Props) => {
     <>
       <div className="flex items-center ">
         {balance > startBalance ? (
-          <TrendingUp className="h-5 w-5 text-emerald-600 mr-2" aria-hidden="true" />
+          <TrendingUp className="h-5 w-5 text-green-600 mr-2" aria-hidden="true" />
         ) : balance < startBalance ? (
-          <TrendingDown className="h-5 w-5 text-red-500 mr-2" aria-hidden="true" />
+          <TrendingDown className="h-5 w-5 text-red-600 mr-2" aria-hidden="true" />
         ) : null}
 
         <ColoredNumber value={balance} className={className}>

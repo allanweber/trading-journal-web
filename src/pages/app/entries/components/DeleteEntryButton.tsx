@@ -9,7 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
-import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { TrashIcon } from "lucide-react";
 import { Entry } from "model/entry";
@@ -49,9 +48,7 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess }: Props) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4" />
-        </Button>
+        <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

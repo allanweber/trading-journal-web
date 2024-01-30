@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { Ref, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useDebouncedCallback } from 'use-debounce';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { FilterOptions, TableFilter } from './TableFilter';
+import { Cross2Icon } from "@radix-ui/react-icons";
+import { Ref, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { FilterOptions, TableFilter } from "./TableFilter";
 
 type Props = {
   placeholder: string;
@@ -22,7 +22,7 @@ export default function Search(props: Props) {
 
   useEffect(() => {
     setFiltering(false);
-    if (searchParams.get('query')) {
+    if (searchParams.get("query")) {
       setFiltering(true);
     }
     filters?.forEach((filter) => {
@@ -34,22 +34,22 @@ export default function Search(props: Props) {
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
+    params.set("page", "1");
     if (term) {
       setFiltering(true);
-      params.set('query', term);
+      params.set("query", term);
     } else {
-      params.delete('query');
+      params.delete("query");
     }
     updatePath(params);
   }, 300);
 
   const reset = () => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
-    params.delete('query');
+    params.set("page", "1");
+    params.delete("query");
     if (inputRef.current) {
-      inputRef.current.value = '';
+      inputRef.current.value = "";
     }
     filters?.forEach((filter) => {
       params.delete(filter.filterId);
@@ -71,7 +71,7 @@ export default function Search(props: Props) {
         onChange={(e) => {
           handleSearch(e.target.value);
         }}
-        defaultValue={searchParams.get('query')?.toString()}
+        defaultValue={searchParams.get("query")?.toString()}
       />
       {filters?.map((filter) => (
         <TableFilter key={filter.filterId} {...filter} />

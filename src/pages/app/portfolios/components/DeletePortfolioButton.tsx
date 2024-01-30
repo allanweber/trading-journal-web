@@ -9,7 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
-import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { TrashIcon } from "lucide-react";
@@ -50,9 +49,7 @@ export const DeletePortfolioButton = ({ portfolio, onError }: Props) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm">
-          <TrashIcon className="h-4 w-4" />
-        </Button>
+        <TrashIcon className="h-4 w-4 hover:scale-150 hover:cursor-pointer" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

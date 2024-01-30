@@ -112,7 +112,7 @@ export const Portfolios = () => {
                       />
                     </TableCell>
                     <TableCell>{portfolio.currency}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                       <DeletePortfolioButton
                         portfolio={portfolio}
                         onError={(error) => setDeleteError(error)}

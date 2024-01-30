@@ -81,7 +81,7 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
             </PageHeader>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-6">
+        <CardContent className="pl-3 pr-3 sm:pr-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
