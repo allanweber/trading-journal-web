@@ -37,6 +37,7 @@ export const useGetPortfolioBalance = (id: string) => {
       const accessToken = await getToken();
       return getPortfolioBalance(accessToken!, id);
     },
+    enabled: !!id,
   });
 };
 

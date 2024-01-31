@@ -22,17 +22,18 @@ import { DeleteEntryButton } from "./components/DeleteEntryButton";
 import { EntrySearch } from "./components/EntrySearch";
 import { EntryStatus } from "./components/EntryStatus";
 
-const ResultChange = ({ entry }: { entry: Entry }) => {
-  if (!entry.result) return <span className="text-muted-foreground">Open</span>;
+const Result = ({ entry, className }: { entry: Entry; className?: string }) => {
+  if (!entry.result || entry.result === 0)
+    return <NumberDisplay value={entry.result} currency={entry.portfolio.currency} />;
 
   return (
-    <div className="flex flex-col space-y-2">
-      <ColoredNumber value={entry.result}>
+    <div className="flex">
+      <ColoredNumber value={entry.result} className={className}>
         <NumberDisplay value={entry.result} currency={entry.portfolio.currency} />
       </ColoredNumber>
-      {entry.accountChange && (
-        <ColoredNumber value={entry.accountChange}>
-          <NumberDisplay value={entry.accountChange} isPercentage></NumberDisplay>
+      {entry.returnPercentage && (
+        <ColoredNumber value={entry.returnPercentage} className="ml-1">
+          (<NumberDisplay value={entry.returnPercentage} isPercentage></NumberDisplay>)
         </ColoredNumber>
       )}
     </div>
@@ -129,7 +130,7 @@ export const Entries = () => {
                   className="hover:bg-slate-200"
                   onClick={() => navigate(`/trading/entries/${entry.id}`)}
                 >
-                  <CardHeader>
+                  <CardHeader className="space-y-0 pt-3 pb-2">
                     <CardTitle>
                       <div className="flex w-full items-center justify-between">
                         <div>
@@ -156,14 +157,16 @@ export const Entries = () => {
                       </div>
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>{/* <p>Card Content</p> */}</CardContent>
+                  <CardContent className="space-y-0 pt-3 pb-2">
+                    <EntrySizeAndPrice entry={entry} />
+                  </CardContent>
                   <CardFooter>
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
                         <DateDisplay value={entry.date} />
                       </div>
-                      <div className="flex justify-end">
-                        <EntrySizeAndPrice entry={entry} />
+                      <div className="flex justify-end pr-2">
+                        <Result entry={entry} className="" />
                       </div>
                     </div>
                   </CardFooter>
@@ -182,12 +185,13 @@ export const Entries = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Start/Exit Date</TableHead>
+                <TableHead>Open Date</TableHead>
                 <TableHead>Symbol</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Side</TableHead>
                 <TableHead>Entry</TableHead>
-                <TableHead>Result/Change</TableHead>
+                <TableHead>Hold</TableHead>
+                <TableHead>Result</TableHead>
                 <TableHead className="w-[45px]"></TableHead>
               </TableRow>
             </TableHeader>
@@ -215,7 +219,7 @@ export const Entries = () => {
                       <TableCell>
                         <SymbolDisplay entry={entry} />
                       </TableCell>
-                      <TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
                         <EntryStatus entry={entry} />
                       </TableCell>
                       <TableCell>
@@ -224,8 +228,9 @@ export const Entries = () => {
                       <TableCell>
                         <EntrySizeAndPrice entry={entry} />
                       </TableCell>
+                      <TableCell>xx days</TableCell>
                       <TableCell>
-                        <ResultChange entry={entry} />
+                        <Result entry={entry} />
                       </TableCell>
                       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                         <DeleteEntryButton

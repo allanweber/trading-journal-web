@@ -3,6 +3,12 @@ import { Direction } from "./direction";
 import { EntryType } from "./entryType";
 import { portfolioSchema } from "./portfolio";
 
+export enum OrderStatus {
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+  CANCELED = "CANCELED",
+}
+
 export const tradeSchema = z
   .object({
     id: z.string().optional(),
@@ -223,15 +229,12 @@ export const entrySchema = z.object({
     })
     .positive({ message: "price-positive" })
     .max(9999999999, { message: "price-max" }),
-  result: z
-    .number({
-      required_error: "price-required",
-      invalid_type_error: "price-positive",
-    })
-    .max(9999999999, { message: "price-max" }),
+
   entryType: z.nativeEnum(EntryType, {
     required_error: "entry-type-required",
   }),
+  orderStatus: z.nativeEnum(OrderStatus).optional(),
+  orderRef: z.string().optional(),
   notes: z
     .string()
     .max(100, {
@@ -255,20 +258,28 @@ export const entrySchema = z.object({
     .positive({ message: "loss-positive" })
     .max(9999999999, { message: "loss-max" })
     .optional(),
+  costs: z.coerce
+    .number()
+    .positive({ message: "costs-positive" })
+    .max(9999999999, { message: "costs-max" })
+    .optional(),
   exitDate: z.coerce.date().optional(),
   exitPrice: z.coerce
     .number()
     .positive({ message: "exitPrice-positive" })
     .max(9999999999, { message: "exitPrice-max" })
     .optional(),
-  costs: z.coerce
-    .number()
-    .positive({ message: "costs-positive" })
-    .max(9999999999, { message: "costs-max" })
-    .optional(),
+  result: z.number().optional(),
   grossResult: z.number().optional(),
-  accountChange: z.number().optional(),
+  returnPercentage: z.number().optional(),
+  plannedRR: z.number().optional(),
   portfolio: portfolioSchema,
+});
+
+export const exitEntrySchema = z.object({
+  exitDate: z.coerce.date(),
+  exitPrice: z.coerce.number().max(9999999999, { message: "exitPrice-max" }),
+  costs: z.coerce.number().max(9999999999, { message: "costs-max" }).optional(),
 });
 
 export type Stock = z.infer<typeof tradeSchema>;
@@ -278,3 +289,4 @@ export type Fees = z.infer<typeof feesSchema>;
 export type Taxes = z.infer<typeof taxesSchema>;
 export type Dividend = z.infer<typeof dividendSchema>;
 export type Entry = z.infer<typeof entrySchema>;
+export type ExitEntry = z.infer<typeof exitEntrySchema>;

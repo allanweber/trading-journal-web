@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { useAuthState } from "lib/authentication";
 import { config } from "lib/config";
-import { Deposit, Dividend, Entry, Stock, Taxes, Withdrawal } from "model/entry";
+import { Deposit, Dividend, Entry, ExitEntry, Stock, Taxes, Withdrawal } from "model/entry";
 import { Paginated } from "model/pagination";
 import { responseOrError } from "./response";
 
@@ -109,6 +109,31 @@ export const useSaveEntry = (id: string | undefined) => {
   });
 };
 
+export const useCloseEntry = (entryId: string) => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (exitEntry: ExitEntry) => {
+      const accessToken = await getToken();
+      return closeEntry(accessToken!, portfolio?.id!, entryId, exitEntry);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: ["entries"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`balance-${portfolio?.id}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${data.id}`],
+      });
+    },
+  });
+};
+
 const getEntries = (
   accessToken: string,
   portfolioId: string,
@@ -203,5 +228,21 @@ const editEntry = (
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dividend),
+  }).then(responseOrError);
+};
+
+const closeEntry = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string,
+  exitEntry: ExitEntry
+): Promise<Entry> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/close`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(exitEntry),
   }).then(responseOrError);
 };

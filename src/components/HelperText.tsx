@@ -12,9 +12,10 @@ export const HelperText = (props: Props) => {
   return (
     <Popover>
       <PopoverTrigger
+        tabIndex={-1}
         className={cn("absolute right-3 top-1/2 transform -translate-y-1/2", className)}
       >
-        <Info className="h-4 w-4 text-muted-foreground" />
+        <Info className="h-4 w-4 text-muted-foreground " tabIndex={-1} />
       </PopoverTrigger>
       <PopoverContent className="text-xs">{children}</PopoverContent>
     </Popover>

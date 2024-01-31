@@ -75,10 +75,10 @@ export default function DividendForm({ dividend }: Props) {
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-lg">
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
-      <Card className="col-span-4">
+      <Card>
         <CardHeader>
           <CardTitle>
             <PageHeader>
@@ -188,6 +188,6 @@ export default function DividendForm({ dividend }: Props) {
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }

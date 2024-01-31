@@ -65,7 +65,7 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
-      <Card className="col-span-4">
+      <Card>
         <CardHeader>
           <CardTitle>
             <PageHeader>

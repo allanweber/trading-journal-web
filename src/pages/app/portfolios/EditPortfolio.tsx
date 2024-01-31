@@ -1,6 +1,5 @@
 import { MessageDisplay } from "components/MessageDisplay";
 import { TableLoading } from "components/table/TableLoading";
-import { cn } from "lib/utils";
 import { PortfolioForm } from "pages/app/portfolios/components/PortfolioForm";
 import { useParams } from "react-router-dom";
 import { useGetPortfolio } from "service/portfolioQueries";
@@ -21,7 +20,7 @@ export const EditPortfolio = () => {
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
-        <div className={cn("col-span-12 md:col-span-6")}>
+        <div className="col-span-12 md:col-span-6">
           <PortfolioForm portfolio={portfolio} />
         </div>
 

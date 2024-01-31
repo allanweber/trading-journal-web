@@ -1,20 +1,20 @@
-import { TrendingDown, TrendingUp } from 'lucide-react';
+import { TrendingDown, TrendingUp } from "lucide-react";
 
 export enum Direction {
-  Long = 'LONG',
-  Short = 'SHORT',
+  Long = "LONG",
+  Short = "SHORT",
 }
 
 export const directions = [
   {
     direction: Direction.Long,
     icon: TrendingUp,
-    color: 'green',
+    color: "text-green-700",
   },
   {
     direction: Direction.Short,
     icon: TrendingDown,
-    color: 'red',
+    color: "text-red-700",
   },
 ];
 

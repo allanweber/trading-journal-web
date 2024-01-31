@@ -1,10 +1,11 @@
 import Search from "components/table/Search";
+import { FilterOptions } from "components/table/TableFilter";
 import { Award, BookmarkMinus, Circle } from "lucide-react";
 import { directions } from "model/direction";
 import { onlyTrades } from "model/entryType";
 
 export const EntrySearch = () => {
-  const filters: any[] = [
+  const filters: FilterOptions[] = [
     {
       filterId: "entryType",
       title: "Entry Type",
@@ -24,16 +25,19 @@ export const EntrySearch = () => {
           label: "Win",
           value: "win",
           icon: Award,
+          className: "text-green-700",
         },
         {
           label: "Loss",
           value: "loss",
           icon: BookmarkMinus,
+          className: "text-red-700",
         },
         {
           label: "Open",
           value: "open",
           icon: Circle,
+          className: "text-gray-700",
         },
       ],
     },
@@ -45,6 +49,7 @@ export const EntrySearch = () => {
           label: direction.direction,
           value: direction.direction,
           icon: direction.icon,
+          className: direction.color,
         };
       }),
     },

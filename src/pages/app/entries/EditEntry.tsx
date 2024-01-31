@@ -1,6 +1,6 @@
 import { MessageDisplay } from "components/MessageDisplay";
 import { TableLoading } from "components/table/TableLoading";
-import { Entry } from "model/entry";
+import { Entry, OrderStatus } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useParams } from "react-router-dom";
 import { useGetEntry } from "service/entryQueries";
@@ -33,6 +33,10 @@ export const EditEntry = () => {
 
   if (isSuccess && !data) {
     return <MessageDisplay message="Entry not found" variant="destructive" />;
+  }
+
+  if (data?.orderStatus === OrderStatus.CLOSED) {
+    return <MessageDisplay message="Entry is closed" variant="destructive" />;
   }
 
   return <EntryForm entry={data!} />;

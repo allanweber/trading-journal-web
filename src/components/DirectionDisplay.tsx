@@ -17,8 +17,11 @@ export const DirectionDisplay = ({ direction, withLabel = true, size = Size.SMAL
       {directionEntry && (
         <div className="flex flex-row items-center">
           <directionEntry.icon
-            color={directionEntry.color}
-            className={cn(size === Size.SMALL ? "h-4 w-4" : "h-6 w-6", withLabel ? "mr-1" : "")}
+            className={cn(
+              directionEntry.color,
+              size === Size.SMALL ? "h-4 w-4" : "h-6 w-6",
+              withLabel ? "mr-1" : ""
+            )}
           />
           {withLabel && <span>{direction}</span>}
         </div>

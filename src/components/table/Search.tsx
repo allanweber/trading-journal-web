@@ -63,19 +63,23 @@ export default function Search(props: Props) {
   };
 
   return (
-    <div className="flex items-start gap-1 flex-wrap">
-      <Input
-        className="h-8 w-[150px] lg:w-[250px]"
-        ref={inputRef as Ref<HTMLInputElement>}
-        placeholder={placeholder}
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-        defaultValue={searchParams.get("query")?.toString()}
-      />
-      {filters?.map((filter) => (
-        <TableFilter key={filter.filterId} {...filter} />
-      ))}
+    <div className="grid grid-cols-12 gap-3">
+      <div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-2">
+        <Input
+          className="h-8"
+          ref={inputRef as Ref<HTMLInputElement>}
+          placeholder={placeholder}
+          onChange={(e) => {
+            handleSearch(e.target.value);
+          }}
+          defaultValue={searchParams.get("query")?.toString()}
+        />
+      </div>
+      <div className="col-span-12 sm:col-span-6 md:col-span-8 space-x-1">
+        {filters?.map((filter) => (
+          <TableFilter key={filter.filterId} {...filter} />
+        ))}
+      </div>
       {filtering && (
         <Button variant="ghost" onClick={reset} className="h-8 px-2 lg:px-3">
           <span className="hidden md:flex">Reset</span>

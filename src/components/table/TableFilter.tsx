@@ -1,12 +1,12 @@
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
-import * as React from 'react';
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import * as React from "react";
 
-import { cn } from 'lib/utils';
+import { cn } from "lib/utils";
 
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Badge } from '../ui/badge';
-import { Button } from '../ui/button';
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import {
   Command,
   CommandEmpty,
@@ -15,9 +15,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '../ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { Separator } from '../ui/separator';
+} from "../ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Separator } from "../ui/separator";
 
 export interface FilterOptions {
   filterId: string;
@@ -26,6 +26,7 @@ export interface FilterOptions {
     label: string;
     value: string;
     icon?: React.ComponentType<{ className?: string }>;
+    className?: string;
   }[];
 }
 
@@ -39,7 +40,7 @@ export function TableFilter(props: FilterOptions) {
     if (searchParams.get(filterId)) {
       searchParams
         .get(filterId)
-        ?.split(',')
+        ?.split(",")
         .forEach((value) => {
           setSelectedValues((prev) => new Set(prev.add(value)));
         });
@@ -50,9 +51,9 @@ export function TableFilter(props: FilterOptions) {
 
   const selectChanges = () => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
+    params.set("page", "1");
     if (selectedValues.size > 0) {
-      params.set(filterId, Array.from(selectedValues).join(','));
+      params.set(filterId, Array.from(selectedValues).join(","));
     } else {
       params.delete(filterId);
     }
@@ -62,7 +63,7 @@ export function TableFilter(props: FilterOptions) {
   const reset = () => {
     setSelectedValues(() => new Set());
     const params = new URLSearchParams(searchParams);
-    params.set('page', '1');
+    params.set("page", "1");
     params.delete(filterId);
     updatePath(params);
   };
@@ -80,18 +81,12 @@ export function TableFilter(props: FilterOptions) {
           {selectedValues?.size > 0 && (
             <>
               <Separator orientation="vertical" className="mx-2 h-4" />
-              <Badge
-                variant="secondary"
-                className="rounded-sm px-1 font-normal lg:hidden"
-              >
+              <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
                 {selectedValues.size}
               </Badge>
               <div className="hidden space-x-1 lg:flex">
                 {selectedValues.size > 2 ? (
-                  <Badge
-                    variant="secondary"
-                    className="rounded-sm px-1 font-normal"
-                  >
+                  <Badge variant="secondary" className="rounded-sm px-1 font-normal">
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
@@ -130,27 +125,28 @@ export function TableFilter(props: FilterOptions) {
                           return new Set(prev);
                         });
                       } else {
-                        setSelectedValues(
-                          (prev) => new Set(prev.add(option.value))
-                        );
+                        setSelectedValues((prev) => new Set(prev.add(option.value)));
                       }
                       return selectChanges();
                     }}
                   >
                     <div
                       className={cn(
-                        'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
-                          ? 'bg-primary text-primary-foreground'
-                          : 'opacity-50 [&_svg]:invisible'
+                          ? "bg-primary text-primary-foreground"
+                          : "opacity-50 [&_svg]:invisible"
                       )}
                     >
-                      <CheckIcon className={cn('h-4 w-4')} />
+                      <CheckIcon className={cn("h-4 w-4")} />
                     </div>
+
                     {option.icon && (
-                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <option.icon
+                        className={cn("mr-2 h-4 w-4 text-muted-foreground", option.className)}
+                      />
                     )}
-                    <span>{option.label}</span>
+                    <span className={cn(option.className)}>{option.label}</span>
                   </CommandItem>
                 );
               })}
@@ -159,10 +155,7 @@ export function TableFilter(props: FilterOptions) {
               <>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem
-                    onSelect={() => reset()}
-                    className="justify-center text-center"
-                  >
+                  <CommandItem onSelect={() => reset()} className="justify-center text-center">
                     Clear filters
                   </CommandItem>
                 </CommandGroup>
