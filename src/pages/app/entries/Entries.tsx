@@ -1,5 +1,6 @@
 import ColoredNumber from "components/ColoredNumber";
 import DateDisplay from "components/DateDisplay";
+import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import NumberDisplay from "components/NumberDisplay";
@@ -228,7 +229,11 @@ export const Entries = () => {
                       <TableCell>
                         <EntrySizeAndPrice entry={entry} />
                       </TableCell>
-                      <TableCell>xx days</TableCell>
+                      <TableCell>
+                        {entry.exitDate && (
+                          <DateDistance startDate={entry.date} endDate={entry.exitDate} />
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Result entry={entry} />
                       </TableCell>
