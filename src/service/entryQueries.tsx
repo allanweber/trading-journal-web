@@ -9,6 +9,7 @@ import { responseOrError } from "./response";
 export const useGetEntries = (
   query?: string,
   type?: string,
+  status?: string,
   direction?: string,
   pageSize?: string,
   page?: string
@@ -19,11 +20,20 @@ export const useGetEntries = (
   return useQuery({
     queryKey: [
       "entries",
-      `entries-${query}-${portfolio?.id}-${type}-${direction}-${pageSize}-${page}`,
+      `entries-${query}-${portfolio?.id}-${type}-${status}-${direction}-${pageSize}-${page}`,
     ],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getEntries(accessToken!, portfolio?.id!, query, type, direction, pageSize, page);
+      return getEntries(
+        accessToken!,
+        portfolio?.id!,
+        query,
+        type,
+        status,
+        direction,
+        pageSize,
+        page
+      );
     },
   });
 };
@@ -139,6 +149,7 @@ const getEntries = (
   portfolioId: string,
   query?: string,
   type?: string,
+  status?: string,
   direction?: string,
   pageSize?: string,
   page?: string
@@ -150,6 +161,9 @@ const getEntries = (
   }
   if (type) {
     url = `${url}type=${type}&`;
+  }
+  if (status) {
+    url = `${url}status=${status}&`;
   }
   if (direction) {
     url = `${url}direction=${direction}&`;

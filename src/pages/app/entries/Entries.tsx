@@ -96,7 +96,7 @@ export const Entries = () => {
   } = useGetEntries(
     searchParams.get("query") || undefined,
     searchParams.get("entryType") || undefined,
-    //Add status filter
+    searchParams.get("status") || undefined,
     searchParams.get("direction") || undefined,
     searchParams.get("pageSize") || undefined,
     searchParams.get("page") || undefined
