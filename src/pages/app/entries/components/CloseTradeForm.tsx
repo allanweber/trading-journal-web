@@ -22,19 +22,21 @@ const EntrySummary = ({ entry }: { entry: Entry }) => {
       <span className="flex justify-between">
         <span>Open Date</span>
         <span>
-          <DateDisplay value={entry.date} withTime />{" "}
+          <DateDisplay withTime>{entry.date}</DateDisplay>
         </span>
       </span>
       <span className="flex justify-between">
         <span>Entry Price</span>
         <span>
-          <NumberDisplay value={entry.price} currency={getSymbol(entry.portfolio.currency)} />
+          <NumberDisplay currency={getSymbol(entry.portfolio.currency)}>
+            {entry.price}
+          </NumberDisplay>
         </span>
       </span>
       <span className="flex justify-between">
         <span>Entry Size</span>
         <span>
-          <NumberDisplay value={entry.size} />
+          <NumberDisplay>{entry.size}</NumberDisplay>
         </span>
       </span>
     </span>

@@ -4,6 +4,7 @@ import { Entry, OrderStatus } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useParams } from "react-router-dom";
 import { useGetEntry } from "service/entryQueries";
+import { ClosedEntry } from "./components/ClosedEntry";
 import DividendForm from "./components/DividendForm";
 import { StockForm } from "./components/StockForm";
 
@@ -36,7 +37,7 @@ export const EditEntry = () => {
   }
 
   if (data?.orderStatus === OrderStatus.CLOSED) {
-    return <MessageDisplay message="Entry is closed" variant="destructive" />;
+    return <ClosedEntry entry={data!} />;
   }
 
   return <EntryForm entry={data!} />;

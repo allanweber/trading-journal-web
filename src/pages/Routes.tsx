@@ -1,23 +1,19 @@
-import { AppLayout } from 'layouts/AppLayout';
-import { RootLayout } from 'layouts/RootLayout';
-import { UserLayout } from 'layouts/UserLayout';
-import { About } from 'pages/About';
-import { Home } from 'pages/Home';
-import { Login } from 'pages/Login';
-import { Trading } from 'pages/app/Trading';
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from 'react-router-dom';
-import { EditEntry } from './app/entries/EditEntry';
-import { Entries } from './app/entries/Entries';
-import { NewEntry } from './app/entries/NewEntry';
-import { EditPortfolio } from './app/portfolios/EditPortfolio';
-import { NewPortfolio } from './app/portfolios/NewPortfolio';
-import { Portfolios } from './app/portfolios/Portfolios';
-import { UserProfile } from './app/user/UserProfile';
-import { UserSettings } from './app/user/UserSettings';
+import { AppLayout } from "layouts/AppLayout";
+import { RootLayout } from "layouts/RootLayout";
+import { UserLayout } from "layouts/UserLayout";
+import { About } from "pages/About";
+import { Home } from "pages/Home";
+import { Login } from "pages/Login";
+import { Trading } from "pages/app/Trading";
+import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { EditEntry } from "./app/entries/EditEntry";
+import { Entries } from "./app/entries/Entries";
+import { NewEntry } from "./app/entries/NewEntry";
+import { EditPortfolio } from "./app/portfolios/EditPortfolio";
+import { NewPortfolio } from "./app/portfolios/NewPortfolio";
+import { Portfolios } from "./app/portfolios/Portfolios";
+import { UserProfile } from "./app/user/UserProfile";
+import { UserSettings } from "./app/user/UserSettings";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

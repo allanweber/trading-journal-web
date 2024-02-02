@@ -13,9 +13,5 @@ export default function ColoredNumber(props: PropsWithChildren<Props>) {
   const negative = "text-red-600";
   const positiveValue = value >= 0;
 
-  return (
-    <span className={cn(positiveValue ? positive : negative, "text-sm", className)}>
-      {children}
-    </span>
-  );
+  return <span className={cn(positiveValue ? positive : negative, className)}>{children}</span>;
 }

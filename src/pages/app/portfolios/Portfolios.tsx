@@ -51,7 +51,7 @@ export const Portfolios = () => {
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p>
-                      <DateDisplay value={portfolio.startDate} />
+                      <DateDisplay>{portfolio.startDate}</DateDisplay>
                     </p>
                   </div>
                   <div className="flex justify-end mb-2">
@@ -102,7 +102,7 @@ export const Portfolios = () => {
                     </TableCell>
                     <TableCell>{portfolio.description}</TableCell>
                     <TableCell>
-                      <DateDisplay value={portfolio.startDate} />
+                      <DateDisplay>{portfolio.startDate}</DateDisplay>
                     </TableCell>
                     <TableCell>
                       <PortfolioBalance

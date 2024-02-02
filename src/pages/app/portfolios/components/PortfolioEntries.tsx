@@ -94,7 +94,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                   </Avatar>
                   <div className="ml-4 space-y-1">
                     <p className="text-sm font-medium leading-none">
-                      <DateDisplay value={entry.date} />
+                      <DateDisplay>{entry.date}</DateDisplay>
                     </p>
                     <p className="text-sm text-muted-foreground lowercase">{entry.entryType}</p>
                   </div>
@@ -109,11 +109,9 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                     <div className="flex items-center">
                       <div>
                         <ColoredNumber value={entry.result!}>
-                          <NumberDisplay
-                            value={entry.result}
-                            currency={portfolio.currency}
-                            withSign
-                          />
+                          <NumberDisplay currency={portfolio.currency} withSign>
+                            {entry.result}
+                          </NumberDisplay>
                         </ColoredNumber>
                       </div>
                       <div className="ml-1" onClick={(e) => e.stopPropagation()}>

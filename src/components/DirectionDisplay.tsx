@@ -23,7 +23,7 @@ export const DirectionDisplay = ({ direction, withLabel = true, size = Size.SMAL
               withLabel ? "mr-1" : ""
             )}
           />
-          {withLabel && <span>{direction}</span>}
+          {withLabel && <span className={cn(directionEntry.color)}>{direction}</span>}
         </div>
       )}
     </>

@@ -1,4 +1,3 @@
-import ColoredNumber from "components/ColoredNumber";
 import DateDisplay from "components/DateDisplay";
 import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
@@ -7,11 +6,8 @@ import NumberDisplay from "components/NumberDisplay";
 import { PageHeader } from "components/PageHeader";
 import { TableLoading } from "components/table/TableLoading";
 import { TablePagination } from "components/table/TablePagination";
-import { Button } from "components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
-import { useToast } from "components/ui/use-toast";
-import { CandlestickChart } from "lucide-react";
 import { Entry } from "model/entry";
 import { EntryType } from "model/entryType";
 import { Size } from "model/size";
@@ -20,61 +16,22 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useGetEntries } from "service/entryQueries";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
+import { EntryResult } from "./components/EntryResult";
 import { EntrySearch } from "./components/EntrySearch";
 import { EntryStatus } from "./components/EntryStatus";
-
-const Result = ({ entry, className }: { entry: Entry; className?: string }) => {
-  if (!entry.result || entry.result === 0)
-    return <NumberDisplay value={entry.result} currency={entry.portfolio.currency} />;
-
-  return (
-    <div className="flex">
-      <ColoredNumber value={entry.result} className={className}>
-        <NumberDisplay value={entry.result} currency={entry.portfolio.currency} />
-      </ColoredNumber>
-      {entry.returnPercentage && (
-        <ColoredNumber value={entry.returnPercentage} className="ml-1">
-          (<NumberDisplay value={entry.returnPercentage} isPercentage></NumberDisplay>)
-        </ColoredNumber>
-      )}
-    </div>
-  );
-};
-
-const SymbolDisplay = ({ entry }: { entry: Entry }) => {
-  /* TODO: on click open chart */
-  const { toast } = useToast();
-
-  const showChart = (e: any) => {
-    e.stopPropagation();
-    toast({
-      title: "Display Chart",
-      description: `Display chart is coming soon in a future release.`,
-    });
-  };
-
-  if (!entry.symbol) return <></>;
-  if (entry.entryType === EntryType.DIVIDEND) return <span>{`${entry.symbol} (Dividend)`}</span>;
-
-  return (
-    <Button variant="link" className="p-0 m-0 h-0" onClick={(e) => showChart(e)}>
-      {entry.symbol}
-      <CandlestickChart className="h-4 w-4 ml-1" />
-    </Button>
-  );
-};
+import { SymbolDisplay } from "./components/SymbolDisplay";
 
 const EntrySizeAndPrice = ({ entry }: { entry: Entry }) => {
   return (
     <div className="flex items-center justify-start">
       <div>
-        <NumberDisplay value={entry.price} currency={entry.portfolio.currency} />
+        <NumberDisplay currency={entry.portfolio.currency}>{entry.price}</NumberDisplay>
       </div>
       <div>
         {entry.size && (
           <>
             <span className=" text-muted-foreground text-xs ml-1">
-              (<NumberDisplay value={entry.size} />)
+              (<NumberDisplay>{entry.size}</NumberDisplay>)
             </span>
           </>
         )}
@@ -159,15 +116,24 @@ export const Entries = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-0 pt-3 pb-2">
-                    <EntrySizeAndPrice entry={entry} />
+                    <div className="flex w-full items-center justify-between">
+                      <div>
+                        <EntrySizeAndPrice entry={entry} />
+                      </div>
+                      <div className="flex justify-end">
+                        {entry.exitDate && (
+                          <DateDistance startDate={entry.date} endDate={entry.exitDate} />
+                        )}
+                      </div>
+                    </div>
                   </CardContent>
                   <CardFooter>
                     <div className="flex w-full items-center justify-between pt-4">
                       <div>
-                        <DateDisplay value={entry.date} />
+                        <DateDisplay>{entry.date}</DateDisplay>
                       </div>
                       <div className="flex justify-end pr-2">
-                        <Result entry={entry} className="" />
+                        <EntryResult entry={entry} />
                       </div>
                     </div>
                   </CardFooter>
@@ -215,10 +181,10 @@ export const Entries = () => {
                       className="hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
                     >
                       <TableCell>
-                        <DateDisplay withTime value={entry.date} />
+                        <DateDisplay withTime>{entry.date}</DateDisplay>
                       </TableCell>
                       <TableCell>
-                        <SymbolDisplay entry={entry} />
+                        <SymbolDisplay entry={entry} className="p-0 m-0 h-0" />
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <EntryStatus entry={entry} />
@@ -235,7 +201,7 @@ export const Entries = () => {
                         )}
                       </TableCell>
                       <TableCell>
-                        <Result entry={entry} />
+                        <EntryResult entry={entry} />
                       </TableCell>
                       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                         <DeleteEntryButton

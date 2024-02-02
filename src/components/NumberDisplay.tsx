@@ -1,32 +1,32 @@
 import { currencyFormatter, numberFormatter, percentFormatter } from "lib/number";
 
 type Props = {
-  value: number | undefined;
+  children: number | undefined;
   currency?: string;
   isPercentage?: boolean;
   withSign?: boolean;
 };
 
 export default function NumberDisplay(props: Props) {
-  const { value, currency, isPercentage, withSign } = props;
+  const { children, currency, isPercentage, withSign } = props;
   let sign = undefined;
   let formattedValue = undefined;
 
   if (withSign) {
-    if (value && value > 0) {
+    if (children && children > 0) {
       sign = "+";
-    } else if (value && value < 0) {
+    } else if (children && children < 0) {
       sign = "-";
     }
   }
 
-  if (value) {
+  if (children) {
     if (isPercentage) {
-      formattedValue = percentFormatter(value);
+      formattedValue = percentFormatter(children);
     } else if (currency) {
-      formattedValue = currencyFormatter(value, currency);
+      formattedValue = currencyFormatter(children, currency);
     } else {
-      formattedValue = numberFormatter(value);
+      formattedValue = numberFormatter(children);
     }
 
     if (withSign) {

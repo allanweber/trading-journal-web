@@ -21,7 +21,7 @@ export const PortfolioBalance = (props: Props) => {
         ) : null}
 
         <ColoredNumber value={balance} className={className}>
-          <NumberDisplay value={balance} currency={currency} />
+          <NumberDisplay currency={currency}>{balance}</NumberDisplay>
         </ColoredNumber>
       </div>
     </>

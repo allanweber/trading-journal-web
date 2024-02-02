@@ -5,22 +5,22 @@ const withTimeFormat = "PP hh:mm";
 const dateFormat = "PP";
 
 type Props = {
-  value: Date | string | undefined;
+  children: Date | string | undefined;
   withTime?: boolean;
 };
 
 export default function DateDisplay(props: Props) {
-  const { value, withTime } = props;
+  const { children, withTime } = props;
   const calendarLocale = enGB;
   const fieldFormat = withTime ? withTimeFormat : dateFormat;
 
-  if (!value) return null;
+  if (!children) return null;
 
   let date;
-  if (typeof value === "string") {
-    date = new Date(value);
+  if (typeof children === "string") {
+    date = new Date(children);
   } else {
-    date = value;
+    date = children;
   }
   return <>{format(date, fieldFormat, { locale: calendarLocale })}</>;
 }
