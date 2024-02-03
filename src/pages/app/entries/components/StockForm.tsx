@@ -29,6 +29,7 @@ import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
+import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
 import { NavLink } from "react-router-dom";
@@ -41,7 +42,10 @@ const CloseTrade = ({ entry }: { entry: Entry }) => {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="link">Close trade</Button>
+          <Button variant="link">
+            {" "}
+            <CheckCheck className="h-4 w-4 mr-1" /> Close trade
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <CloseTradeForm entry={entry} />
@@ -118,6 +122,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                       entry={stock as Entry}
                       onError={(error) => setDeleteError(error)}
                       onSuccess={() => navigate("/trading/entries")}
+                      withLabel
                     />
                   </div>
                 )}

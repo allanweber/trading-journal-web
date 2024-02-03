@@ -1,6 +1,7 @@
 import DateDisplay from "components/DateDisplay";
 import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
+import { MessageDisplay } from "components/MessageDisplay";
 import NumberDisplay from "components/NumberDisplay";
 import { Badge } from "components/ui/badge";
 import { Card, CardContent, CardHeader } from "components/ui/card";
@@ -8,7 +9,9 @@ import { Table, TableBody, TableCell, TableRow } from "components/ui/table";
 import { Entry } from "model/entry";
 import { EntryType, getEntryType } from "model/entryType";
 import { Size } from "model/size";
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { DeleteEntryButton } from "./DeleteEntryButton";
 import { EntryResult } from "./EntryResult";
 
 type Props = {
@@ -16,6 +19,8 @@ type Props = {
 };
 
 export const ClosedEntry = ({ entry }: Props) => {
+  const [deleteError, setDeleteError] = useState<any>(null);
+  const navigation = useNavigate();
   const entryType = getEntryType(entry.entryType)!;
 
   const items = [
@@ -59,6 +64,7 @@ export const ClosedEntry = ({ entry }: Props) => {
 
   return (
     <div className="mx-auto max-w-4xl">
+      <MessageDisplay message={deleteError} variant="destructive" />
       <Card>
         <CardHeader>
           <div className="flex flex-col items-start justify-between md:flex-row md:items-center ">
@@ -91,6 +97,13 @@ export const ClosedEntry = ({ entry }: Props) => {
                       <DirectionDisplay direction={entry.direction} withLabel size={Size.LARGE} />
                     </Badge>
                   )}
+                </div>
+                <div>
+                  <DeleteEntryButton
+                    entry={entry}
+                    onError={(error) => setDeleteError(error)}
+                    onSuccess={() => navigation("/trading/entries")}
+                  />
                 </div>
               </div>
             </div>

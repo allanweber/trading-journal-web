@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
+import { Button } from "components/ui/button";
 import { toast } from "components/ui/use-toast";
 import { TrashIcon } from "lucide-react";
 import { Entry } from "model/entry";
@@ -19,9 +20,10 @@ type Props = {
   entry: Entry;
   onError: (error: any) => void;
   onSuccess: () => void;
+  withLabel?: boolean;
 };
 
-export const DeleteEntryButton = ({ entry, onError, onSuccess }: Props) => {
+export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Props) => {
   const mutation = useDeleteEntry();
 
   if (mutation.isPending) {
@@ -48,7 +50,14 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess }: Props) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer" />
+        {withLabel ? (
+          <Button variant="link">
+            <TrashIcon className="mr-1 h-4 w-4" />
+            Delete
+          </Button>
+        ) : (
+          <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer" />
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
