@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageDisplay } from "components/MessageDisplay";
 import { Button } from "components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "components/ui/card";
+import { Card, CardContent, CardHeader } from "components/ui/card";
 import {
   Form,
   FormControl,
@@ -24,11 +24,14 @@ import { DirectionSelect } from "components/DirectionSelect";
 import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
+import { Uploader } from "components/Uploader";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
+import { config } from "lib/config";
+import { cn } from "lib/utils";
 import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
@@ -70,6 +73,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
     result: 0,
     portfolio: portfolio!,
   };
+  const showImages = !!stock?.id;
 
   const [values, setValues] = useState<Entry>(stock || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
@@ -97,10 +101,12 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
           title: "Stock saved",
           description: `Stock was saved successfully`,
         });
-        navigate("/trading/entries");
+        navigate(`/trading/entries/${data.id}`);
       },
     });
   }
+
+  const uploadUrl = `${config.api}/api/v1/portfolios/${portfolio?.id}/entries/${stock?.id}/upload`;
 
   return (
     <>
@@ -108,11 +114,17 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
       <MessageDisplay message={deleteError} variant="destructive" />
 
       <Form {...form}>
-        <Card>
+        <Card className={cn(showImages ? null : "mx-auto max-w-2xl")}>
           <CardHeader>
             <PageHeader>
               <PageHeader.Title>
-                {stock ? "Edit" : "Add a new"} Stock Trade {stock && <EntryStatus entry={stock} />}
+                <span className="block md:hidden">
+                  {stock ? <EntryStatus entry={stock} /> : "Add a new stock"}
+                </span>
+                <span className="hidden md:block">
+                  {stock ? "Edit" : "Add a new"} Stock Trade{" "}
+                  {stock && <EntryStatus entry={stock} />}
+                </span>
               </PageHeader.Title>
               <PageHeader.Action>
                 {stock && (
@@ -131,9 +143,14 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-12 gap-4">
-                <div className="col-span-12 md:col-span-7 lg:col-span-6">
-                  <div className="grid grid-cols-12 gap-6">
+              <div className="grid grid-cols-12 gap-6">
+                <div
+                  className={cn(
+                    "col-span-12 ",
+                    !showImages ? "col-span-12" : "md:col-span-7 lg:col-span-6"
+                  )}
+                >
+                  <div className="grid grid-cols-12 gap-3">
                     <div className="col-span-12 md:col-span-6 lg:col-span-4">
                       <FormField
                         control={form.control}
@@ -171,7 +188,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                     </div>
 
                     <div className="col-span-12 md:col-span-6 lg:col-span-4 mt-8">
-                      <span className="text-muted-foreground ">Strategy is coming up soon</span>
+                      <span className="text-muted-foreground ">Strategy is coming soon</span>
                     </div>
 
                     <div className="col-span-12 md:col-span-6 lg:col-span-4">
@@ -309,7 +326,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                     </div>
 
                     <div className="col-span-12">
-                      <Separator className="mb-3" />
+                      <Separator />
                     </div>
 
                     <div className="col-span-12 sm:col-span-12">
@@ -330,28 +347,30 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                         )}
                       />
                     </div>
+
+                    <div className="col-span-12">
+                      <div className="flex flex-wrap sm:justify-end mt-0 mb-0 p-0">
+                        <Button asChild variant="outline" className="w-full sm:w-[200px]">
+                          <NavLink to="/trading/entries">Cancel</NavLink>
+                        </Button>
+                        <Button
+                          type="submit"
+                          className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
+                          disabled={mutation.isPending}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className="col-span-12 md:col-span-7 lg:col-span-6">
-                  <Card>
-                    <CardHeader></CardHeader>
-                    <CardContent></CardContent>
-                  </Card>
-                </div>
+
+                {showImages && (
+                  <div className="col-span-12 md:col-span-7 lg:col-span-6">
+                    <Uploader url={uploadUrl} />
+                  </div>
+                )}
               </div>
-              <CardFooter className="flex flex-wrap sm:justify-end">
-                <Separator className="mb-3" />
-                <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to="/trading/entries">Cancel</NavLink>
-                </Button>
-                <Button
-                  type="submit"
-                  className="w-full mt-2 sm:w-[200px] sm:ml-3 sm:mt-0"
-                  disabled={mutation.isPending}
-                >
-                  Save
-                </Button>
-              </CardFooter>
             </form>
           </CardContent>
         </Card>
