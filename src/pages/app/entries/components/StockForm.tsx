@@ -24,13 +24,11 @@ import { DirectionSelect } from "components/DirectionSelect";
 import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
-import { Uploader } from "components/Uploader";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
-import { config } from "lib/config";
 import { cn } from "lib/utils";
 import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
@@ -38,6 +36,7 @@ import { Direction } from "model/direction";
 import { NavLink } from "react-router-dom";
 import { CloseTradeForm } from "./CloseTradeForm";
 import { DeleteEntryButton } from "./DeleteEntryButton";
+import { EntryImages } from "./EntryImages";
 import { EntryStatus } from "./EntryStatus";
 
 const CloseTrade = ({ entry }: { entry: Entry }) => {
@@ -105,8 +104,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
       },
     });
   }
-
-  const uploadUrl = `${config.api}/api/v1/portfolios/${portfolio?.id}/entries/${stock?.id}/upload`;
 
   return (
     <>
@@ -367,7 +364,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
 
                 {showImages && (
                   <div className="col-span-12 md:col-span-7 lg:col-span-6">
-                    <Uploader url={uploadUrl} />
+                    <EntryImages entry={stock} />
                   </div>
                 )}
               </div>
