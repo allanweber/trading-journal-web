@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import DateDisplay from "components/DateDisplay";
 import { DateTimePicker } from "components/DateTimePicker";
+import { DirectionDisplay } from "components/DirectionDisplay";
 import { HelperText } from "components/HelperText";
 import { MessageDisplay } from "components/MessageDisplay";
 import NumberDisplay from "components/NumberDisplay";
@@ -37,6 +38,12 @@ const EntrySummary = ({ entry }: { entry: Entry }) => {
         <span>Entry Size</span>
         <span>
           <NumberDisplay>{entry.size}</NumberDisplay>
+        </span>
+      </span>
+      <span className="flex justify-between">
+        <span>Direction</span>
+        <span>
+          <DirectionDisplay direction={entry.direction} />
         </span>
       </span>
     </span>

@@ -8,7 +8,9 @@ import Uploady, {
   useItemStartListener,
 } from "@rpldy/uploady";
 import { useAuthState } from "lib/authentication";
-import { UploadCloud } from "lucide-react";
+import { config } from "lib/config";
+import { UploadCloud, X } from "lucide-react";
+import { ImageUploaded } from "model/fileUploaded";
 import { Ref, forwardRef, useState } from "react";
 import { Button } from "./ui/button";
 
@@ -36,35 +38,28 @@ type UploadStatus = {
   error?: string;
 };
 
-type FileUploaded = {
-  id: string;
-  url: string;
-  fileName?: string;
-};
-
 type Props = {
   folder: string;
-  onFileUploaded?: (file: FileUploaded) => void;
+  onFileUploaded?: (file: ImageUploaded) => void;
 };
 
 export const Uploader = ({ folder, onFileUploaded }: Props) => {
   const { user } = useAuthState();
 
   const destination = {
-    url: "https://api.cloudinary.com/v1_1/dmhsxloua/image/upload",
+    url: config.cloudinary.url,
     method: "POST",
     params: {
-      upload_preset: "ml_default",
       folder: `${user!.email}/${folder}`,
-      cloud_name: "dmhsxloua",
       timestamp: Date.now(),
-      api_key: "779142691317196",
+      upload_preset: config.cloudinary.preset,
+      cloud_name: config.cloudinary.cloudName,
+      api_key: config.cloudinary.apiKey,
     },
   };
 
+  const [files, setFiles] = useState<UploadStatus[] | undefined>([]);
   const UploadStatusView = () => {
-    const [files, setFiles] = useState<UploadStatus[] | undefined>([]);
-
     useItemStartListener((e) =>
       setFiles((prev) => {
         return [
@@ -82,7 +77,7 @@ export const Uploader = ({ folder, onFileUploaded }: Props) => {
     useItemFinishListener((item) => {
       if (onFileUploaded) {
         onFileUploaded({
-          id: item.uploadResponse?.data.asset_id!,
+          imageId: item.uploadResponse?.data.asset_id!,
           url: item.uploadResponse?.data.secure_url,
           fileName: item.file.name,
         });
@@ -140,20 +135,35 @@ export const Uploader = ({ folder, onFileUploaded }: Props) => {
         {files.map((file) => {
           return (
             <div key={file.itemId} className="flex flex-col">
-              <div className="flex flex-row">
-                <div>{file.name}</div>
+              <div className="rounded-md bg-[#F5F7FB] py-1 px-2">
+                <div className="flex items-center justify-between">
+                  <span className="truncate text-base font-medium text-[#07074D]">{file.name}</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="text-[#07074D] p-0 m-0"
+                    onClick={() => {
+                      setFiles((prev) => {
+                        return prev!.filter((i) => i.itemId !== file.itemId);
+                      });
+                    }}
+                  >
+                    <X size={14} />
+                  </Button>
+                </div>
+                {file.error ? (
+                  <p className="text-red-500 dark:text-red-400 text-wrap max-w-xs md:max-w-md truncate">
+                    {file.error}
+                  </p>
+                ) : (
+                  <div className="relative mt-1 h-[6px] rounded-lg bg-[#E2E5EF]">
+                    <div
+                      className="absolute left-0 right-0 h-full rounded-lg bg-green-500 dark:bg-green-400"
+                      style={{ width: `${file.completed}%` }}
+                    ></div>
+                  </div>
+                )}
               </div>
-
-              {file.error ? (
-                <p className="text-red-500 dark:text-red-400 text-wrap max-w-xs md:max-w-md truncate">
-                  {file.error}
-                </p>
-              ) : (
-                <div
-                  className="h-2 bg-green-500 dark:bg-green-400 rounded-lg"
-                  style={{ width: `${file.completed}%` }}
-                ></div>
-              )}
             </div>
           );
         })}

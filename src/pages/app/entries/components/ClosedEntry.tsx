@@ -12,6 +12,7 @@ import { Size } from "model/size";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DeleteEntryButton } from "./DeleteEntryButton";
+import { EntryImages } from "./EntryImages";
 import { EntryResult } from "./EntryResult";
 
 type Props = {
@@ -122,6 +123,9 @@ export const ClosedEntry = ({ entry }: Props) => {
           <span className="block w-full p-2 text-center font-normal text-muted-foreground">
             Chart will be available in the future
           </span>
+          <div>
+            <EntryImages entry={entry} locked />
+          </div>
 
           <Table>
             <TableBody>

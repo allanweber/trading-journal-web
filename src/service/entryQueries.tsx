@@ -3,6 +3,7 @@ import { usePortfolioContext } from "contexts/PortfolioContext";
 import { useAuthState } from "lib/authentication";
 import { config } from "lib/config";
 import { Deposit, Dividend, Entry, ExitEntry, Stock, Taxes, Withdrawal } from "model/entry";
+import { ImageUploaded } from "model/fileUploaded";
 import { Paginated } from "model/pagination";
 import { responseOrError } from "./response";
 
@@ -144,6 +145,58 @@ export const useCloseEntry = (entryId: string) => {
   });
 };
 
+export const useSaveImage = (entryId: string) => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (image: ImageUploaded) => {
+      const accessToken = await getToken();
+      return saveImage(accessToken!, portfolio?.id!, entryId, image);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: [`images-${entryId}`],
+      });
+    },
+  });
+};
+
+export const useGetImages = (entryId: string) => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  return useQuery({
+    queryKey: [`images-${entryId}`],
+    queryFn: async () => {
+      const accessToken = await getToken();
+      return getImages(accessToken!, portfolio?.id!, entryId);
+    },
+  });
+};
+
+export const useDeleteImage = (entryId: string) => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (imageId: string) => {
+      const accessToken = await getToken();
+      return deleteImage(accessToken!, portfolio?.id!, entryId, imageId);
+    },
+    onSuccess(data, variables, context) {
+      console.log(data);
+      queryClient.removeQueries({
+        queryKey: [`images-${entryId}`],
+      });
+    },
+  });
+};
+
 const getEntries = (
   accessToken: string,
   portfolioId: string,
@@ -260,3 +313,46 @@ const closeEntry = (
     body: JSON.stringify(exitEntry),
   }).then(responseOrError);
 };
+
+const saveImage = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string,
+  image: ImageUploaded
+): Promise<ImageUploaded> => {
+  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(image),
+  }).then(responseOrError);
+};
+
+const getImages = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string
+): Promise<ImageUploaded[]> =>
+  fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  }).then(responseOrError);
+
+const deleteImage = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string,
+  imageId: string
+): Promise<string> =>
+  fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images/${imageId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  }).then(responseOrError);
