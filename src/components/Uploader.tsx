@@ -77,7 +77,7 @@ export const Uploader = ({ folder, onFileUploaded }: Props) => {
     useItemFinishListener((item) => {
       if (onFileUploaded) {
         onFileUploaded({
-          imageId: item.uploadResponse?.data.asset_id!,
+          imageId: item.uploadResponse?.data.public_id!,
           url: item.uploadResponse?.data.secure_url,
           fileName: item.file.name,
         });

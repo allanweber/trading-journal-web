@@ -9,5 +9,5 @@ type Props = {
 export const ZoomImage = ({ children }: Props) => {
   if (!children) return null;
 
-  return <ImageZoom zoomMargin={40}>{children}</ImageZoom>;
+  return <ImageZoom>{children}</ImageZoom>;
 };

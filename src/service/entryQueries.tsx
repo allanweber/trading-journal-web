@@ -189,7 +189,6 @@ export const useDeleteImage = (entryId: string) => {
       return deleteImage(accessToken!, portfolio?.id!, entryId, imageId);
     },
     onSuccess(data, variables, context) {
-      console.log(data);
       queryClient.removeQueries({
         queryKey: [`images-${entryId}`],
       });
@@ -349,10 +348,15 @@ const deleteImage = (
   entryId: string,
   imageId: string
 ): Promise<string> =>
-  fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images/${imageId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-  }).then(responseOrError);
+  fetch(
+    `${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images/${encodeURIComponent(
+      imageId
+    )}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  ).then(responseOrError);
