@@ -111,7 +111,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
       <MessageDisplay message={deleteError} variant="destructive" />
 
       <Form {...form}>
-        <Card className={cn(showImages ? null : "mx-auto max-w-2xl")}>
+        <Card className={cn(showImages ? null : "mx-auto max-w-3xl")}>
           <CardHeader>
             <PageHeader>
               <PageHeader.Title>
