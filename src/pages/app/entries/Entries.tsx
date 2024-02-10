@@ -8,6 +8,8 @@ import { TableLoading } from "components/table/TableLoading";
 import { TablePagination } from "components/table/TablePagination";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
+import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
+import { Image, StickyNote } from "lucide-react";
 import { Entry } from "model/entry";
 import { EntryType } from "model/entryType";
 import { Size } from "model/size";
@@ -36,6 +38,33 @@ const EntrySizeAndPrice = ({ entry }: { entry: Entry }) => {
           </>
         )}
       </div>
+    </div>
+  );
+};
+
+const NotesAndImages = ({ entry }: { entry: Entry }) => {
+  return (
+    <div className="flex items-center justify-end gap-1">
+      {entry._count && entry._count?.images > 0 && (
+        <Tooltip>
+          <TooltipTrigger>
+            <Image className="h-4 w-4" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>There are images</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
+      {entry.notes && (
+        <Tooltip>
+          <TooltipTrigger>
+            <StickyNote className="h-4 w-4" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>There are notes</p>
+          </TooltipContent>
+        </Tooltip>
+      )}
     </div>
   );
 };
@@ -92,9 +121,9 @@ export const Entries = () => {
                     <CardTitle>
                       <div className="flex w-full items-center justify-between">
                         <div>
-                          <div className="flex w-full items-center">
+                          <div className="flex w-full items-center gap-2">
                             <div>
-                              <span className="text-2xl font-semibold leading-none tracking-tight mr-2">
+                              <span className="text-2xl font-semibold leading-none tracking-tight">
                                 {`${entry.symbol}${
                                   entry.entryType === EntryType.DIVIDEND ? " (Divd)" : ""
                                 }`}
@@ -107,6 +136,7 @@ export const Entries = () => {
                                 size={Size.LARGE}
                               />
                             </div>
+                            <NotesAndImages entry={entry} />
                           </div>
                         </div>
                         <div className="flex justify-end">
@@ -160,6 +190,7 @@ export const Entries = () => {
                 <TableHead>Hold</TableHead>
                 <TableHead>Result</TableHead>
                 <TableHead className="w-[45px]"></TableHead>
+                <TableHead className="w-[45px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -202,6 +233,9 @@ export const Entries = () => {
                       </TableCell>
                       <TableCell>
                         <EntryResult entry={entry} />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <NotesAndImages entry={entry} />
                       </TableCell>
                       <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                         <DeleteEntryButton

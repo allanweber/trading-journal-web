@@ -4,19 +4,72 @@ import { DirectionDisplay } from "components/DirectionDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import NumberDisplay from "components/NumberDisplay";
 import { Badge } from "components/ui/badge";
+import { Button } from "components/ui/button";
 import { Card, CardContent, CardHeader } from "components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "components/ui/table";
+import { Textarea } from "components/ui/textarea";
+import { Toggle } from "components/ui/toggle";
+import { Pencil } from "lucide-react";
 import { Entry } from "model/entry";
 import { EntryType, getEntryType } from "model/entryType";
 import { Size } from "model/size";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUpdateNotes } from "service/entryQueries";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 import { EntryImages } from "./EntryImages";
 import { EntryResult } from "./EntryResult";
 
 type Props = {
   entry: Entry;
+};
+
+const UpdateNotes = ({ entry }: Props) => {
+  const [editing, setEditing] = useState(false);
+  const [notes, setNotes] = useState(entry.notes!);
+  const mutation = useUpdateNotes(entry.id!);
+
+  return (
+    <Card>
+      <CardHeader className="pt-2">
+        <div className="flex items-center justify-between">
+          <div className="text-xl font-bold">Notes</div>
+          <div className="flex md:justify-end mt-4 md:mt-0">
+            <Toggle
+              aria-label="Toggle Edit"
+              pressed={editing}
+              onClick={() => setEditing((prev) => !prev)}
+            >
+              <Pencil />
+            </Toggle>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <MessageDisplay message={mutation.error} variant="destructive" />
+        {editing ? (
+          <div>
+            <div className="mb-4">
+              <Textarea defaultValue={notes} onChange={(e) => setNotes(e.target.value)} />
+            </div>
+            <div className="flex justify-end">
+              <Button
+                className="w-full sm:w-1/2 md:w-1/3"
+                onClick={() => {
+                  mutation.mutate(notes);
+                  setEditing(false);
+                }}
+              >
+                Save
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div>{notes}</div>
+        )}
+      </CardContent>
+    </Card>
+  );
 };
 
 export const ClosedEntry = ({ entry }: Props) => {
@@ -139,6 +192,7 @@ export const ClosedEntry = ({ entry }: Props) => {
               ))}
             </TableBody>
           </Table>
+          <UpdateNotes entry={entry} />
         </CardContent>
       </Card>
     </div>

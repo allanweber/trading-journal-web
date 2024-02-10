@@ -29,7 +29,7 @@ export const tradeSchema = z
     }),
     notes: z
       .string()
-      .max(100, {
+      .max(255, {
         message: "notes-max",
       })
       .optional(),
@@ -237,7 +237,7 @@ export const entrySchema = z.object({
   orderRef: z.string().optional(),
   notes: z
     .string()
-    .max(100, {
+    .max(255, {
       message: "notes-max",
     })
     .optional(),
@@ -273,6 +273,7 @@ export const entrySchema = z.object({
   grossResult: z.number().optional(),
   returnPercentage: z.number().optional(),
   plannedRR: z.number().optional(),
+  _count: z.object({ images: z.number() }).optional(),
   portfolio: portfolioSchema,
 });
 

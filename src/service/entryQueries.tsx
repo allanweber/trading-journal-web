@@ -177,6 +177,25 @@ export const useDeleteImage = (entryId: string) => {
   });
 };
 
+export const useUpdateNotes = (entryId: string) => {
+  const { getToken } = useAuthState();
+  const { portfolio } = usePortfolioContext();
+
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (notes: string) => {
+      const accessToken = await getToken();
+      return updateNotes(accessToken!, portfolio?.id!, entryId, notes);
+    },
+    onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${entryId}`],
+      });
+    },
+  });
+};
+
 const getEntries = (
   accessToken: string,
   portfolioId: string,
@@ -325,3 +344,18 @@ const deleteImage = (
       },
     }
   ).then(responseOrError);
+
+const updateNotes = (
+  accessToken: string,
+  portfolioId: string,
+  entryId: string,
+  notes: string
+): Promise<string> =>
+  fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/notes`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ notes }),
+  }).then(responseOrError);
