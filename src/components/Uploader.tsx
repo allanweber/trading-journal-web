@@ -170,7 +170,7 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
   return (
     <Uploady autoUpload={true} multiple={true} destination={destination} accept=".png,.jpg,.jpeg">
       <PasteUploadDropZone params={{ test: "paste" }}>
-        <PasteArea>
+        <PasteArea autoUpload={false}>
           <div className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
             <div className="flex flex-col items-center justify-evenly space-y-2 pt-2">
               <UploadCloud size={40} className=" text-gray-500 dark:text-gray-400" />
