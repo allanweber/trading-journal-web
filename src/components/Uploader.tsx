@@ -8,7 +8,6 @@ import Uploady, {
   useItemStartListener,
 } from "@rpldy/uploady";
 import { useAuthState } from "lib/authentication";
-import { config } from "lib/config";
 import { UploadCloud, X } from "lucide-react";
 import { ImageUploaded } from "model/fileUploaded";
 import { Ref, forwardRef, useState } from "react";
@@ -39,27 +38,24 @@ type UploadStatus = {
 };
 
 type Props = {
-  folder: string;
+  url: string;
   onFileUploaded?: (file: ImageUploaded) => void;
 };
 
-export const Uploader = ({ folder, onFileUploaded }: Props) => {
-  const { user } = useAuthState();
+export const Uploader = ({ url, onFileUploaded }: Props) => {
+  const { getToken } = useAuthState();
+  const [token, setToken] = useState<string>();
+  getToken().then((t) => setToken(t));
 
   const destination = {
-    url: config.cloudinary.url,
+    url,
     method: "POST",
-    params: {
-      folder: `${user!.email}/${folder}`,
-      timestamp: Date.now(),
-      upload_preset: config.cloudinary.preset,
-      cloud_name: config.cloudinary.cloudName,
-      api_key: config.cloudinary.apiKey,
-    },
+    filesParamName: "file",
+    headers: { Authorization: `Bearer ${token}` },
   };
 
-  const [files, setFiles] = useState<UploadStatus[] | undefined>([]);
   const UploadStatusView = () => {
+    const [files, setFiles] = useState<UploadStatus[] | undefined>([]);
     useItemStartListener((e) =>
       setFiles((prev) => {
         return [
@@ -77,9 +73,9 @@ export const Uploader = ({ folder, onFileUploaded }: Props) => {
     useItemFinishListener((item) => {
       if (onFileUploaded) {
         onFileUploaded({
-          imageId: item.uploadResponse?.data.public_id!,
-          url: item.uploadResponse?.data.secure_url,
-          fileName: item.file.name,
+          imageId: item.uploadResponse?.data.imageId,
+          url: item.uploadResponse?.data.url,
+          fileName: item.uploadResponse?.data.fileName,
         });
       }
       setFiles((prev) => {

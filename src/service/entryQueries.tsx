@@ -145,25 +145,6 @@ export const useCloseEntry = (entryId: string) => {
   });
 };
 
-export const useSaveImage = (entryId: string) => {
-  const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
-
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (image: ImageUploaded) => {
-      const accessToken = await getToken();
-      return saveImage(accessToken!, portfolio?.id!, entryId, image);
-    },
-    onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({
-        queryKey: [`images-${entryId}`],
-      });
-    },
-  });
-};
-
 export const useGetImages = (entryId: string) => {
   const { getToken } = useAuthState();
   const { portfolio } = usePortfolioContext();
@@ -189,7 +170,7 @@ export const useDeleteImage = (entryId: string) => {
       return deleteImage(accessToken!, portfolio?.id!, entryId, imageId);
     },
     onSuccess(data, variables, context) {
-      queryClient.removeQueries({
+      queryClient.invalidateQueries({
         queryKey: [`images-${entryId}`],
       });
     },
@@ -310,22 +291,6 @@ const closeEntry = (
       "Content-Type": "application/json",
     },
     body: JSON.stringify(exitEntry),
-  }).then(responseOrError);
-};
-
-const saveImage = (
-  accessToken: string,
-  portfolioId: string,
-  entryId: string,
-  image: ImageUploaded
-): Promise<ImageUploaded> => {
-  return fetch(`${config.api}/api/v1/portfolios/${portfolioId}/entries/${entryId}/images`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(image),
   }).then(responseOrError);
 };
 

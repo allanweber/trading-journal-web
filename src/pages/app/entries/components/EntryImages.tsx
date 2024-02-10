@@ -1,4 +1,3 @@
-import { Uploader } from "components/Uploader";
 import { ZoomImage } from "components/ZoomImage";
 import {
   AlertDialog,
@@ -12,19 +11,12 @@ import {
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
 import { TrashIcon } from "lucide-react";
-import { Entry } from "model/entry";
 import { ImageUploaded } from "model/fileUploaded";
-import { useDeleteImage, useGetImages, useSaveImage } from "service/entryQueries";
+import { useDeleteImage, useGetImages } from "service/entryQueries";
 
-type Props = {
-  entry: Entry;
-  locked?: boolean;
-};
-
-export const EntryImages = ({ entry, locked = false }: Props) => {
-  const { data: images } = useGetImages(entry.id!);
-  const saveMutation = useSaveImage(entry.id!);
-  const deleteMutation = useDeleteImage(entry.id!);
+export const EntryImages = ({ entryId }: { entryId: string }) => {
+  const { data: images } = useGetImages(entryId);
+  const deleteMutation = useDeleteImage(entryId);
 
   const deleteImage = (imageId: string) => {
     deleteMutation.mutate(imageId);
@@ -86,18 +78,11 @@ export const EntryImages = ({ entry, locked = false }: Props) => {
             </div>
           </div>
         ) : (
-          !locked && (
-            <div className="flex items-center justify-center h-16 text-muted-foreground text-center">
-              No images, use the upload bellow to add images to this entry
-            </div>
-          )
+          <div className="flex items-center justify-center h-16 text-muted-foreground text-center">
+            No images uploaded
+          </div>
         )}
       </div>
-      {!locked && (
-        <div>
-          <Uploader folder={entry.id!} onFileUploaded={(image) => saveMutation.mutate(image)} />
-        </div>
-      )}
     </div>
   );
 };

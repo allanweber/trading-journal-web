@@ -124,7 +124,7 @@ export const ClosedEntry = ({ entry }: Props) => {
             Chart will be available in the future
           </span>
           <div>
-            <EntryImages entry={entry} locked />
+            <EntryImages entryId={entry.id!} />
           </div>
 
           <Table>

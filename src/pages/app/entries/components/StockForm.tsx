@@ -29,14 +29,12 @@ import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
 import { Textarea } from "components/ui/textarea";
 import { usePortfolioContext } from "contexts/PortfolioContext";
-import { cn } from "lib/utils";
 import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
 import { NavLink } from "react-router-dom";
 import { CloseTradeForm } from "./CloseTradeForm";
 import { DeleteEntryButton } from "./DeleteEntryButton";
-import { EntryImages } from "./EntryImages";
 import { EntryStatus } from "./EntryStatus";
 
 const CloseTrade = ({ entry }: { entry: Entry }) => {
@@ -72,7 +70,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
     result: 0,
     portfolio: portfolio!,
   };
-  const showImages = !!stock?.id;
 
   const [values, setValues] = useState<Entry>(stock || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
@@ -111,7 +108,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
       <MessageDisplay message={deleteError} variant="destructive" />
 
       <Form {...form}>
-        <Card className={cn(showImages ? null : "mx-auto max-w-3xl")}>
+        <Card>
           <CardHeader>
             <PageHeader>
               <PageHeader.Title>
@@ -141,12 +138,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-12 gap-6">
-                <div
-                  className={cn(
-                    "col-span-12 ",
-                    !showImages ? "col-span-12" : "md:col-span-7 lg:col-span-6"
-                  )}
-                >
+                <div className="col-span-12">
                   <div className="grid grid-cols-12 gap-3">
                     <div className="col-span-12 md:col-span-6 lg:col-span-4">
                       <FormField
@@ -361,12 +353,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                     </div>
                   </div>
                 </div>
-
-                {showImages && (
-                  <div className="col-span-12 md:col-span-7 lg:col-span-6">
-                    <EntryImages entry={stock} />
-                  </div>
-                )}
               </div>
             </form>
           </CardContent>

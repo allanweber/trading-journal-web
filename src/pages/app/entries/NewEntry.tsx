@@ -6,9 +6,17 @@ import { StockForm } from "./components/StockForm";
 const EntryForm = ({ entryType }: { entryType: EntryType }) => {
   switch (entryType) {
     case EntryType.STOCK:
-      return <StockForm />;
+      return (
+        <div className="mx-auto max-w-3xl">
+          <StockForm />
+        </div>
+      );
     case EntryType.DIVIDEND:
-      return <DividendForm />;
+      return (
+        <div className="mx-auto max-w-lg">
+          <DividendForm />
+        </div>
+      );
     default:
       throw new Error(`Invalid entry type: ${entryType}`);
   }
