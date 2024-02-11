@@ -30,14 +30,14 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <main>
-      <AuthContext>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext>
           <TooltipProvider>
             <RouterProvider router={router} />
           </TooltipProvider>
           <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </AuthContext>
+        </AuthContext>
+      </QueryClientProvider>
       <Toaster />
     </main>
   );
