@@ -6,6 +6,7 @@ import { Home } from "pages/Home";
 import { Login } from "pages/Login";
 import { Trading } from "pages/app/Trading";
 import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
+import { NotFound } from "./app/NotFound";
 import { EditEntry } from "./app/entries/EditEntry";
 import { Entries } from "./app/entries/Entries";
 import { NewEntry } from "./app/entries/NewEntry";
@@ -22,6 +23,7 @@ export const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
       <Route path="trading" element={<AppLayout />}>
         <Route index element={<Trading />} />
@@ -35,6 +37,7 @@ export const router = createBrowserRouter(
           <Route path="settings" element={<UserSettings />} />
           <Route path="profile" element={<UserProfile />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </>
   )
