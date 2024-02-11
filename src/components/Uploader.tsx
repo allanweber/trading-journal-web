@@ -10,7 +10,7 @@ import Uploady, {
 import { useAuthState } from "lib/authentication";
 import { UploadCloud, X } from "lucide-react";
 import { ImageUploaded } from "model/fileUploaded";
-import { Ref, forwardRef, useState } from "react";
+import { Ref, forwardRef, useCallback, useState } from "react";
 import { Button } from "./ui/button";
 
 const PasteUploadDropZone = withPasteUpload(UploadDropZone);
@@ -106,8 +106,7 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
       })
     );
 
-    useItemErrorListener((item) => {
-      console.error(item);
+    useItemErrorListener((item) =>
       setFiles((prev) => {
         return prev!.map((i) => {
           if (i.itemId === item.id) {
@@ -119,8 +118,8 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
           }
           return i;
         });
-      });
-    });
+      })
+    );
 
     if (!files || files.length === 0) {
       return <></>;
@@ -167,8 +166,18 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
     );
   };
 
+  const filterBySize = useCallback((file: any) => {
+    return file.size < 250000;
+  }, []);
+
   return (
-    <Uploady autoUpload={true} multiple={true} destination={destination} accept=".png,.jpg,.jpeg">
+    <Uploady
+      autoUpload={true}
+      multiple={true}
+      destination={destination}
+      accept=".png,.jpg,.jpeg"
+      fileFilter={filterBySize}
+    >
       <PasteUploadDropZone params={{ test: "paste" }}>
         <PasteArea autoUpload={false}>
           <div className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -176,6 +185,7 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
               <UploadCloud size={40} className=" text-gray-500 dark:text-gray-400" />
               <p className="text-sm text-gray-500">Drag and Drop file, Paste from clipboard or</p>
               <ButtonAsUploadButton />
+              <p className="text-sm font-semibold">Max 250kb per file</p>
             </div>
           </div>
         </PasteArea>
