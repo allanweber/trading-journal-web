@@ -6,9 +6,8 @@ env:
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [preview]
+
 jobs:
   test:
     timeout-minutes: 60
@@ -25,9 +24,7 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
-        run: |
-          url="$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})"
-          vercel alias --token=${{ secrets.VERCEL_TOKEN }} set "$url" preview.tradefastapp.com
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
       # - name: Install dependencies
       #   run: npm ci
       # - name: Install Playwright Browsers
