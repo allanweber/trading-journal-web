@@ -10,7 +10,6 @@ test("Should signin create the first portfolio portfolio", async ({ page }) => {
     .filter({ hasText: /^Email$/ })
     .nth(2)
     .click();
-  await page.getByTestId("auth-email-field").press("Control+z");
   await page.getByTestId("auth-email-field").click();
   await page.getByTestId("auth-email-field").fill("testtradefast@gmail.com");
   await page.getByTestId("auth-submit-button").click();
