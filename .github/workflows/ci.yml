@@ -17,18 +17,6 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: env file
-        run: |
-          touch .env
-          echo REACT_APP_KINDE_CLIENT_ID=${{ secrets.KINDE_CLIENT_ID }} >> .env
-          echo REACT_APP_KINDE_DOMAIN=https://tradefastapp-development.eu.kinde.com >> .env
-          echo REACT_APP_KINDE_REDIRECT_URI=http://localhost:3000/trading >> .env
-          echo REACT_APP_KINDE_LOGOUT_URI=http://localhost:3000 >> .env
-          echo REACT_APP_TRADEFAST_API_URL=http://localhost:8080 >> .env
-          echo REACT_APP_TRADEFAST_TEST_PASSWORD=${{ secrets.TEST_PASSWORD }} >> .env
-          cat .env
-      - name: start server
-        run: npm run start
       - name: Run Playwright tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
