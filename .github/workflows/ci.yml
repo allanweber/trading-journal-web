@@ -1,13 +1,9 @@
 name: Playwright Tests
-
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 on:
   push:
-    branches: [preview]
-
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   test:
     timeout-minutes: 60
@@ -17,14 +13,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "21.x"
-      - name: Install Vercel CLI
-        run: npm install --global vercel@canary
-      - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Build Project Artifacts
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
       # - name: Install dependencies
       #   run: npm ci
       # - name: Install Playwright Browsers
@@ -32,8 +20,15 @@ jobs:
       # - name: env file for playwright
       #   run: |
       #     touch .env
+      #     echo REACT_APP_KINDE_CLIENT_ID=${{ secrets.KINDE_CLIENT_ID }} >> .env
+      #     echo REACT_APP_KINDE_DOMAIN=https://tradefastapp-development.eu.kinde.com >> .env
+      #     echo REACT_APP_KINDE_REDIRECT_URI=http://localhost:3000/trading >> .env
+      #     echo REACT_APP_KINDE_LOGOUT_URI=http://localhost:3000 >> .env
+      #     echo REACT_APP_TRADEFAST_API_URL=http://localhost:8080 >> .env
       #     echo REACT_APP_TRADEFAST_TEST_PASSWORD=${{ secrets.TEST_PASSWORD }} >> .env
       #     cat .env
+      # - name: start server
+      #   run: npm run start
       # - name: Run Playwright tests
       #   run: npx playwright test
       # - uses: actions/upload-artifact@v3
