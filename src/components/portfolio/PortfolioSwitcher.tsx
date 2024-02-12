@@ -50,7 +50,7 @@ export default function PortfolioSwitcher() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          aria-label="Select a team"
+          aria-label="Select a portfolio"
           className="w-[200px] justify-between"
         >
           {contextPortfolio ? (
@@ -67,12 +67,10 @@ export default function PortfolioSwitcher() {
               <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
             </>
           ) : (
-            <span>
-              <div className="flex items-center">
-                <PlusCircledIcon className="mr-2 h-5 w-5" />
-                First create a portfolio
-              </div>
-            </span>
+            <label className="flex items-center">
+              <PlusCircledIcon className="mr-2 h-5 w-5" />
+              First create a portfolio
+            </label>
           )}
         </Button>
       </PopoverTrigger>

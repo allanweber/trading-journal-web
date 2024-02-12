@@ -49,7 +49,10 @@ export const DeletePortfolioButton = ({ portfolio, onError }: Props) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <TrashIcon className="h-4 w-4 hover:scale-150 hover:cursor-pointer" />
+        <TrashIcon
+          aria-label="delete portfolio"
+          className="h-4 w-4 hover:scale-150 hover:cursor-pointer"
+        />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
