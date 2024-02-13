@@ -1,8 +1,9 @@
 /* eslint-disable testing-library/prefer-screen-queries */
 import { expect, test } from "@playwright/test";
+import { config } from "./test-config";
 
 test("Should signin create the first portfolio portfolio", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("/");
   await page.getByRole("link", { name: "Trading" }).click();
   await page.getByRole("button", { name: "Sign In" }).click();
   await page
@@ -14,9 +15,7 @@ test("Should signin create the first portfolio portfolio", async ({ page }) => {
   await page.getByTestId("auth-email-field").fill("testtradefast@gmail.com");
   await page.getByTestId("auth-submit-button").click();
   await page.getByLabel("Password", { exact: true }).click();
-  await page
-    .getByLabel("Password", { exact: true })
-    .fill(process.env.REACT_APP_TRADEFAST_TEST_PASSWORD!);
+  await page.getByLabel("Password", { exact: true }).fill(config.userPassword);
   await page.getByRole("button", { name: "Continue" }).click();
 
   await page.route("*/**/api/v1/users/me", async (route) => {
