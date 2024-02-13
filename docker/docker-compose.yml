@@ -1,0 +1,12 @@
+version: "3"
+services:
+  trade-fast-app:
+    image: allanweber/tradefastapp:latest
+    ports:
+      - 3000:3000
+    environment:
+      REACT_APP_KINDE_CLIENT_ID: $KINDE_CLIENT_ID
+      REACT_APP_KINDE_DOMAIN: "https://tradefastapp-development.eu.kinde.com"
+      REACT_APP_KINDE_REDIRECT_URI: "http://localhost:3000/trading"
+      REACT_APP_KINDE_LOGOUT_URI: "http://localhost:3000"
+      REACT_APP_TRADEFAST_API_URL: "http://localhost:8080"
