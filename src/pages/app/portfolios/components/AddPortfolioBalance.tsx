@@ -46,11 +46,16 @@ export const AddPortfolioBalance = ({ showEditIcon }: Props) => {
     <div className="flex">
       <Dialog open={menuOpen} onOpenChange={setMenuOpen}>
         {showEditIcon ? (
-          <Button variant="ghost" size="sm" onClick={() => setMenuOpen(true)}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setMenuOpen(true)}
+            aria-label="add balance"
+          >
             <Edit className="h-4 w-4" />
           </Button>
         ) : (
-          <Button onClick={() => setMenuOpen(true)}>
+          <Button onClick={() => setMenuOpen(true)} aria-label="add balance">
             <PlusCircle className="mr-2 h-4 w-4" />
             Add Balance
           </Button>

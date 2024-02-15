@@ -16,7 +16,7 @@ const items = [
     href: "/trading",
   },
   {
-    name: "Entries",
+    name: "Trades",
     href: "/trading/entries",
   },
 ];
@@ -86,7 +86,9 @@ export default function TradingNav() {
                   {open ? (
                     <X className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <Menu className="block h-6 w-6" aria-hidden="true" />
+                    <>
+                      <Menu className="block h-6 w-6" aria-hidden="true" />
+                    </>
                   )}
                 </Disclosure.Button>
               </div>

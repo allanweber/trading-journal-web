@@ -132,7 +132,12 @@ export const Uploader = ({ url, onFileUploaded }: Props) => {
             <div key={file.itemId} className="flex flex-col">
               <div className="rounded-md bg-[#F5F7FB] py-1 px-2">
                 <div className="flex items-center justify-between">
-                  <span className="truncate text-base font-medium text-[#07074D]">{file.name}</span>
+                  <span
+                    className="truncate text-base font-medium text-[#07074D]"
+                    aria-label={file.name}
+                  >
+                    {file.name}
+                  </span>
                   <Button
                     type="button"
                     variant="ghost"

@@ -91,9 +91,9 @@ export const Entries = () => {
   return (
     <>
       <PageHeader>
-        <PageHeader.Title>Entries</PageHeader.Title>
+        <PageHeader.Title>Trades</PageHeader.Title>
         <PageHeader.Subtitle>
-          <span className="hidden md:flex">View and manage your entries</span>
+          <span className="hidden md:flex">View and manage your trades</span>
         </PageHeader.Subtitle>
         <PageHeader.Action>
           <AddEntryButton />
@@ -101,7 +101,7 @@ export const Entries = () => {
       </PageHeader>
       <EntrySearch />
       <>
-        <div className="md:hidden rounded-md border min-w-full">
+        <div className="md:hidden rounded-md border min-w-full" aria-label="entries">
           <MessageDisplay message={error} variant="destructive" />
           <MessageDisplay message={deleteError} variant="destructive" />
           {isLoading && isSuccess ? (
@@ -111,19 +111,23 @@ export const Entries = () => {
             entries &&
             entries.data &&
             (entries.pagination.total > 0 ? (
-              entries?.data?.map((entry) => (
+              entries?.data?.map((entry, index) => (
                 <Card
                   key={entry.id}
                   className="hover:bg-slate-200"
                   onClick={() => navigate(`/trading/entries/${entry.id}`)}
+                  aria-label={`entry-${index}`}
                 >
-                  <CardHeader className="space-y-0 pt-3 pb-2">
+                  <CardHeader className="space-y-0 pt-3 pb-2" aria-label="header">
                     <CardTitle>
                       <div className="flex w-full items-center justify-between">
                         <div>
                           <div className="flex w-full items-center gap-2">
                             <div>
-                              <span className="text-2xl font-semibold leading-none tracking-tight">
+                              <span
+                                className="text-2xl font-semibold leading-none tracking-tight"
+                                aria-label="entry name"
+                              >
                                 {`${entry.symbol}${
                                   entry.entryType === EntryType.DIVIDEND ? " (Divd)" : ""
                                 }`}
@@ -139,7 +143,7 @@ export const Entries = () => {
                             <NotesAndImages entry={entry} />
                           </div>
                         </div>
-                        <div className="flex justify-end">
+                        <div className="flex justify-end" onClick={(e) => e.stopPropagation()}>
                           <EntryStatus entry={entry} />
                         </div>
                       </div>
@@ -159,7 +163,7 @@ export const Entries = () => {
                   </CardContent>
                   <CardFooter>
                     <div className="flex w-full items-center justify-between pt-4">
-                      <div>
+                      <div aria-label="date">
                         <DateDisplay>{entry.date}</DateDisplay>
                       </div>
                       <div className="flex justify-end pr-2">
@@ -172,7 +176,7 @@ export const Entries = () => {
             ) : (
               <div className="mb-2 w-full rounded-md p-4">
                 <div className="flex items-center justify-between">
-                  <p className="text-md font-medium">No entries found.</p>
+                  <p className="text-md font-medium">No trades found.</p>
                 </div>
               </div>
             ))
@@ -205,11 +209,12 @@ export const Entries = () => {
                 entries &&
                 entries.data &&
                 (entries.pagination.total > 0 ? (
-                  entries.data.map((entry) => (
+                  entries.data.map((entry, index) => (
                     <TableRow
                       key={entry.id}
                       onClick={() => navigate(`/trading/entries/${entry.id}`)}
                       className="hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                      aria-label={`entry-${index}`}
                     >
                       <TableCell>
                         <DateDisplay withTime>{entry.date}</DateDisplay>
@@ -248,8 +253,8 @@ export const Entries = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center">
-                      No entries found.
+                    <TableCell colSpan={9} className="h-24 text-center">
+                      No trades found.
                     </TableCell>
                   </TableRow>
                 ))

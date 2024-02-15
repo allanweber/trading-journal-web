@@ -51,12 +51,15 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Prop
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {withLabel ? (
-          <Button variant="link">
+          <Button variant="link" aria-label="delete entry">
             <TrashIcon className="mr-1 h-4 w-4" />
             Delete
           </Button>
         ) : (
-          <TrashIcon className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer" />
+          <TrashIcon
+            className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer"
+            aria-label="delete entry"
+          />
         )}
       </AlertDialogTrigger>
       <AlertDialogContent>

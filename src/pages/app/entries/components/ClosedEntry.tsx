@@ -65,7 +65,7 @@ const UpdateNotes = ({ entry }: Props) => {
             </div>
           </div>
         ) : (
-          <div>{notes}</div>
+          <div aria-label="entry notes">{notes}</div>
         )}
       </CardContent>
     </Card>
@@ -133,7 +133,7 @@ export const ClosedEntry = ({ entry }: Props) => {
             <div className="flex md:justify-end mt-4 md:mt-0">
               <div className="flex flex-wrap items-center gap-2">
                 <div>
-                  <Badge variant="outline" className="text-base">
+                  <Badge variant="outline" className="text-base" aria-label="entry type">
                     {React.createElement(entryType.icon, { className: "h-5 w-5 mr-2" })}
                     {entryType.type}
                   </Badge>

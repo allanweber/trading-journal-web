@@ -26,7 +26,10 @@ export const EntryImages = ({ entryId }: { entryId: string }) => {
     return (
       <AlertDialog>
         <AlertDialogTrigger>
-          <TrashIcon className="h-6 w-6 sm:h-4 sm:w-4 leading-0 font-semibold text-white hover:scale-125" />
+          <TrashIcon
+            className="h-6 w-6 sm:h-4 sm:w-4 leading-0 font-semibold text-white hover:scale-125"
+            aria-label={`delete ${image.fileName}`}
+          />
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>

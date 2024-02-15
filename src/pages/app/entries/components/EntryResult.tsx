@@ -7,7 +7,7 @@ export const EntryResult = ({ entry }: { entry: Entry }) => {
     return <NumberDisplay currency={entry.portfolio.currency}>{entry.result}</NumberDisplay>;
 
   return (
-    <div className="flex">
+    <div className="flex" aria-label="result">
       <ColoredNumber value={entry.result}>
         <NumberDisplay currency={entry.portfolio.currency}>{entry.result}</NumberDisplay>
       </ColoredNumber>
