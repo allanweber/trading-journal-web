@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
-import { useToast } from "components/ui/use-toast";
 import { Entry, OrderStatus, tradeSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
@@ -74,7 +73,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
   const [values, setValues] = useState<Entry>(stock || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const mutation = useSaveEntry(stock?.id);
 
@@ -93,10 +91,6 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
-        toast({
-          title: "Stock saved",
-          description: `Stock was saved successfully`,
-        });
         navigate(`/trading/entries/${data.id}`);
       },
     });

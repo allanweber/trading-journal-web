@@ -96,7 +96,6 @@ export default function PortfolioSwitcher() {
                           alt={contextPortfolio.name}
                           className="grayscale"
                         />
-                        <AvatarFallback>SC</AvatarFallback>
                       </Avatar>
                       {contextPortfolio.name}
                       <CheckIcon className="ml-auto h-4 w-4 opacity-100" />
@@ -121,9 +120,8 @@ export default function PortfolioSwitcher() {
                             alt={portfolio.name}
                             className="grayscale"
                           />
-                          <AvatarFallback>SC</AvatarFallback>
                         </Avatar>
-                        {portfolio.name}
+                        <label aria-label="another-portfolio">{portfolio.name}</label>
                       </CommandItem>
                     ))}
                   </CommandGroup>

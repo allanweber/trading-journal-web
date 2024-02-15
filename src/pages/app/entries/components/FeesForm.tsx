@@ -10,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
-import { useToast } from "components/ui/use-toast";
 import { Entry, feesSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
@@ -41,7 +40,6 @@ export const FeesForm = ({ fees, onChange }: Props) => {
   };
 
   const [values, setValues] = useState<Entry>(fees || startValues);
-  const { toast } = useToast();
 
   const mutation = useSaveEntry(fees?.id);
 
@@ -60,10 +58,6 @@ export const FeesForm = ({ fees, onChange }: Props) => {
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
-        toast({
-          title: "Fee saved",
-          description: `Fee was saved successfully`,
-        });
         onChange(data);
       },
     });

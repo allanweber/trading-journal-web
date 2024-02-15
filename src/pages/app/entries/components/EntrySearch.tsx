@@ -8,7 +8,7 @@ export const EntrySearch = () => {
   const filters: FilterOptions[] = [
     {
       filterId: "entryType",
-      title: "Entry Type",
+      title: "Trade Type",
       options: onlyTrades().map((entry) => {
         return {
           label: entry.type,

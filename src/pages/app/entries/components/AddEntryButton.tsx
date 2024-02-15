@@ -28,7 +28,7 @@ export const AddEntryButton = () => {
           <DialogTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
-              Add Entry
+              Add Trade
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -55,7 +55,7 @@ export const AddEntryButton = () => {
           <DropdownMenuTrigger asChild>
             <Button>
               <PlusCircle className="mr-2 h-4 w-4" />
-              Add Entry
+              Add Trade
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>

@@ -10,7 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
-import { useToast } from "components/ui/use-toast";
 import { Entry, withdrawalSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
@@ -41,7 +40,6 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
   };
 
   const [values, setValues] = useState<Entry>(withdrawal || startValues);
-  const { toast } = useToast();
 
   const mutation = useSaveEntry(withdrawal?.id);
 
@@ -60,10 +58,6 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
-        toast({
-          title: "Withdrawal saved",
-          description: `Withdrawal was saved successfully`,
-        });
         onChange(data);
       },
     });

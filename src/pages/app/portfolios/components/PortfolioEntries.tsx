@@ -80,8 +80,9 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
               <TableLoading />
             ) : (
               isSuccess &&
-              entries.map((entry) => (
+              entries.map((entry, index) => (
                 <div
+                  aria-label={`entry-${index}`}
                   className="flex items-center pt-1 pb-1 rounded-md transition-all hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
                   key={entry.id}
                   onClick={() => {
