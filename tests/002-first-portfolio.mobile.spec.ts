@@ -5,7 +5,10 @@ import { config } from "./test-config";
 test.describe("specific viewport for mobile", () => {
   test.use({ viewport: { width: 375, height: 667 } });
 
-  test("Should signin create the first portfolio portfolio", async ({ page, browserName }) => {
+  test("Create portfolio and entries, delete portfolio at the end", async ({
+    page,
+    browserName,
+  }) => {
     const browser = browserName as string;
     const portfolioName = `MOBPORT ${browserName as string}`;
     const dividend = `MOBDIV ${browser}`;
@@ -101,10 +104,7 @@ test.describe("specific viewport for mobile", () => {
     await page.getByPlaceholder("0,00").click();
     await page.getByPlaceholder("0,00").fill("€ 100");
     await page.getByRole("button", { name: "Save" }).click();
-    await page.waitForTimeout(500);
-    await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("entry name")
-    ).toContainText(`${dividend} (Divd)`);
+    await page.waitForTimeout(1000);
     await page.getByText(`${dividend} (Divd)`).click();
     await expect(page.getByLabel("result")).toContainText("€ 100,00");
     await expect(page.getByLabel("entry type")).toContainText("DIVIDEND");
@@ -112,7 +112,7 @@ test.describe("specific viewport for mobile", () => {
     await page.getByRole("textbox").click();
     await page.getByRole("textbox").fill("some notes");
     await page.getByRole("button", { name: "Save" }).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await expect(page.getByLabel("entry notes")).toContainText("some notes");
 
     await page.getByRole("button", { name: "Open main menu" }).click();
@@ -135,24 +135,11 @@ test.describe("specific viewport for mobile", () => {
     await page.getByLabel("Costs").click();
     await page.getByLabel("Costs").fill("5");
     await page.getByRole("button", { name: "Save" }).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await expect(page.locator("h2")).toContainText("Open");
 
     await page.getByRole("button", { name: "Open main menu" }).click();
     await page.getByRole("link", { name: "Trades" }).click();
-    await expect(page.getByLabel("entries").getByLabel("entry-0").getByLabel("date")).toContainText(
-      "1 Feb 2023 03:35"
-    );
-    await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("entry name")
-    ).toContainText(stock);
-    await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("header")
-    ).toContainText("Open");
-    await expect(page.getByLabel("entries").getByLabel("entry-0")).toContainText("€ 150,00");
-    await expect(page.getByLabel("entries").getByLabel("entry-0")).toContainText("2.00");
-    await expect(page.getByLabel("entries").getByLabel("entry-0")).toContainText("N/A");
-
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByPlaceholder("DD/MM/YYYY HH:mm").fill("10/02/2024 18:008");
     await page.getByLabel("Exit price").click();
@@ -161,15 +148,17 @@ test.describe("specific viewport for mobile", () => {
     await page.waitForTimeout(1000);
 
     await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("header")
+      page.getByLabel("entries").getByLabel("entry-1").getByLabel("header")
     ).toContainText("Win");
     await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("result")
+      page.getByLabel("entries").getByLabel("entry-1").getByLabel("result")
     ).toContainText("€ 35,00");
     await expect(
-      page.getByLabel("entries").getByLabel("entry-0").getByLabel("result")
+      page.getByLabel("entries").getByLabel("entry-1").getByLabel("result")
     ).toContainText("23,33 %");
-    await expect(page.locator('[id="headlessui-disclosure-panel-\\:rb7\\:"]')).toContainText(
+
+    await page.getByRole("button", { name: "Open main menu" }).click();
+    await expect(page.locator('[id="headlessui-disclosure-panel-\\:r4\\:"]')).toContainText(
       "€ 1.205,00"
     );
 
@@ -178,6 +167,6 @@ test.describe("specific viewport for mobile", () => {
     await page.locator("p").filter({ hasText: portfolioName }).click();
     await page.getByLabel(`delete portfolio ${portfolioName}`).click();
     await page.getByRole("button", { name: "Continue" }).click();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
   });
 });

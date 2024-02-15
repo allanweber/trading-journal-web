@@ -10,7 +10,6 @@ import { PageHeader } from "components/PageHeader";
 import { Button } from "components/ui/button";
 import { DialogClose } from "components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
-import { useToast } from "components/ui/use-toast";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 import { Entry, ExitEntry, exitEntrySchema } from "model/entry";
@@ -62,7 +61,6 @@ export const CloseTradeForm = ({ entry }: Props) => {
     costs: entry.costs,
   };
 
-  const { toast } = useToast();
   const mutation = useCloseEntry(entry.id!);
 
   const form = useForm<ExitEntry>({
@@ -71,14 +69,7 @@ export const CloseTradeForm = ({ entry }: Props) => {
   });
 
   function onSubmit(data: ExitEntry) {
-    mutation.mutate(data, {
-      onSuccess: (entry) => {
-        toast({
-          title: "Entry Close",
-          description: `Entry ${entry.symbol} was successfully closed`,
-        });
-      },
-    });
+    mutation.mutate(data);
   }
 
   return (

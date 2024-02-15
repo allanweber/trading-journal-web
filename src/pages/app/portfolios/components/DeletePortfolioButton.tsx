@@ -9,7 +9,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
-import { toast } from "components/ui/use-toast";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { TrashIcon } from "lucide-react";
 import { Portfolio } from "model/portfolio";
@@ -36,10 +35,6 @@ export const DeletePortfolioButton = ({ portfolio, onError }: Props) => {
   const confirm = () => {
     mutation.mutate(portfolio.id!, {
       onSuccess: () => {
-        toast({
-          title: "Portfolio Deleted",
-          description: `Your Portfolio ${portfolio.name} was deleted successfully`,
-        });
         setPortfolio(undefined);
         navigate("/trading/portfolios");
       },

@@ -10,7 +10,6 @@ import {
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
 import { Button } from "components/ui/button";
-import { toast } from "components/ui/use-toast";
 import { TrashIcon } from "lucide-react";
 import { Entry } from "model/entry";
 import { EntryType } from "model/entryType";
@@ -36,12 +35,6 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Prop
   const confirm = () => {
     mutation.mutate(entry.id!, {
       onSuccess: () => {
-        toast({
-          title: "Entry Deleted",
-          description: `Entry ${
-            entry.entryType === EntryType.STOCK ? entry.symbol : entry.entryType
-          } from portfolio ${entry.portfolio.name} was deleted successfully`,
-        });
         onSuccess();
       },
     });

@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { Input } from "components/ui/input";
-import { useToast } from "components/ui/use-toast";
 import { useForm } from "react-hook-form";
 
 import { CurrencySelect } from "components/CurrencySelect";
@@ -32,7 +31,6 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
   const [values, setValues] = useState<Portfolio>(portfolio || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { setPortfolio } = usePortfolioContext();
 
   const mutation = useSavePortfolio();
@@ -51,10 +49,6 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
   function onSubmit(data: Portfolio) {
     mutation.mutate(data, {
       onSuccess: (data) => {
-        toast({
-          title: "Portfolio saved",
-          description: `Your portfolio ${data.name} was saved successfully`,
-        });
         setPortfolio(data);
         navigate("/trading");
       },
