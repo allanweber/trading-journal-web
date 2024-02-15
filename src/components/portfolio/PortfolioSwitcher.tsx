@@ -121,7 +121,7 @@ export default function PortfolioSwitcher() {
                             className="grayscale"
                           />
                         </Avatar>
-                        {portfolio.name}
+                        <label aria-label="another-portfolio">{portfolio.name}</label>
                       </CommandItem>
                     ))}
                   </CommandGroup>
