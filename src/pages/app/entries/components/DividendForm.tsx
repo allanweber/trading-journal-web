@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
+import { useToast } from "components/ui/use-toast";
 import { Entry, dividendSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
@@ -47,6 +48,7 @@ export default function DividendForm({ dividend }: Props) {
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
   const mutation = useSaveEntry(dividend?.id);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (dividend) {
@@ -63,6 +65,10 @@ export default function DividendForm({ dividend }: Props) {
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
+        toast({
+          title: "Dividend saved",
+          description: `Dividend ${data.symbol} was saved successfully`,
+        });
         navigate("/trading/entries");
       },
     });

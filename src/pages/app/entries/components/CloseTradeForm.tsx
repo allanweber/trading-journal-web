@@ -10,6 +10,7 @@ import { PageHeader } from "components/PageHeader";
 import { Button } from "components/ui/button";
 import { DialogClose } from "components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
+import { useToast } from "components/ui/use-toast";
 import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 import { Entry, ExitEntry, exitEntrySchema } from "model/entry";
@@ -62,6 +63,7 @@ export const CloseTradeForm = ({ entry }: Props) => {
   };
 
   const mutation = useCloseEntry(entry.id!);
+  const { toast } = useToast();
 
   const form = useForm<ExitEntry>({
     resolver: zodResolver(exitEntrySchema),
@@ -69,7 +71,14 @@ export const CloseTradeForm = ({ entry }: Props) => {
   });
 
   function onSubmit(data: ExitEntry) {
-    mutation.mutate(data);
+    mutation.mutate(data, {
+      onSuccess: (entry) => {
+        toast({
+          title: "Entry Close",
+          description: `Entry ${entry.symbol} was successfully closed`,
+        });
+      },
+    });
   }
 
   return (

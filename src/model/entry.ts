@@ -277,11 +277,21 @@ export const entrySchema = z.object({
   portfolio: portfolioSchema,
 });
 
-export const exitEntrySchema = z.object({
-  exitDate: z.coerce.date(),
-  exitPrice: z.coerce.number().max(9999999999, { message: "exitPrice-max" }),
-  costs: z.coerce.number().max(9999999999, { message: "costs-max" }).optional(),
-});
+export const exitEntrySchema = z
+  .object({
+    exitDate: z.coerce.date(),
+    exitPrice: z.coerce.number().max(9999999999, { message: "exitPrice-max" }),
+    costs: z.coerce.number().max(9999999999, { message: "costs-max" }).optional(),
+  })
+  .superRefine(({ exitDate }, context) => {
+    if (exitDate && exitDate > new Date()) {
+      return context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Exit date cannot be in the future",
+        path: ["exitDate"],
+      });
+    }
+  });
 
 export type Stock = z.infer<typeof tradeSchema>;
 export type Deposit = z.infer<typeof depositSchema>;
