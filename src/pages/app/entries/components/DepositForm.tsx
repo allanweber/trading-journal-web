@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
+import { useToast } from "components/ui/use-toast";
 import { Entry, depositSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
@@ -42,6 +43,7 @@ export const DepositForm = ({ deposit, onChange }: Props) => {
   const [values, setValues] = useState<Entry>(deposit || startValues);
 
   const mutation = useSaveEntry(deposit?.id);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (deposit) {
@@ -58,6 +60,10 @@ export const DepositForm = ({ deposit, onChange }: Props) => {
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
+        toast({
+          title: "Deposit saved",
+          description: `Deposit was saved successfully`,
+        });
         onChange(data);
       },
     });

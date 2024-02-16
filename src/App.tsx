@@ -2,6 +2,7 @@ import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { inject } from "@vercel/analytics";
+import { Toaster } from "components/ui/toaster";
 import { AuthContext } from "contexts/AuthContext";
 import { router } from "pages/Routes";
 import { RouterProvider } from "react-router-dom";
@@ -37,6 +38,7 @@ function App() {
           <ReactQueryDevtools initialIsOpen={false} />
         </AuthContext>
       </QueryClientProvider>
+      <Toaster />
     </main>
   );
 }

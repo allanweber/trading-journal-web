@@ -1,4 +1,5 @@
 import { Button } from "components/ui/button";
+import { useToast } from "components/ui/use-toast";
 import { cn } from "lib/utils";
 import { CandlestickChart } from "lucide-react";
 import { Entry } from "model/entry";
@@ -10,8 +11,14 @@ type Props = {
 };
 
 export const SymbolDisplay = ({ entry, className }: Props) => {
+  const { toast } = useToast();
+
   const showChart = (e: any) => {
     e.stopPropagation();
+    toast({
+      title: "Display Chart",
+      description: `Display chart is coming soon in a future release.`,
+    });
   };
 
   if (!entry.symbol) return <></>;
