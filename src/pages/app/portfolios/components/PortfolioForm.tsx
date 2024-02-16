@@ -56,7 +56,7 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
           description: `Your portfolio ${data.name} was saved successfully`,
         });
         setPortfolio(data);
-        navigate("/trading");
+        navigate("/trading/portfolios");
       },
     });
   }
