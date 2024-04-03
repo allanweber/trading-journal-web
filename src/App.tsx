@@ -15,7 +15,9 @@ if (process.env.NODE_ENV === "production") {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // refetchOnWindowFocus: false,
+      refetchOnWindowFocus: false,
+      retry: 1,
+      staleTime: 1000 * 60 * 5,
     },
   },
   queryCache: new QueryCache({
@@ -29,7 +31,7 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <main>
+    <>
       <QueryClientProvider client={queryClient}>
         <AuthContext>
           <TooltipProvider>
@@ -39,7 +41,7 @@ function App() {
         </AuthContext>
       </QueryClientProvider>
       <Toaster />
-    </main>
+    </>
   );
 }
 

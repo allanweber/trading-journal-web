@@ -81,9 +81,9 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
             </PageHeader>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-3 pr-3 sm:pr-6">
+        <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-lg">
               <FormField
                 control={form.control}
                 name="name"
@@ -178,9 +178,10 @@ export const PortfolioForm = ({ portfolio }: { portfolio?: Portfolio }) => {
 
               <div className="flex flex-wrap sm:justify-end">
                 <Button
+                  type="button"
                   variant="outline"
                   className="w-full sm:w-[200px]"
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate("/trading/portfolios")}
                 >
                   Cancel
                 </Button>

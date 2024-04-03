@@ -29,7 +29,7 @@ export const router = createBrowserRouter(
         <Route index element={<Trading />} />
         <Route path="portfolios" element={<Portfolios />} />
         <Route path="portfolios/new" element={<NewPortfolio />} />
-        <Route path="portfolios/:id" element={<EditPortfolio />} />
+        <Route path="portfolios/:id/edit" element={<EditPortfolio />} />
         <Route path="entries" element={<Entries />} />
         <Route path="entries/new/:tradeType" element={<NewEntry />} />
         <Route path="entries/:id" element={<EditEntry />} />
