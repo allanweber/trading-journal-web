@@ -157,7 +157,7 @@ export const AppLayout = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <header className="flex h-12 items-center gap-4 px-4 border-b md:border-none md:bg-muted/40 lg:h-[60px] lg:px-6">
+            <header className="flex h-14 items-center gap-4 px-4 border-b md:border-none md:bg-muted/40 lg:h-[60px] lg:px-6">
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -180,7 +180,6 @@ export const AppLayout = () => {
                   <Logo />
                 </div>
               </div>
-
               <Notifications />
               <UserNav />
             </header>
