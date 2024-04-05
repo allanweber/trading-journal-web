@@ -27,7 +27,7 @@ import { Textarea } from "components/ui/textarea";
 import { getSymbol } from "model/currency";
 import { Portfolio } from "model/portfolio";
 import { NavLink, useNavigate } from "react-router-dom";
-import { DeleteEntryButton } from "./DeleteEntryButton";
+import { DeleteEntryButton } from "../DeleteEntryButton";
 
 type Props = {
   portfolio: Portfolio;

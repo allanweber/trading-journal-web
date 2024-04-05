@@ -1,8 +1,8 @@
 import { EntryType } from "model/entryType";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetPortfolio } from "service/portfolioQueries";
-import DividendForm from "./components/DividendForm";
-import { StockForm } from "./components/StockForm";
+import DividendForm from "./components/forms/DividendForm";
+import { StockForm } from "./components/forms/StockForm";
 
 export const NewEntry = () => {
   const { portfolioId, tradeType } = useParams();

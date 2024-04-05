@@ -4,10 +4,10 @@ import { Edit, PlusCircle } from "lucide-react";
 import { Button } from "components/ui/button";
 import { Entry } from "model/entry";
 import { EntryType, onlyPortfolioBalances } from "model/entryType";
-import { DepositForm } from "pages/app/entries/components/DepositForm";
-import { FeesForm } from "pages/app/entries/components/FeesForm";
-import { TaxesForm } from "pages/app/entries/components/TaxesForm";
-import { WithdrawalForm } from "pages/app/entries/components/WithdrawalForm";
+import { DepositForm } from "pages/app/entries/components/forms/DepositForm";
+import { FeesForm } from "pages/app/entries/components/forms/FeesForm";
+import { TaxesForm } from "pages/app/entries/components/forms/TaxesForm";
+import { WithdrawalForm } from "pages/app/entries/components/forms/WithdrawalForm";
 import { useState } from "react";
 
 type Props = {

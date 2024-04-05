@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useGetEntry } from "service/entryQueries";
 import { ClosedEntry } from "./components/ClosedEntry";
 import { EntryImages } from "./components/EntryImages";
-import { StockForm } from "./components/StockForm";
+import { StockForm } from "./components/forms/StockForm";
 
 export const EditEntry = () => {
   const { id } = useParams();

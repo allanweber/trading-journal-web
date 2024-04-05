@@ -33,9 +33,9 @@ import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
 import { Portfolio } from "model/portfolio";
 import { NavLink } from "react-router-dom";
-import { CloseTradeForm } from "./CloseTradeForm";
-import { DeleteEntryButton } from "./DeleteEntryButton";
-import { EntryStatus } from "./EntryStatus";
+import { DeleteEntryButton } from "../DeleteEntryButton";
+import { EntryStatus } from "../EntryStatus";
+import { CloseStockForm } from "./CloseStockForm";
 
 const CloseTrade = ({ entry }: { entry: Entry }) => {
   if (entry.orderStatus === OrderStatus.OPEN) {
@@ -47,7 +47,7 @@ const CloseTrade = ({ entry }: { entry: Entry }) => {
           </Button>
         </DialogTrigger>
         <DialogContent>
-          <CloseTradeForm entry={entry} />
+          <CloseStockForm entry={entry} />
         </DialogContent>
       </Dialog>
     );

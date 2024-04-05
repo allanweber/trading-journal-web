@@ -54,7 +54,7 @@ type Props = {
   entry: Entry;
 };
 
-export const CloseTradeForm = ({ entry }: Props) => {
+export const CloseStockForm = ({ entry }: Props) => {
   const { portfolio } = usePortfolioContext();
   const startValues: ExitEntry = {
     exitDate: new Date(),
