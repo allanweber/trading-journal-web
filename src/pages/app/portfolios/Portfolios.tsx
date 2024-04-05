@@ -2,7 +2,6 @@ import DateDisplay from "components/DateDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import { PageHeader } from "components/PageHeader";
 import { TableLoading } from "components/table/TableLoading";
-import { Card, CardContent, CardHeader } from "components/ui/card";
 import { Separator } from "components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
 import { AddPortfolioButton } from "pages/app/portfolios/components/AddPortfolioButton";
@@ -20,19 +19,17 @@ export const Portfolios = () => {
   const { data: portfolios, error, isLoading, isSuccess } = useAllPortfolios();
 
   return (
-    <Card>
-      <CardHeader>
-        <PageHeader>
-          <PageHeader.Title>Portfolios</PageHeader.Title>
-          <PageHeader.Subtitle>
-            <span className="hidden md:flex">View and manage your Portfolios</span>
-          </PageHeader.Subtitle>
-          <PageHeader.Action>
-            {isSuccess && portfolios.length > 0 && <AddPortfolioButton />}
-          </PageHeader.Action>
-        </PageHeader>
-      </CardHeader>
-      <CardContent>
+    <>
+      <PageHeader>
+        <PageHeader.Title>Portfolios</PageHeader.Title>
+        <PageHeader.Subtitle>
+          <span className="hidden md:flex">View and manage your Portfolios</span>
+        </PageHeader.Subtitle>
+        <PageHeader.Action>
+          {isSuccess && portfolios.length > 0 && <AddPortfolioButton />}
+        </PageHeader.Action>
+      </PageHeader>
+      <div className="my-4 bg-card">
         <MessageDisplay message={error} variant="destructive" />
         <MessageDisplay message={deleteError} variant="destructive" />
 
@@ -93,7 +90,9 @@ export const Portfolios = () => {
                     >
                       <TableCell>
                         <div className="font-medium">
-                          <Link to={`/trading/portfolios/${portfolio.id}`}>{portfolio.name}</Link>
+                          <Link to={`/trading/portfolios/${portfolio.id}/edit`}>
+                            {portfolio.name}
+                          </Link>
                         </div>
                         <div className="hidden text-sm text-muted-foreground md:inline">
                           {portfolio.description}
@@ -125,7 +124,7 @@ export const Portfolios = () => {
         ) : (
           <NoPortfoliosCard />
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </>
   );
 };

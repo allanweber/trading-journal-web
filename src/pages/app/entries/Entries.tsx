@@ -99,8 +99,11 @@ export const Entries = () => {
           <AddEntryButton />
         </PageHeader.Action>
       </PageHeader>
-      <EntrySearch />
-      <>
+
+      <div className="my-4">
+        <EntrySearch />
+      </div>
+      <div className="my-4 bg-card">
         <div className="md:hidden rounded-md border min-w-full" aria-label="entries">
           <MessageDisplay message={error} variant="destructive" />
           <MessageDisplay message={deleteError} variant="destructive" />
@@ -262,8 +265,8 @@ export const Entries = () => {
             </TableBody>
           </Table>
         </div>
-        {isSuccess && entries && <TablePagination {...entries.pagination} />}
-      </>
+      </div>
+      {isSuccess && entries && <TablePagination {...entries.pagination} />}
     </>
   );
 };

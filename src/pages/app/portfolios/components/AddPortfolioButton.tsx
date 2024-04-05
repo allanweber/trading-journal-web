@@ -4,10 +4,10 @@ import { Button } from "../../../../components/ui/button";
 
 export const AddPortfolioButton = () => {
   return (
-    <Button asChild>
+    <Button asChild size="sm" className="gap-1">
       <NavLink to="/trading/portfolios/new">
-        <PlusCircle className="mr-2 h-4 w-4" />
-        Add new Portfolio
+        <PlusCircle className="h-3.5 w-3.5" />
+        <span className="">Add new Portfolio</span>
       </NavLink>
     </Button>
   );

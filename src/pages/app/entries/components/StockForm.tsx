@@ -28,10 +28,10 @@ import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
 import { Textarea } from "components/ui/textarea";
-import { usePortfolioContext } from "contexts/PortfolioContext";
 import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
+import { Portfolio } from "model/portfolio";
 import { NavLink } from "react-router-dom";
 import { CloseTradeForm } from "./CloseTradeForm";
 import { DeleteEntryButton } from "./DeleteEntryButton";
@@ -43,7 +43,6 @@ const CloseTrade = ({ entry }: { entry: Entry }) => {
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="link">
-            {" "}
             <CheckCheck className="h-4 w-4 mr-1" /> Close trade
           </Button>
         </DialogTrigger>
@@ -57,8 +56,7 @@ const CloseTrade = ({ entry }: { entry: Entry }) => {
   }
 };
 
-export const StockForm = ({ stock }: { stock?: Entry }) => {
-  const { portfolio } = usePortfolioContext();
+export const StockForm = ({ portfolio, stock }: { portfolio: Portfolio; stock?: Entry }) => {
   const startValues: Entry = {
     date: new Date(),
     price: 0,
@@ -68,7 +66,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
     size: 0,
     notes: "",
     result: 0,
-    portfolio: portfolio!,
+    portfolio: portfolio,
   };
 
   const [values, setValues] = useState<Entry>(stock || startValues);
@@ -97,7 +95,7 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
           title: "Stock saved",
           description: `Stock ${data.symbol} was saved successfully`,
         });
-        navigate(`/trading/entries/${data.id}`);
+        navigate(`/trading/portfolios/${portfolio.id}/entries/${data.id}`);
       },
     });
   }
@@ -340,7 +338,9 @@ export const StockForm = ({ stock }: { stock?: Entry }) => {
                     <div className="col-span-12">
                       <div className="flex flex-wrap sm:justify-end mt-0 mb-0 p-0">
                         <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                          <NavLink to="/trading/entries">Cancel</NavLink>
+                          <NavLink to={`/trading/portfolios/${portfolio.id}/entries`}>
+                            Cancel
+                          </NavLink>
                         </Button>
                         <Button
                           type="submit"

@@ -86,7 +86,7 @@ const Navigation = () => {
                 data?.map((portfolio) => (
                   <NavLink
                     key={portfolio.id}
-                    to={`/trading/portfolios/${portfolio.id}`}
+                    to={`/trading/portfolios/${portfolio.id}/entries`}
                     className={cn(
                       isPortfolioActive(portfolio.id!)
                         ? "bg-muted text-primary"
@@ -108,7 +108,7 @@ const Navigation = () => {
                 )}
               >
                 <Plus className="h-4 w-4" />
-                Add new Portfolio
+                Add a new Portfolio
               </NavLink>
             </CollapsibleContent>
           </Collapsible>

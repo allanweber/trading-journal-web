@@ -1,4 +1,5 @@
 import { AppLayout } from "layouts/AppLayout";
+import { PortfolioLayout } from "layouts/PortfolioLayout";
 import { RootLayout } from "layouts/RootLayout";
 import { UserLayout } from "layouts/UserLayout";
 import { About } from "pages/About";
@@ -29,10 +30,12 @@ export const router = createBrowserRouter(
         <Route index element={<Trading />} />
         <Route path="portfolios" element={<Portfolios />} />
         <Route path="portfolios/new" element={<NewPortfolio />} />
-        <Route path="portfolios/:id/edit" element={<EditPortfolio />} />
-        <Route path="entries" element={<Entries />} />
-        <Route path="entries/new/:tradeType" element={<NewEntry />} />
-        <Route path="entries/:id" element={<EditEntry />} />
+        <Route path="portfolios/:portfolioId/edit" element={<EditPortfolio />} />
+        <Route path="portfolios/:portfolioId" element={<PortfolioLayout />}>
+          <Route path="entries" element={<Entries />} />
+          <Route path="entries/new/:tradeType" element={<NewEntry />} />
+          <Route path="entries/:entryId" element={<EditEntry />} />
+        </Route>
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />
           <Route path="profile" element={<UserProfile />} />

@@ -24,17 +24,17 @@ import { PageHeader } from "components/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
-import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
+import { Portfolio } from "model/portfolio";
 import { NavLink, useNavigate } from "react-router-dom";
 import { DeleteEntryButton } from "./DeleteEntryButton";
 
 type Props = {
+  portfolio: Portfolio;
   dividend?: Entry;
 };
 
-export default function DividendForm({ dividend }: Props) {
-  const { portfolio } = usePortfolioContext();
+export default function DividendForm({ portfolio, dividend }: Props) {
   const startValues: Entry = {
     symbol: "",
     notes: "",
@@ -42,7 +42,7 @@ export default function DividendForm({ dividend }: Props) {
     price: 0,
     entryType: EntryType.DIVIDEND,
     result: 0,
-    portfolio: portfolio!,
+    portfolio: portfolio,
   };
   const [values, setValues] = useState<Entry>(dividend || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
@@ -69,7 +69,7 @@ export default function DividendForm({ dividend }: Props) {
           title: "Dividend saved",
           description: `Dividend ${data.symbol} was saved successfully`,
         });
-        navigate("/trading/entries");
+        navigate(`/trading/portfolios/${portfolio.id}/entries`);
       },
     });
   }
@@ -173,7 +173,7 @@ export default function DividendForm({ dividend }: Props) {
 
               <div className="flex flex-wrap sm:justify-end">
                 <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to="/trading/entries">Cancel</NavLink>
+                  <NavLink to={`/trading/portfolios/${portfolio.id}/entries`}>Cancel</NavLink>
                 </Button>
 
                 <Button

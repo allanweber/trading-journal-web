@@ -6,8 +6,8 @@ import { useGetPortfolio } from "service/portfolioQueries";
 import { PortfolioEntries } from "./components/PortfolioEntries";
 
 export const EditPortfolio = () => {
-  const { id } = useParams();
-  const { data: portfolio, isLoading, error: queryError } = useGetPortfolio(id!);
+  const { portfolioId } = useParams();
+  const { data: portfolio, isLoading, error: queryError } = useGetPortfolio(portfolioId!);
 
   if (isLoading) {
     return <TableLoading />;
