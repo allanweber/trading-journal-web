@@ -64,9 +64,9 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>Balances</PageHeader.Title>
+              <PageHeader.Title>Portfolio Entries</PageHeader.Title>
               <PageHeader.Action>
-                <AddPortfolioBalance />
+                {isSuccess && entries.length > 0 && <AddPortfolioBalance />}
               </PageHeader.Action>
             </PageHeader>
           </CardTitle>
@@ -78,7 +78,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
           <div className="space-y-8">
             {isLoading ? (
               <TableLoading />
-            ) : (
+            ) : isSuccess && entries.length > 0 ? (
               isSuccess &&
               entries.map((entry, index) => (
                 <div
@@ -126,6 +126,23 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                   </div>
                 </div>
               ))
+            ) : (
+              <div className="flex flex-1 flex-col gap-4 p-2 md:p-4">
+                <div className="rounded-lg border border-dashed shadow-sm py-10">
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <h3 className="text-2xl font-bold tracking-tight">
+                      You have no manual entries
+                    </h3>
+                    <p className="text-sm text-muted-foreground px-2">
+                      You can entries such deposits, withdrawals, fees, and taxes to keep track of
+                      your portfolio.
+                    </p>
+                    <div className="mt-4">
+                      <AddPortfolioBalance />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </CardContent>

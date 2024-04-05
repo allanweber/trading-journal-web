@@ -57,7 +57,7 @@ export const AddPortfolioBalance = ({ showEditIcon }: Props) => {
         ) : (
           <Button onClick={() => setMenuOpen(true)} aria-label="add balance">
             <PlusCircle className="mr-2 h-4 w-4" />
-            Add Balance
+            Add Entry
           </Button>
         )}
         <DialogContent>

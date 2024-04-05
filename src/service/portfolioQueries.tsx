@@ -16,13 +16,16 @@ export const useAllPortfolios = () => {
   });
 };
 
-export const useGetPortfolio = (id: string) => {
+export const useGetPortfolio = (id?: string) => {
   const { getToken } = useAuthState();
 
   return useQuery({
     queryKey: [`portfolio-${id}`],
     queryFn: async () => {
       const accessToken = await getToken();
+      if (!id) {
+        return null;
+      }
       return getPortfolio(accessToken!, id);
     },
   });

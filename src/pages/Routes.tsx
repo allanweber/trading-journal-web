@@ -11,8 +11,7 @@ import { NotFound } from "./app/NotFound";
 import { EditEntry } from "./app/entries/EditEntry";
 import { Entries } from "./app/entries/Entries";
 import { NewEntry } from "./app/entries/NewEntry";
-import { EditPortfolio } from "./app/portfolios/EditPortfolio";
-import { NewPortfolio } from "./app/portfolios/NewPortfolio";
+import { Portfolio } from "./app/portfolios/Portfolio";
 import { Portfolios } from "./app/portfolios/Portfolios";
 import { UserProfile } from "./app/user/UserProfile";
 import { UserSettings } from "./app/user/UserSettings";
@@ -29,8 +28,8 @@ export const router = createBrowserRouter(
       <Route path="trading" element={<AppLayout />}>
         <Route index element={<Trading />} />
         <Route path="portfolios" element={<Portfolios />} />
-        <Route path="portfolios/new" element={<NewPortfolio />} />
-        <Route path="portfolios/:portfolioId/edit" element={<EditPortfolio />} />
+        <Route path="portfolios/new" element={<Portfolio />} />
+        <Route path="portfolios/:portfolioId/edit" element={<Portfolio />} />
         <Route path="portfolios/:portfolioId" element={<PortfolioLayout />}>
           <Route path="entries" element={<Entries />} />
           <Route path="entries/new/:tradeType" element={<NewEntry />} />
