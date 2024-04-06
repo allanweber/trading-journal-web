@@ -1,3 +1,4 @@
+import { Box } from "components/Box";
 import DateDisplay from "components/DateDisplay";
 import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
@@ -100,10 +101,10 @@ export const Entries = () => {
         </PageHeader.Action>
       </PageHeader>
 
-      <div className="my-4">
+      <div className="pt-2">
         <EntrySearch />
       </div>
-      <div className="my-4 bg-card">
+      <Box>
         <div className="md:hidden rounded-md border min-w-full" aria-label="entries">
           <MessageDisplay message={error} variant="destructive" />
           <MessageDisplay message={deleteError} variant="destructive" />
@@ -265,7 +266,7 @@ export const Entries = () => {
             </TableBody>
           </Table>
         </div>
-      </div>
+      </Box>
       {isSuccess && entries && <TablePagination {...entries.pagination} />}
     </>
   );

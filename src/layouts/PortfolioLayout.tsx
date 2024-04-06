@@ -20,9 +20,9 @@ export const PortfolioLayout = () => {
   }, [data, error, isFetched, navigate, toast]);
 
   return (
-    <div>
+    <>
       <div>{data?.name}</div>
       <Outlet />
-    </div>
+    </>
   );
 };

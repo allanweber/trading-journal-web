@@ -1,3 +1,4 @@
+import { Box } from "components/Box";
 import DateDisplay from "components/DateDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import { PageHeader } from "components/PageHeader";
@@ -29,7 +30,7 @@ export const Portfolios = () => {
           {isSuccess && portfolios.length > 0 && <AddPortfolioButton />}
         </PageHeader.Action>
       </PageHeader>
-      <div className="my-4 bg-card">
+      <Box>
         <MessageDisplay message={error} variant="destructive" />
         <MessageDisplay message={deleteError} variant="destructive" />
 
@@ -124,7 +125,7 @@ export const Portfolios = () => {
         ) : (
           <NoPortfoliosCard />
         )}
-      </div>
+      </Box>
     </>
   );
 };
