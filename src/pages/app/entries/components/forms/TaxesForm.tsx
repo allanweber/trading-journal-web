@@ -42,7 +42,7 @@ export const TaxesForm = ({ taxes, onChange }: Props) => {
 
   const [values, setValues] = useState<Entry>(taxes || startValues);
 
-  const mutation = useSaveEntry(taxes?.id);
+  const mutation = useSaveEntry(portfolio?.id!, taxes?.id);
   const { toast } = useToast();
 
   useEffect(() => {

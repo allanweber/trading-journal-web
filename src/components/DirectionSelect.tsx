@@ -1,8 +1,8 @@
-import { Direction, directions } from 'model/direction';
-import { forwardRef } from 'react';
-import { DirectionDisplay } from './DirectionDisplay';
-import { Label } from './ui/label';
-import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { Direction, directions } from "model/direction";
+import { forwardRef } from "react";
+import { DirectionDisplay } from "./DirectionDisplay";
+import { Label } from "./ui/label";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 
 type Props = {
   onChange: (value: Direction) => void;
@@ -10,14 +10,11 @@ type Props = {
   [x: string]: any;
 };
 
-export const DirectionSelect = forwardRef(function DirectionSelect(
-  props: Props,
-  ref
-) {
+export const DirectionSelect = forwardRef(function DirectionSelect(props: Props, ref) {
   const { onChange, value, ...rest } = props;
   return (
     <RadioGroup
-      defaultValue={value}
+      value={value}
       className="flex items-start w-full"
       {...rest}
       onValueChange={(value) => onChange(value as Direction)}

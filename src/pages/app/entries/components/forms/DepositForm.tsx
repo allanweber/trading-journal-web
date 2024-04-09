@@ -42,7 +42,7 @@ export const DepositForm = ({ deposit, onChange }: Props) => {
 
   const [values, setValues] = useState<Entry>(deposit || startValues);
 
-  const mutation = useSaveEntry(deposit?.id);
+  const mutation = useSaveEntry(portfolio?.id!, deposit?.id);
   const { toast } = useToast();
 
   useEffect(() => {

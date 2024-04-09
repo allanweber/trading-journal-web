@@ -11,7 +11,7 @@ import { onlyTrades } from "model/entryType";
 import { NavLink, useParams } from "react-router-dom";
 import { Button } from "../../../../components/ui/button";
 
-export const AddEntryButton = () => {
+export const AddTradeButton = () => {
   const { portfolioId } = useParams();
   const entryTypes = onlyTrades();
   return (
@@ -28,16 +28,18 @@ export const AddEntryButton = () => {
             <DialogTitle>Add by type</DialogTitle>
           </DialogHeader>
           <DialogDescription>
-            <div className="flex flex-col space-y-2">
+            <span className="flex flex-col space-y-2">
               {entryTypes.map((entryType: any) => (
                 <Button asChild key={entryType.type} className="w-full" variant="outline">
-                  <NavLink to={`/trading/portfolios/${portfolioId}/entries/new/${entryType.type}`}>
+                  <NavLink
+                    to={`/trading/portfolios/${portfolioId}/entries/${entryType.type.toLowerCase()}/new`}
+                  >
                     <entryType.icon className="mr-2 h-4 w-4" />
                     <span className="capitalize">{entryType.type.toLowerCase()}</span>
                   </NavLink>
                 </Button>
               ))}
-            </div>
+            </span>
           </DialogDescription>
         </DialogContent>
       </Dialog>

@@ -2,7 +2,7 @@ import { Badge } from "components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Award, BookmarkMinus, Circle } from "lucide-react";
 import { Entry, OrderStatus } from "model/entry";
-import { CloseStockForm } from "./forms/CloseStockForm";
+import { CloseStockForm } from "./CloseStockForm";
 
 type Props = {
   entry: Entry;

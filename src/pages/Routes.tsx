@@ -8,9 +8,9 @@ import { Login } from "pages/Login";
 import { Trading } from "pages/app/Trading";
 import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import { NotFound } from "./app/NotFound";
-import { EditEntry } from "./app/entries/EditEntry";
+import { ClosedEntry } from "./app/entries/ClosedEntry";
 import { Entries } from "./app/entries/Entries";
-import { NewEntry } from "./app/entries/NewEntry";
+import { Stock } from "./app/entries/Stock";
 import { Portfolio } from "./app/portfolios/Portfolio";
 import { Portfolios } from "./app/portfolios/Portfolios";
 import { UserProfile } from "./app/user/UserProfile";
@@ -32,8 +32,9 @@ export const router = createBrowserRouter(
         <Route path="portfolios/:portfolioId/edit" element={<Portfolio />} />
         <Route path="portfolios/:portfolioId" element={<PortfolioLayout />}>
           <Route path="entries" element={<Entries />} />
-          <Route path="entries/new/:tradeType" element={<NewEntry />} />
-          <Route path="entries/:entryId" element={<EditEntry />} />
+          <Route path="entries/:entryId/closed" element={<ClosedEntry />} />
+          <Route path="entries/stock/new" element={<Stock />} />
+          <Route path="entries/stock/:entryId" element={<Stock />} />
         </Route>
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />

@@ -24,11 +24,11 @@ type Props = {
 };
 
 export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Props) => {
-  const mutation = useDeleteEntry();
+  const mutation = useDeleteEntry(entry.portfolio.id!);
   const { toast } = useToast();
 
   if (mutation.isPending) {
-    return <div>Deleting...</div>;
+    return <>Deleting...</>;
   }
   if (mutation.isError) {
     onError(mutation.error);

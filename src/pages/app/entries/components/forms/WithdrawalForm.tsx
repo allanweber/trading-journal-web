@@ -42,7 +42,7 @@ export const WithdrawalForm = ({ withdrawal, onChange }: Props) => {
 
   const [values, setValues] = useState<Entry>(withdrawal || startValues);
 
-  const mutation = useSaveEntry(withdrawal?.id);
+  const mutation = useSaveEntry(portfolio?.id!, withdrawal?.id);
   const { toast } = useToast();
 
   useEffect(() => {

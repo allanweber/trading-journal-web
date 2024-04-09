@@ -33,9 +33,9 @@ import { getSymbol } from "model/currency";
 import { Direction } from "model/direction";
 import { Portfolio } from "model/portfolio";
 import { NavLink } from "react-router-dom";
+import { CloseStockForm } from "../CloseStockForm";
 import { DeleteEntryButton } from "../DeleteEntryButton";
 import { EntryStatus } from "../EntryStatus";
-import { CloseStockForm } from "./CloseStockForm";
 
 const CloseTrade = ({ entry }: { entry: Entry }) => {
   if (entry.orderStatus === OrderStatus.OPEN) {
@@ -73,7 +73,7 @@ export const StockForm = ({ portfolio, stock }: { portfolio: Portfolio; stock?: 
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
 
-  const mutation = useSaveEntry(stock?.id);
+  const mutation = useSaveEntry(portfolio?.id!, stock?.id);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -125,7 +125,7 @@ export const StockForm = ({ portfolio, stock }: { portfolio: Portfolio; stock?: 
                     <DeleteEntryButton
                       entry={stock as Entry}
                       onError={(error) => setDeleteError(error)}
-                      onSuccess={() => navigate("/trading/entries")}
+                      onSuccess={() => navigate(`/trading/portfolios/${portfolio.id}/entries`)}
                       withLabel
                     />
                   </div>

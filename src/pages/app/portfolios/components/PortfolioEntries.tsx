@@ -34,7 +34,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
   const [formOpen, setFormOpen] = useState(false);
   const [entry, setEntry] = useState<Entry>();
 
-  const { data: entries, error, isLoading, isSuccess } = useGetPortfolioEntries();
+  const { data: entries, error, isLoading, isSuccess } = useGetPortfolioEntries(portfolio.id!);
 
   const onFormChange = (data: Entry | undefined) => {
     setFormOpen(false);

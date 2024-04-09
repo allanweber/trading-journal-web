@@ -62,7 +62,7 @@ export const CloseStockForm = ({ entry }: Props) => {
     costs: entry.costs,
   };
 
-  const mutation = useCloseEntry(entry.id!);
+  const mutation = useCloseEntry(entry.portfolio.id!, entry.id!);
   const { toast } = useToast();
 
   const form = useForm<ExitEntry>({

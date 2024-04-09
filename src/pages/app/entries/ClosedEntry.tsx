@@ -3,6 +3,7 @@ import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
 import { MessageDisplay } from "components/MessageDisplay";
 import NumberDisplay from "components/NumberDisplay";
+import { TableLoading } from "components/table/TableLoading";
 import { Badge } from "components/ui/badge";
 import { Button } from "components/ui/button";
 import { Card, CardContent, CardHeader } from "components/ui/card";
@@ -14,20 +15,16 @@ import { Entry } from "model/entry";
 import { EntryType, getEntryType } from "model/entryType";
 import { Size } from "model/size";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useUpdateNotes } from "service/entryQueries";
-import { DeleteEntryButton } from "./DeleteEntryButton";
-import { EntryImages } from "./EntryImages";
-import { EntryResult } from "./EntryResult";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetEntry, useUpdateNotes } from "service/entryQueries";
+import { DeleteEntryButton } from "./components/DeleteEntryButton";
+import { EntryImages } from "./components/EntryImages";
+import { EntryResult } from "./components/EntryResult";
 
-type Props = {
-  entry: Entry;
-};
-
-const UpdateNotes = ({ entry }: Props) => {
+const UpdateNotes = ({ entry }: { entry: Entry }) => {
   const [editing, setEditing] = useState(false);
   const [notes, setNotes] = useState(entry.notes!);
-  const mutation = useUpdateNotes(entry.id!);
+  const mutation = useUpdateNotes(entry.portfolio.id!, entry.id!);
 
   return (
     <Card>
@@ -72,11 +69,16 @@ const UpdateNotes = ({ entry }: Props) => {
   );
 };
 
-export const ClosedEntry = ({ entry }: Props) => {
+export const ClosedEntry = () => {
+  const { portfolioId, entryId } = useParams();
+  const { data: entry } = useGetEntry(portfolioId!, entryId);
+
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigation = useNavigate();
-  const entryType = getEntryType(entry.entryType)!;
 
+  if (!entry) return <TableLoading />;
+
+  const entryType = getEntryType(entry.entryType)!;
   const items = [
     {
       label: "Entry Date",
@@ -117,7 +119,7 @@ export const ClosedEntry = ({ entry }: Props) => {
   ];
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div>
       <MessageDisplay message={deleteError} variant="destructive" />
       <Card>
         <CardHeader>
@@ -156,7 +158,7 @@ export const ClosedEntry = ({ entry }: Props) => {
                   <DeleteEntryButton
                     entry={entry}
                     onError={(error) => setDeleteError(error)}
-                    onSuccess={() => navigation("/trading/entries")}
+                    onSuccess={() => navigation(`/trading/portfolios/${portfolioId}/entries`)}
                   />
                 </div>
               </div>
@@ -177,7 +179,7 @@ export const ClosedEntry = ({ entry }: Props) => {
             Chart will be available in the future
           </span>
           <div>
-            <EntryImages entryId={entry.id!} />
+            <EntryImages entry={entry} />
           </div>
 
           <Table>

@@ -47,7 +47,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
   const [values, setValues] = useState<Entry>(dividend || startValues);
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
-  const mutation = useSaveEntry(dividend?.id);
+  const mutation = useSaveEntry(portfolio?.id!, dividend?.id);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
                   <DeleteEntryButton
                     entry={dividend as Entry}
                     onError={(error) => setDeleteError(error)}
-                    onSuccess={() => navigate("/trading/entries")}
+                    onSuccess={() => navigate(`/trading/portfolios/${portfolio.id}/entries`)}
                   />
                 )}
               </PageHeader.Action>

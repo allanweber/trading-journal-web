@@ -11,12 +11,13 @@ import {
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
 import { TrashIcon } from "lucide-react";
+import { Entry } from "model/entry";
 import { ImageUploaded } from "model/fileUploaded";
 import { useDeleteImage, useGetImages } from "service/entryQueries";
 
-export const EntryImages = ({ entryId }: { entryId: string }) => {
-  const { data: images } = useGetImages(entryId);
-  const deleteMutation = useDeleteImage(entryId);
+export const EntryImages = ({ entry }: { entry: Entry }) => {
+  const { data: images } = useGetImages(entry.portfolio.id!, entry.id!);
+  const deleteMutation = useDeleteImage(entry.portfolio.id!, entry.id!);
 
   const deleteImage = (imageId: string) => {
     deleteMutation.mutate(imageId);

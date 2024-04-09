@@ -22,10 +22,10 @@ export const useGetPortfolio = (id?: string) => {
   return useQuery({
     queryKey: [`portfolio-${id}`],
     queryFn: async () => {
-      const accessToken = await getToken();
       if (!id) {
         return null;
       }
+      const accessToken = await getToken();
       return getPortfolio(accessToken!, id);
     },
   });
