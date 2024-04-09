@@ -1,4 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "components/ui/use-toast";
+import { Entry, dividendSchema } from "model/entry";
+import { EntryType } from "model/entryType";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router";
+import { useGetEntry, useSaveEntry } from "service/entryQueries";
+import { useGetPortfolio } from "service/portfolioQueries";
+
 import { MessageDisplay } from "components/MessageDisplay";
 import { Button } from "components/ui/button";
 import {
@@ -10,41 +19,33 @@ import {
   FormLabel,
   FormMessage,
 } from "components/ui/form";
-import { useToast } from "components/ui/use-toast";
-import { Entry, dividendSchema } from "model/entry";
-import { EntryType } from "model/entryType";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useSaveEntry } from "service/entryQueries";
 
 import { DateTimePicker } from "components/DateTimePicker";
 import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
+import { TableLoading } from "components/table/TableLoading";
 import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
 import { getSymbol } from "model/currency";
-import { Portfolio } from "model/portfolio";
-import { NavLink, useNavigate } from "react-router-dom";
-import { DeleteEntryButton } from "../DeleteEntryButton";
+import { NavLink } from "react-router-dom";
+import { DeleteEntryButton } from "./components/DeleteEntryButton";
 
-type Props = {
-  portfolio: Portfolio;
-  dividend?: Entry;
-};
+export const Dividend = () => {
+  const { portfolioId, entryId } = useParams();
+  const { data: portfolio } = useGetPortfolio(portfolioId);
+  const { data: dividend, error: queryError } = useGetEntry(portfolioId!, entryId);
 
-export default function DividendForm({ portfolio, dividend }: Props) {
-  const startValues: Entry = {
+  const [values, setValues] = useState<Entry>({
     symbol: "",
     notes: "",
     date: new Date(),
     price: 0,
     entryType: EntryType.DIVIDEND,
     result: 0,
-    portfolio: portfolio,
-  };
-  const [values, setValues] = useState<Entry>(dividend || startValues);
+    portfolio: portfolio!,
+  });
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
   const mutation = useSaveEntry(portfolio?.id!, dividend?.id);
@@ -62,6 +63,8 @@ export default function DividendForm({ portfolio, dividend }: Props) {
     values,
   });
 
+  if (!portfolio) return <TableLoading />;
+
   function onSubmit(data: Entry) {
     mutation.mutate(data, {
       onSuccess: (data) => {
@@ -69,7 +72,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
           title: "Dividend saved",
           description: `Dividend ${data.symbol} was saved successfully`,
         });
-        navigate(`/trading/portfolios/${portfolio.id}/entries`);
+        navigate(`/trading/portfolios/${portfolio!.id}/entries`);
       },
     });
   }
@@ -78,6 +81,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
     <>
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
+      <MessageDisplay message={queryError} variant="destructive" />
       <Card>
         <CardHeader>
           <CardTitle>
@@ -88,7 +92,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
                   <DeleteEntryButton
                     entry={dividend as Entry}
                     onError={(error) => setDeleteError(error)}
-                    onSuccess={() => navigate(`/trading/portfolios/${portfolio.id}/entries`)}
+                    onSuccess={() => navigate(`/trading/portfolios/${portfolio!.id}/entries`)}
                   />
                 )}
               </PageHeader.Action>
@@ -173,7 +177,7 @@ export default function DividendForm({ portfolio, dividend }: Props) {
 
               <div className="flex flex-wrap sm:justify-end">
                 <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to={`/trading/portfolios/${portfolio.id}/entries`}>Cancel</NavLink>
+                  <NavLink to={`/trading/portfolios/${portfolio!.id}/entries`}>Cancel</NavLink>
                 </Button>
 
                 <Button
@@ -190,4 +194,4 @@ export default function DividendForm({ portfolio, dividend }: Props) {
       </Card>
     </>
   );
-}
+};

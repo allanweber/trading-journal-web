@@ -29,6 +29,7 @@ import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
 import { Uploader } from "components/Uploader";
+import { TableLoading } from "components/table/TableLoading";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Input } from "components/ui/input";
 import { Separator } from "components/ui/separator";
@@ -314,6 +315,8 @@ export const Stock = () => {
       setValues(stock);
     }
   }, [stock]);
+
+  if (!portfolio) return <TableLoading />;
 
   return (
     <div className="flex flex-col">

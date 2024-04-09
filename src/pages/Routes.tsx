@@ -9,6 +9,7 @@ import { Trading } from "pages/app/Trading";
 import { Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom";
 import { NotFound } from "./app/NotFound";
 import { ClosedEntry } from "./app/entries/ClosedEntry";
+import { Dividend } from "./app/entries/Dividend";
 import { Entries } from "./app/entries/Entries";
 import { Stock } from "./app/entries/Stock";
 import { Portfolio } from "./app/portfolios/Portfolio";
@@ -35,6 +36,8 @@ export const router = createBrowserRouter(
           <Route path="entries/:entryId/closed" element={<ClosedEntry />} />
           <Route path="entries/stock/new" element={<Stock />} />
           <Route path="entries/stock/:entryId" element={<Stock />} />
+          <Route path="entries/dividend/new" element={<Dividend />} />
+          <Route path="entries/dividend/:entryId" element={<Dividend />} />
         </Route>
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />
