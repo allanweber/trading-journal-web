@@ -34,7 +34,6 @@ export const NumberInput = forwardRef(function NumberInput(props: Props, ref) {
       <div className="relative w-full">
         <div className="relative">
           <IMaskInput
-            ref={ref}
             mask={currency ? `${currency} num` : "num"}
             blocks={{
               num: {
