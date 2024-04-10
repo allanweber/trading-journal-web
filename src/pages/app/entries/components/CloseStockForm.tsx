@@ -11,7 +11,6 @@ import { Button } from "components/ui/button";
 import { DialogClose } from "components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "components/ui/form";
 import { useToast } from "components/ui/use-toast";
-import { usePortfolioContext } from "contexts/PortfolioContext";
 import { getSymbol } from "model/currency";
 import { Entry, ExitEntry, exitEntrySchema } from "model/entry";
 import { useForm } from "react-hook-form";
@@ -55,7 +54,7 @@ type Props = {
 };
 
 export const CloseStockForm = ({ entry }: Props) => {
-  const { portfolio } = usePortfolioContext();
+  const { portfolio } = entry;
   const startValues: ExitEntry = {
     exitDate: new Date(),
     exitPrice: 0,

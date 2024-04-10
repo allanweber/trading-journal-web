@@ -10,7 +10,6 @@ import {
   AlertDialogTrigger,
 } from "components/ui/alert-dialog";
 import { useToast } from "components/ui/use-toast";
-import { usePortfolioContext } from "contexts/PortfolioContext";
 import { TrashIcon } from "lucide-react";
 import { Portfolio } from "model/portfolio";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +23,6 @@ type Props = {
 export const DeletePortfolioButton = ({ portfolio, onError }: Props) => {
   const mutation = useDeletePortfolio();
   const navigate = useNavigate();
-  const { setPortfolio } = usePortfolioContext();
   const { toast } = useToast();
 
   if (mutation.isPending) {
@@ -41,7 +39,6 @@ export const DeletePortfolioButton = ({ portfolio, onError }: Props) => {
           title: "Portfolio Deleted",
           description: `Your Portfolio ${portfolio.name} was deleted successfully`,
         });
-        setPortfolio(undefined);
         navigate("/trading/portfolios");
       },
     });
