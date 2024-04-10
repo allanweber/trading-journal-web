@@ -137,11 +137,19 @@ export const AppLayout = () => {
   if (!isAuthenticated) return <Navigate to="/login" />;
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-screen w-full md:grid-cols-[250px_1fr] lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r md:block">
         <div className="flex h-full max-h-screen flex-col gap-2">
-          <div className="flex h-12 items-center border-b px-4 lg:h-[60px] lg:px-6">
-            <Logo />
+          <div className="flex h-12 items-center border-b px-4 lg:h-[60px]">
+            <div className="w-full flex-1">
+              <div>
+                <Logo />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Notifications />
+              <UserNav />
+            </div>
           </div>
           <div className="flex-1">
             <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
@@ -154,7 +162,7 @@ export const AppLayout = () => {
         </div>
       </div>
       <div className="flex flex-col">
-        <header className="flex h-14 items-center gap-4 px-4 border-b md:border-none md:bg-muted/40 lg:h-[60px] lg:px-6">
+        <header className="flex h-14 items-center gap-4 px-4 border-b md:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -164,7 +172,6 @@ export const AppLayout = () => {
             </SheetTrigger>
             <SheetContent side="left" className="flex flex-col">
               <nav className="grid gap-2 text-lg font-medium">
-                <Logo />
                 <Navigation />
               </nav>
               <div className="mt-auto">
@@ -172,7 +179,7 @@ export const AppLayout = () => {
               </div>
             </SheetContent>
           </Sheet>
-          <div className="w-full flex-1 md:hidden">
+          <div className="w-full flex-1">
             <div>
               <Logo />
             </div>
@@ -181,7 +188,7 @@ export const AppLayout = () => {
           <UserNav />
         </header>
 
-        <main className="flex flex-1 flex-col p-4 pt-2 md:pt-0 bg-muted/40">
+        <main className="flex flex-1 flex-col p-4 bg-muted/40">
           <Outlet />
         </main>
       </div>
