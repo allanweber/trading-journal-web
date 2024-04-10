@@ -33,7 +33,7 @@ export const useGetPortfolioEntries = (portfolioId: string) => {
   const { getToken } = useAuthState();
 
   return useQuery({
-    queryKey: ["portfolio-entries"],
+    queryKey: [`portfolio-entries-${portfolioId}`],
     queryFn: async () => {
       const accessToken = await getToken();
       return getPortfolioEntries(accessToken!, portfolioId);
@@ -69,10 +69,16 @@ export const useDeleteEntry = (portfolioId: string) => {
         queryKey: ["entries"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["portfolio-entries"],
+        queryKey: [`portfolio-entries-${portfolioId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`balance-${portfolioId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`portfolio-${portfolioId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`portfolios`],
       });
     },
   });
@@ -96,13 +102,19 @@ export const useSaveEntry = (portfolioId: string, id?: string) => {
         queryKey: ["entries"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["portfolio-entries"],
+        queryKey: [`portfolio-entries-${portfolioId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`balance-${portfolioId}`],
       });
       queryClient.invalidateQueries({
         queryKey: [`entry-${data.id}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`portfolio-${portfolioId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`portfolios`],
       });
     },
   });

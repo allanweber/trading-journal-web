@@ -99,7 +99,7 @@ export const Dividend = () => {
             </PageHeader>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pl-6">
+        <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField

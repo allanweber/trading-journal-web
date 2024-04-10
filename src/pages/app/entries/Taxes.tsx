@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageDisplay } from "components/MessageDisplay";
 import { Button } from "components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import {
   Form,
   FormControl,
@@ -12,7 +11,7 @@ import {
   FormMessage,
 } from "components/ui/form";
 import { useToast } from "components/ui/use-toast";
-import { Entry, depositSchema } from "model/entry";
+import { Entry, taxesSchema } from "model/entry";
 import { EntryType } from "model/entryType";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -23,6 +22,7 @@ import { HelperText } from "components/HelperText";
 import { NumberInput } from "components/NumberInput";
 import { PageHeader } from "components/PageHeader";
 import { TableLoading } from "components/table/TableLoading";
+import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Textarea } from "components/ui/textarea";
 import { getSymbol } from "model/currency";
 import { useNavigate, useParams } from "react-router";
@@ -30,31 +30,32 @@ import { NavLink } from "react-router-dom";
 import { useGetPortfolio } from "service/portfolioQueries";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
 
-export const Deposit = () => {
+export const Taxes = () => {
   const { portfolioId, entryId } = useParams();
   const { data: portfolio } = useGetPortfolio(portfolioId);
-  const { data: deposit, error: queryError } = useGetEntry(portfolioId!, entryId);
+  const { data: taxes, error: queryError } = useGetEntry(portfolioId!, entryId);
 
   const [values, setValues] = useState<Entry>({
     notes: "",
     date: new Date(),
     price: 0,
-    entryType: EntryType.DEPOSIT,
+    entryType: EntryType.TAXES,
+    result: 0,
     portfolio: portfolio!,
   });
   const [deleteError, setDeleteError] = useState<any>(null);
   const navigate = useNavigate();
-  const mutation = useSaveEntry(portfolio?.id!, deposit?.id);
+  const mutation = useSaveEntry(portfolio?.id!, taxes?.id);
   const { toast } = useToast();
 
   useEffect(() => {
-    if (deposit) {
-      setValues(deposit);
+    if (taxes) {
+      setValues(taxes);
     }
-  }, [deposit]);
+  }, [taxes]);
 
   const form = useForm<Entry>({
-    resolver: zodResolver(depositSchema),
+    resolver: zodResolver(taxesSchema),
     defaultValues: values,
     values,
   });
@@ -65,8 +66,8 @@ export const Deposit = () => {
     mutation.mutate(data, {
       onSuccess: (data) => {
         toast({
-          title: "Deposit saved",
-          description: `Deposit was saved successfully`,
+          title: "Tax saved",
+          description: `Tax were saved successfully`,
         });
         navigate(`/trading/portfolios/${portfolio!.id}/edit`);
       },
@@ -83,11 +84,11 @@ export const Deposit = () => {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>{deposit ? "Edit" : "Add a new"} Deposit</PageHeader.Title>
+              <PageHeader.Title>{taxes ? "Edit" : "Add a new"} Tax</PageHeader.Title>
               <PageHeader.Action>
-                {deposit && (
+                {taxes && (
                   <DeleteEntryButton
-                    entry={deposit as Entry}
+                    entry={taxes as Entry}
                     onError={(error) => setDeleteError(error)}
                     onSuccess={() => navigate(`/trading/portfolios/${portfolio!.id}/edit`)}
                   />
@@ -104,11 +105,11 @@ export const Deposit = () => {
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Deposit Date</FormLabel>
-                    <DateTimePicker withTime {...field} disabled={deposit}>
+                    <FormLabel>Taxes Date</FormLabel>
+                    <DateTimePicker withTime {...field} disabled={taxes}>
                       <HelperText>
-                        This is the date when you did or will do your deposit, this is used to
-                        calculate your balance, and can never be changed. (required)
+                        This is the date when you declared your taxes, this is used to calculate
+                        your balance, and can never be changed. (required)
                       </HelperText>
                     </DateTimePicker>
                     <FormMessage />
@@ -121,15 +122,15 @@ export const Deposit = () => {
                 name="price"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Deposit value</FormLabel>
+                    <FormLabel>Taxes value</FormLabel>
                     <NumberInput
                       {...field}
                       currency={getSymbol(portfolio?.currency || "$")}
-                      disabled={deposit}
+                      disabled={taxes}
                     >
                       <HelperText>
-                        This is the value of your deposit, this is used to calculate your balance,
-                        and can never be changed. (required)
+                        This is the value of your taxes, this is used to calculate your balance, and
+                        can never be changed. (required)
                       </HelperText>
                     </NumberInput>
                     <FormMessage />
@@ -147,7 +148,7 @@ export const Deposit = () => {
                       <Textarea placeholder="Notes" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is just a brief description of your deposit. (optional)
+                      This is just a brief description of your taxes. (optional)
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

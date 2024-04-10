@@ -20,7 +20,7 @@ export default function NumberDisplay(props: Props) {
     }
   }
 
-  if (children) {
+  if (children !== undefined) {
     if (isPercentage) {
       formattedValue = percentFormatter(children);
     } else if (currency) {

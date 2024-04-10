@@ -5,7 +5,7 @@ import { useToast } from "components/ui/use-toast";
 import { portfolioSchema, type Portfolio as PortfolioType } from "model/portfolio";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useGetPortfolio, useSavePortfolio } from "service/portfolioQueries";
 
 import { Button } from "components/ui/button";
@@ -187,13 +187,8 @@ export const Portfolio = () => {
                 />
 
                 <div className="flex flex-wrap sm:justify-end">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full sm:w-[200px]"
-                    onClick={() => navigate("/trading/portfolios")}
-                  >
-                    Cancel
+                  <Button asChild variant="outline" className="w-full sm:w-[200px]">
+                    <NavLink to={"/trading/portfolios"}>Cancel</NavLink>
                   </Button>
                   <Button
                     type="submit"

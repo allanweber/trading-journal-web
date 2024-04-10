@@ -12,7 +12,10 @@ import { ClosedEntry } from "./app/entries/ClosedEntry";
 import { Deposit } from "./app/entries/Deposit";
 import { Dividend } from "./app/entries/Dividend";
 import { Entries } from "./app/entries/Entries";
+import { Fees } from "./app/entries/Fees";
 import { Stock } from "./app/entries/Stock";
+import { Taxes } from "./app/entries/Taxes";
+import { Withdrawal } from "./app/entries/Withdrawal";
 import { Portfolio } from "./app/portfolios/Portfolio";
 import { Portfolios } from "./app/portfolios/Portfolios";
 import { UserProfile } from "./app/user/UserProfile";
@@ -41,6 +44,12 @@ export const router = createBrowserRouter(
           <Route path="entries/dividend/:entryId" element={<Dividend />} />
           <Route path="entries/deposit/new" element={<Deposit />} />
           <Route path="entries/deposit/:entryId" element={<Deposit />} />
+          <Route path="entries/fees/new" element={<Fees />} />
+          <Route path="entries/fees/:entryId" element={<Fees />} />
+          <Route path="entries/taxes/new" element={<Taxes />} />
+          <Route path="entries/taxes/:entryId" element={<Taxes />} />
+          <Route path="entries/withdrawal/new" element={<Withdrawal />} />
+          <Route path="entries/withdrawal/:entryId" element={<Withdrawal />} />
         </Route>
         <Route path="user" element={<UserLayout />}>
           <Route path="settings" element={<UserSettings />} />
