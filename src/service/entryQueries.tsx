@@ -1,10 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthState } from "lib/authentication";
 import { config } from "lib/config";
 import { Deposit, Dividend, Entry, ExitEntry, Stock, Taxes, Withdrawal } from "model/entry";
 import { ImageUploaded } from "model/fileUploaded";
 import { Paginated } from "model/pagination";
 import { responseOrError } from "./response";
+
+function invalidateQueries(queryClient: QueryClient, portfolioId: string) {
+  queryClient.invalidateQueries({
+    queryKey: ["entries"],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolio-entries-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`balance-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolio-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolios`],
+  });
+}
 
 export const useGetEntries = (
   portfolioId: string,
@@ -65,21 +83,7 @@ export const useDeleteEntry = (portfolioId: string) => {
       return deleteEntry(accessToken!, portfolioId, id);
     },
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolio-entries-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolio-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolios`],
-      });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
@@ -98,24 +102,7 @@ export const useSaveEntry = (portfolioId: string, id?: string) => {
       return createEntry(accessToken!, portfolioId, entry);
     },
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolio-entries-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`entry-${data.id}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolio-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`portfolios`],
-      });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
@@ -131,15 +118,7 @@ export const useCloseEntry = (portfolioId: string, entryId: string) => {
       return closeEntry(accessToken!, portfolioId, entryId, exitEntry);
     },
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolioId}`],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`entry-${data.id}`],
-      });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
