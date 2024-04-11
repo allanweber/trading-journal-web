@@ -188,7 +188,7 @@ export const AppLayout = () => {
           <UserNav />
         </header>
 
-        <main className="flex flex-1 flex-col p-4 bg-muted/40">
+        <main className="flex flex-1 flex-col bg-muted/40">
           <Outlet />
         </main>
       </div>

@@ -20,7 +20,7 @@ export const Portfolios = () => {
   const { data: portfolios, error, isLoading, isSuccess } = useAllPortfolios();
 
   return (
-    <>
+    <div className="p-4">
       <PageHeader>
         <PageHeader.Title>Portfolios</PageHeader.Title>
         <PageHeader.Subtitle>
@@ -126,6 +126,6 @@ export const Portfolios = () => {
           <NoPortfoliosCard />
         )}
       </Box>
-    </>
+    </div>
   );
 };

@@ -71,7 +71,7 @@ export const Portfolio = () => {
   }
 
   return (
-    <div className="grid grid-cols-12 gap-6">
+    <div className="grid grid-cols-12 gap-6 p-4">
       <div className="col-span-12 md:col-span-6">
         <MessageDisplay message={mutation.error} variant="destructive" />
         <MessageDisplay message={deleteError} variant="destructive" />

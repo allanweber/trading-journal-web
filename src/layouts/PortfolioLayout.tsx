@@ -1,3 +1,4 @@
+import { PortfolioSummary } from "components/PortfolioSummary";
 import { useToast } from "components/ui/use-toast";
 import { useEffect } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
@@ -21,8 +22,10 @@ export const PortfolioLayout = () => {
 
   return (
     <>
-      <div>{data?.name}</div>
-      <Outlet />
+      {data && <PortfolioSummary portfolio={data} />}
+      <div className="p-4">
+        <Outlet />
+      </div>
     </>
   );
 };

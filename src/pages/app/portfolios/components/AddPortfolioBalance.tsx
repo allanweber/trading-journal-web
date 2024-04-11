@@ -20,6 +20,7 @@ export const AddPortfolioBalance = ({
   const navigate = useNavigate();
 
   const handleClick = (entryType: EntryType) => {
+    setMenuOpen(false);
     navigate(`/trading/portfolios/${portfolio.id}/entries/${entryType.toLocaleLowerCase()}/new`);
   };
 
@@ -32,6 +33,7 @@ export const AddPortfolioBalance = ({
             size="sm"
             onClick={() => setMenuOpen(true)}
             aria-label="add balance"
+            className="px-0"
           >
             <Edit className="h-4 w-4" />
           </Button>
@@ -45,7 +47,7 @@ export const AddPortfolioBalance = ({
           <DialogHeader>
             <DialogTitle>Add to your portfolio balance</DialogTitle>
           </DialogHeader>
-          <span className="flex flex-col space-y-2">
+          <span className="flex flex-col">
             {entryTypes.map((entryType: any) => (
               <Button
                 key={entryType.type}

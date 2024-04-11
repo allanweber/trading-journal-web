@@ -26,7 +26,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Textarea } from "components/ui/textarea";
 import { getSymbol } from "model/currency";
 import { useNavigate, useParams } from "react-router";
-import { NavLink } from "react-router-dom";
 import { useGetPortfolio } from "service/portfolioQueries";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
 
@@ -69,7 +68,7 @@ export const Withdrawal = () => {
           title: "Withdrawal saved",
           description: `Withdrawal was saved successfully`,
         });
-        navigate(`/trading/portfolios/${portfolio!.id}/edit`);
+        navigate(-1);
       },
     });
   }
@@ -156,8 +155,13 @@ export const Withdrawal = () => {
               />
 
               <div className="flex flex-wrap sm:justify-end">
-                <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to={`/trading/portfolios/${portfolio!.id}/edit`}>Cancel</NavLink>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
                 </Button>
                 <Button
                   type="submit"
