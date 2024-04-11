@@ -83,6 +83,9 @@ export const useDeleteEntry = (portfolioId: string) => {
       return deleteEntry(accessToken!, portfolioId, id);
     },
     onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${data}`],
+      });
       invalidateQueries(queryClient, portfolioId);
     },
   });
@@ -102,6 +105,9 @@ export const useSaveEntry = (portfolioId: string, id?: string) => {
       return createEntry(accessToken!, portfolioId, entry);
     },
     onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${data.id}`],
+      });
       invalidateQueries(queryClient, portfolioId);
     },
   });
@@ -118,6 +124,9 @@ export const useCloseEntry = (portfolioId: string, entryId: string) => {
       return closeEntry(accessToken!, portfolioId, entryId, exitEntry);
     },
     onSuccess(data, variables, context) {
+      queryClient.invalidateQueries({
+        queryKey: [`entry-${data.id}`],
+      });
       invalidateQueries(queryClient, portfolioId);
     },
   });

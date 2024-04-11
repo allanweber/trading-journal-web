@@ -22,10 +22,11 @@ export const Portfolios = () => {
   return (
     <div className="p-4">
       <PageHeader>
-        <PageHeader.Title>Portfolios</PageHeader.Title>
-        <PageHeader.Subtitle>
-          <span className="hidden md:flex">View and manage your Portfolios</span>
-        </PageHeader.Subtitle>
+        <PageHeader.Title>
+          Portfolios
+          <PageHeader.Subtitle>View and manage your Portfolios</PageHeader.Subtitle>
+        </PageHeader.Title>
+
         <PageHeader.Action>
           {isSuccess && portfolios.length > 0 && <AddPortfolioButton />}
         </PageHeader.Action>

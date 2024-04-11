@@ -106,10 +106,11 @@ export const Entries = () => {
   return (
     <>
       <PageHeader>
-        <PageHeader.Title>Trades</PageHeader.Title>
-        <PageHeader.Subtitle>
-          <span className="hidden md:flex">View and manage your trades</span>
-        </PageHeader.Subtitle>
+        <PageHeader.Title>
+          Trades
+          <PageHeader.Subtitle>View and manage your trades</PageHeader.Subtitle>
+        </PageHeader.Title>
+
         <PageHeader.Action>
           <AddTradeButton />
         </PageHeader.Action>

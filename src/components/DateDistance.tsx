@@ -13,6 +13,9 @@ export const DateDistance = ({ startDate, endDate }: Props) => {
     endDate = new Date(endDate);
   }
 
+  console.log(startDate);
+  console.log(endDate);
+
   const result = formatDistance(startDate, endDate);
   return <div>{result}</div>;
 };

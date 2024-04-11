@@ -318,6 +318,10 @@ export const Stock = () => {
 
   if (!portfolio) return <TableLoading />;
 
+  if (stock && stock.orderStatus === OrderStatus.CLOSED) {
+    navigate(`/trading/portfolios/${portfolioId}/entries/${entryId}/closed`);
+  }
+
   return (
     <div className="flex flex-col">
       <div>
