@@ -1,11 +1,7 @@
-import { useAuthState } from 'lib/authentication';
-import { NavLink } from 'react-router-dom';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '../../../../components/ui/avatar';
-import { Button } from '../../../../components/ui/button';
+import { useAuthState } from "lib/authentication";
+import { NavLink } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../../../components/ui/dropdown-menu';
+} from "./ui/dropdown-menu";
 
 export const UserNav = () => {
   const { user, isAuthenticated, logout } = useAuthState();
@@ -24,7 +20,7 @@ export const UserNav = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={user.picture ?? ''} alt="@shadcn" />
+            <AvatarImage src={user.picture ?? ""} alt="@shadcn" />
             <AvatarFallback>UR</AvatarFallback>
           </Avatar>
         </Button>
@@ -35,9 +31,7 @@ export const UserNav = () => {
             <p className="text-sm font-medium leading-none">
               {user.given_name} {user.family_name}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

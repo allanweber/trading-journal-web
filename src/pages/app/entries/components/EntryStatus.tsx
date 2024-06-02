@@ -2,7 +2,7 @@ import { Badge } from "components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "components/ui/dialog";
 import { Award, BookmarkMinus, Circle } from "lucide-react";
 import { Entry, OrderStatus } from "model/entry";
-import { CloseTradeForm } from "./CloseTradeForm";
+import { CloseStockForm } from "./CloseStockForm";
 
 type Props = {
   entry: Entry;
@@ -36,7 +36,7 @@ export const EntryStatus = ({ entry }: Props) => {
         </Badge>
       </DialogTrigger>
       <DialogContent>
-        <CloseTradeForm entry={entry} />
+        <CloseStockForm entry={entry} />
       </DialogContent>
     </Dialog>
   );

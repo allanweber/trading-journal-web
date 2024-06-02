@@ -1,3 +1,4 @@
+import { Box } from "components/Box";
 import DateDisplay from "components/DateDisplay";
 import { DateDistance } from "components/DateDistance";
 import { DirectionDisplay } from "components/DirectionDisplay";
@@ -10,12 +11,12 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "components
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "components/ui/tooltip";
 import { Image, StickyNote } from "lucide-react";
-import { Entry } from "model/entry";
+import { Entry, OrderStatus } from "model/entry";
 import { EntryType } from "model/entryType";
 import { Size } from "model/size";
-import { AddEntryButton } from "pages/app/entries/components/AddEntryButton";
+import { AddTradeButton } from "pages/app/entries/components/AddTradeButton";
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useGetEntries } from "service/entryQueries";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
 import { EntryResult } from "./components/EntryResult";
@@ -25,19 +26,14 @@ import { SymbolDisplay } from "./components/SymbolDisplay";
 
 const EntrySizeAndPrice = ({ entry }: { entry: Entry }) => {
   return (
-    <div className="flex items-center justify-start">
-      <div>
-        <NumberDisplay currency={entry.portfolio.currency}>{entry.price}</NumberDisplay>
-      </div>
-      <div>
-        {entry.size && (
-          <>
-            <span className=" text-muted-foreground text-xs ml-1">
-              (<NumberDisplay>{entry.size}</NumberDisplay>)
-            </span>
-          </>
-        )}
-      </div>
+    <div className="flex flex-col truncate">
+      <NumberDisplay currency={entry.portfolio.currency}>{entry.price}</NumberDisplay>
+
+      {entry.size && (
+        <span className="text-muted-foreground text-xs">
+          (<NumberDisplay>{entry.size}</NumberDisplay>)
+        </span>
+      )}
     </div>
   );
 };
@@ -70,6 +66,7 @@ const NotesAndImages = ({ entry }: { entry: Entry }) => {
 };
 
 export const Entries = () => {
+  const { portfolioId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [deleteError, setDeleteError] = useState<any>(null);
@@ -80,6 +77,7 @@ export const Entries = () => {
     isLoading,
     isSuccess,
   } = useGetEntries(
+    portfolioId!,
     searchParams.get("query") || undefined,
     searchParams.get("entryType") || undefined,
     searchParams.get("status") || undefined,
@@ -88,19 +86,35 @@ export const Entries = () => {
     searchParams.get("page") || undefined
   );
 
+  const handleClick = (entry: Entry) => {
+    if (entry.orderStatus === OrderStatus.CLOSED) {
+      navigate(`/trading/portfolios/${portfolioId}/entries/${entry.id}/closed`);
+    } else {
+      navigate(
+        `/trading/portfolios/${portfolioId}/entries/${entry.entryType.toLocaleLowerCase()}/${
+          entry.id
+        }`
+      );
+    }
+  };
+
   return (
     <>
       <PageHeader>
-        <PageHeader.Title>Trades</PageHeader.Title>
-        <PageHeader.Subtitle>
-          <span className="hidden md:flex">View and manage your trades</span>
-        </PageHeader.Subtitle>
+        <PageHeader.Title>
+          Trades
+          <PageHeader.Subtitle>View and manage your trades</PageHeader.Subtitle>
+        </PageHeader.Title>
+
         <PageHeader.Action>
-          <AddEntryButton />
+          <AddTradeButton />
         </PageHeader.Action>
       </PageHeader>
-      <EntrySearch />
-      <>
+
+      <div className="pt-2">
+        <EntrySearch />
+      </div>
+      <Box>
         <div className="md:hidden rounded-md border min-w-full" aria-label="entries">
           <MessageDisplay message={error} variant="destructive" />
           <MessageDisplay message={deleteError} variant="destructive" />
@@ -115,7 +129,7 @@ export const Entries = () => {
                 <Card
                   key={entry.id}
                   className="hover:bg-slate-200"
-                  onClick={() => navigate(`/trading/entries/${entry.id}`)}
+                  onClick={() => handleClick(entry)}
                   aria-label={`entry-${index}`}
                 >
                   <CardHeader className="space-y-0 pt-3 pb-2" aria-label="header">
@@ -212,7 +226,7 @@ export const Entries = () => {
                   entries.data.map((entry, index) => (
                     <TableRow
                       key={entry.id}
-                      onClick={() => navigate(`/trading/entries/${entry.id}`)}
+                      onClick={() => handleClick(entry)}
                       className="hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
                       aria-label={`entry-${index}`}
                     >
@@ -262,8 +276,8 @@ export const Entries = () => {
             </TableBody>
           </Table>
         </div>
-        {isSuccess && entries && <TablePagination {...entries.pagination} />}
-      </>
+      </Box>
+      {isSuccess && entries && <TablePagination {...entries.pagination} />}
     </>
   );
 };

@@ -24,11 +24,11 @@ type Props = {
 };
 
 export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Props) => {
-  const mutation = useDeleteEntry();
+  const mutation = useDeleteEntry(entry.portfolio.id!);
   const { toast } = useToast();
 
   if (mutation.isPending) {
-    return <div>Deleting...</div>;
+    return <>Deleting...</>;
   }
   if (mutation.isError) {
     onError(mutation.error);
@@ -52,13 +52,13 @@ export const DeleteEntryButton = ({ entry, onError, onSuccess, withLabel }: Prop
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {withLabel ? (
-          <Button variant="link" aria-label="delete entry">
-            <TrashIcon className="mr-1 h-4 w-4" />
+          <Button variant="link" aria-label="delete entry" className="gap-2">
+            <TrashIcon className="h-6 w-6 sm:h-4 sm:w-4 " />
             Delete
           </Button>
         ) : (
           <TrashIcon
-            className="mr-2 h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer"
+            className="h-6 w-6 sm:h-4 sm:w-4 hover:scale-150 hover:cursor-pointer"
             aria-label="delete entry"
           />
         )}

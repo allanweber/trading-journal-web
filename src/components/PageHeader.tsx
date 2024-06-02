@@ -1,50 +1,25 @@
 import type { PropsWithChildren } from "react";
-import React, { useEffect, useState } from "react";
 
 export const PageHeader = (props: PropsWithChildren) => {
   const { children } = props;
-  const [title, setTitle] = useState<any>(undefined);
-  const [subtitle, setSubtitle] = useState<any>(undefined);
-  const [action, setAction] = useState<any>(undefined);
-
-  useEffect(() => {
-    React.Children.forEach(children, (child: any) => {
-      if (!title && child.type === Title) {
-        setTitle(child);
-      } else if (!subtitle && child.type === Subtitle) {
-        setSubtitle(child);
-      } else if (!action && child.type === Action) {
-        setAction(child);
-      }
-    });
-  }, [action, children, subtitle, title]);
-
-  return (
-    <div className="flex items-center justify-between space-y-2">
-      <div>
-        <h2 className="text-2xl font-medium">{title}</h2>
-        <h3 className="text-sm text-muted-foreground">{subtitle}</h3>
-      </div>
-      <div className="flex items-center space-x-2">
-        <div className="sm:mt-0 sm:ml-16">{action}</div>
-      </div>
-    </div>
-  );
+  return <div className="flex">{children}</div>;
 };
 
 export const Title = (props: PropsWithChildren) => {
   const { children } = props;
-  return <>{children}</>;
+  return <div className="w-full flex-1 text-2xl font-medium">{children}</div>;
 };
 
 const Subtitle = (props: PropsWithChildren) => {
   const { children } = props;
-  return <>{children}</>;
+  return (
+    <span className="hidden md:flex text-sm font-normal text-muted-foreground">{children}</span>
+  );
 };
 
 const Action = (props: PropsWithChildren) => {
   const { children } = props;
-  return <>{children}</>;
+  return <div className="flex items-center gap-2">{children}</div>;
 };
 
 PageHeader.Title = Title;

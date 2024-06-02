@@ -1,5 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { usePortfolioContext } from "contexts/PortfolioContext";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthState } from "lib/authentication";
 import { config } from "lib/config";
 import { Deposit, Dividend, Entry, ExitEntry, Stock, Taxes, Withdrawal } from "model/entry";
@@ -7,7 +6,26 @@ import { ImageUploaded } from "model/fileUploaded";
 import { Paginated } from "model/pagination";
 import { responseOrError } from "./response";
 
+function invalidateQueries(queryClient: QueryClient, portfolioId: string) {
+  queryClient.invalidateQueries({
+    queryKey: ["entries"],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolio-entries-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`balance-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolio-${portfolioId}`],
+  });
+  queryClient.invalidateQueries({
+    queryKey: [`portfolios`],
+  });
+}
+
 export const useGetEntries = (
+  portfolioId: string,
   query?: string,
   type?: string,
   status?: string,
@@ -16,82 +34,65 @@ export const useGetEntries = (
   page?: string
 ) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   return useQuery({
     queryKey: [
       "entries",
-      `entries-${query}-${portfolio?.id}-${type}-${status}-${direction}-${pageSize}-${page}`,
+      `entries-${query}-${portfolioId}-${type}-${status}-${direction}-${pageSize}-${page}`,
     ],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getEntries(
-        accessToken!,
-        portfolio?.id!,
-        query,
-        type,
-        status,
-        direction,
-        pageSize,
-        page
-      );
+      return getEntries(accessToken!, portfolioId, query, type, status, direction, pageSize, page);
     },
   });
 };
 
-export const useGetPortfolioEntries = () => {
+export const useGetPortfolioEntries = (portfolioId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   return useQuery({
-    queryKey: ["portfolio-entries"],
+    queryKey: [`portfolio-entries-${portfolioId}`],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getPortfolioEntries(accessToken!, portfolio?.id!);
+      return getPortfolioEntries(accessToken!, portfolioId);
     },
   });
 };
 
-export const useGetEntry = (id: string) => {
+export const useGetEntry = (portfolioId: string, id?: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
-
   return useQuery({
     queryKey: [`entry-${id}`],
     queryFn: async () => {
+      if (!id) {
+        return null;
+      }
       const accessToken = await getToken();
-      return getEntry(accessToken!, portfolio?.id!, id);
+      return getEntry(accessToken!, portfolioId, id);
     },
   });
 };
 
-export const useDeleteEntry = () => {
+export const useDeleteEntry = (portfolioId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const accessToken = await getToken();
-      return deleteEntry(accessToken!, portfolio?.id!, id);
+      return deleteEntry(accessToken!, portfolioId, id);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ["entries"],
+        queryKey: [`entry-${data}`],
       });
-      queryClient.invalidateQueries({
-        queryKey: ["portfolio-entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolio?.id}`],
-      });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
 
-export const useSaveEntry = (id: string | undefined) => {
+export const useSaveEntry = (portfolioId: string, id?: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
 
@@ -99,75 +100,59 @@ export const useSaveEntry = (id: string | undefined) => {
     mutationFn: async (entry: Stock | Deposit | Withdrawal | Taxes | Dividend) => {
       const accessToken = await getToken();
       if (id) {
-        return editEntry(accessToken!, portfolio?.id!, id, entry);
+        return editEntry(accessToken!, portfolioId, id, entry);
       }
-      return createEntry(accessToken!, portfolio?.id!, entry);
+      return createEntry(accessToken!, portfolioId, entry);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["portfolio-entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolio?.id}`],
-      });
-      queryClient.invalidateQueries({
         queryKey: [`entry-${data.id}`],
       });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
 
-export const useCloseEntry = (entryId: string) => {
+export const useCloseEntry = (portfolioId: string, entryId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (exitEntry: ExitEntry) => {
       const accessToken = await getToken();
-      return closeEntry(accessToken!, portfolio?.id!, entryId, exitEntry);
+      return closeEntry(accessToken!, portfolioId, entryId, exitEntry);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
-        queryKey: ["entries"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [`balance-${portfolio?.id}`],
-      });
-      queryClient.invalidateQueries({
         queryKey: [`entry-${data.id}`],
       });
+      invalidateQueries(queryClient, portfolioId);
     },
   });
 };
 
-export const useGetImages = (entryId: string) => {
+export const useGetImages = (portfolioId: string, entryId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   return useQuery({
     queryKey: [`images-${entryId}`],
     queryFn: async () => {
       const accessToken = await getToken();
-      return getImages(accessToken!, portfolio?.id!, entryId);
+      return getImages(accessToken!, portfolioId, entryId);
     },
   });
 };
 
-export const useDeleteImage = (entryId: string) => {
+export const useDeleteImage = (portfolioId: string, entryId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (imageId: string) => {
       const accessToken = await getToken();
-      return deleteImage(accessToken!, portfolio?.id!, entryId, imageId);
+      return deleteImage(accessToken!, portfolioId, entryId, imageId);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({
@@ -177,16 +162,15 @@ export const useDeleteImage = (entryId: string) => {
   });
 };
 
-export const useUpdateNotes = (entryId: string) => {
+export const useUpdateNotes = (portfolioId: string, entryId: string) => {
   const { getToken } = useAuthState();
-  const { portfolio } = usePortfolioContext();
 
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (notes: string) => {
       const accessToken = await getToken();
-      return updateNotes(accessToken!, portfolio?.id!, entryId, notes);
+      return updateNotes(accessToken!, portfolioId, entryId, notes);
     },
     onSuccess(data, variables, context) {
       queryClient.invalidateQueries({

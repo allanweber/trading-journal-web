@@ -2,44 +2,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "components/ui/
 import { Edit, PlusCircle } from "lucide-react";
 
 import { Button } from "components/ui/button";
-import { Entry } from "model/entry";
 import { EntryType, onlyPortfolioBalances } from "model/entryType";
-import { DepositForm } from "pages/app/entries/components/DepositForm";
-import { FeesForm } from "pages/app/entries/components/FeesForm";
-import { TaxesForm } from "pages/app/entries/components/TaxesForm";
-import { WithdrawalForm } from "pages/app/entries/components/WithdrawalForm";
+import { Portfolio } from "model/portfolio";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
-type Props = {
+export const AddPortfolioBalance = ({
+  portfolio,
+  showEditIcon,
+}: {
+  portfolio: Portfolio;
   showEditIcon?: boolean;
-};
-
-export const AddPortfolioBalance = ({ showEditIcon }: Props) => {
+}) => {
   const entryTypes = onlyPortfolioBalances();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [formOpen, setFormOpen] = useState(false);
-  const [entryType, setEntryType] = useState<EntryType>();
 
-  const onFormChange = (data: Entry | undefined) => {
-    setFormOpen(false);
-    setEntryType(undefined);
-  };
+  const navigate = useNavigate();
 
-  const EntryForm = () => {
-    switch (entryType) {
-      case EntryType.WITHDRAWAL:
-        return <WithdrawalForm onChange={onFormChange} />;
-      case EntryType.DEPOSIT:
-        return <DepositForm onChange={onFormChange} />;
-      case EntryType.TAXES:
-        return <TaxesForm onChange={onFormChange} />;
-      case EntryType.FEES:
-        return <FeesForm onChange={onFormChange} />;
-      case undefined:
-        return null;
-      default:
-        throw new Error(`Invalid entry type: ${entryType}`);
-    }
+  const handleClick = (entryType: EntryType) => {
+    setMenuOpen(false);
+    navigate(`/trading/portfolios/${portfolio.id}/entries/${entryType.toLocaleLowerCase()}/new`);
   };
 
   return (
@@ -51,44 +33,33 @@ export const AddPortfolioBalance = ({ showEditIcon }: Props) => {
             size="sm"
             onClick={() => setMenuOpen(true)}
             aria-label="add balance"
+            className="px-0"
           >
-            <Edit className="h-4 w-4" />
+            <Edit size={20} />
           </Button>
         ) : (
-          <Button onClick={() => setMenuOpen(true)} aria-label="add balance">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Balance
+          <Button onClick={() => setMenuOpen(true)} aria-label="add balance" className="gap-2">
+            <PlusCircle className="h-6 w-6 md:h-4 md:w-4" />
+            <span className="hidden md:block">Add Entry</span>
           </Button>
         )}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add to your portfolio balance</DialogTitle>
           </DialogHeader>
-          <span className="flex flex-col space-y-2">
+          <span className="flex flex-col">
             {entryTypes.map((entryType: any) => (
               <Button
                 key={entryType.type}
                 className="w-full"
                 variant="outline"
-                onClick={() => {
-                  setMenuOpen(false);
-                  setFormOpen(true);
-                  setEntryType(entryType.type);
-                }}
+                onClick={() => handleClick(entryType.type)}
               >
                 <entryType.icon className="mr-2 h-4 w-4" />
                 <span className="capitalize">{entryType.type.toLowerCase()}</span>
               </Button>
             ))}
           </span>
-        </DialogContent>
-      </Dialog>
-      <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{`Add a new ${entryType}`}</DialogTitle>
-          </DialogHeader>
-          <EntryForm />
         </DialogContent>
       </Dialog>
     </div>

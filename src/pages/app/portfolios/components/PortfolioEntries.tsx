@@ -7,17 +7,13 @@ import { PageHeader } from "components/PageHeader";
 import { TableLoading } from "components/table/TableLoading";
 import { AvatarFallback } from "components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "components/ui/dialog";
 import { AlertCircle } from "lucide-react";
 import { Entry } from "model/entry";
 import { EntryType, getEntryType } from "model/entryType";
 import { Portfolio } from "model/portfolio";
 import { DeleteEntryButton } from "pages/app/entries/components/DeleteEntryButton";
-import { DepositForm } from "pages/app/entries/components/DepositForm";
-import { FeesForm } from "pages/app/entries/components/FeesForm";
-import { TaxesForm } from "pages/app/entries/components/TaxesForm";
-import { WithdrawalForm } from "pages/app/entries/components/WithdrawalForm";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import { useGetPortfolioEntries } from "service/entryQueries";
 import { AddPortfolioBalance } from "./AddPortfolioBalance";
 
@@ -31,31 +27,15 @@ const renderIcon = (entryType: EntryType) => {
 
 export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
   const [deleteError, setDeleteError] = useState<any>(null);
-  const [formOpen, setFormOpen] = useState(false);
-  const [entry, setEntry] = useState<Entry>();
+  const { data: entries, error, isLoading, isSuccess } = useGetPortfolioEntries(portfolio.id!);
+  const navigate = useNavigate();
 
-  const { data: entries, error, isLoading, isSuccess } = useGetPortfolioEntries();
-
-  const onFormChange = (data: Entry | undefined) => {
-    setFormOpen(false);
-    setEntry(undefined);
-  };
-
-  const EntryForm = () => {
-    switch (entry?.entryType) {
-      case EntryType.WITHDRAWAL:
-        return <WithdrawalForm onChange={onFormChange} withdrawal={entry} />;
-      case EntryType.DEPOSIT:
-        return <DepositForm onChange={onFormChange} deposit={entry} />;
-      case EntryType.TAXES:
-        return <TaxesForm onChange={onFormChange} taxes={entry} />;
-      case EntryType.FEES:
-        return <FeesForm onChange={onFormChange} fees={entry} />;
-      case undefined:
-        return null;
-      default:
-        throw new Error(`Invalid entry type: ${entry}`);
-    }
+  const handleClick = (entry: Entry) => {
+    navigate(
+      `/trading/portfolios/${portfolio.id}/entries/${entry.entryType.toLocaleLowerCase()}/${
+        entry.id
+      }`
+    );
   };
 
   return (
@@ -64,9 +44,9 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
         <CardHeader>
           <CardTitle>
             <PageHeader>
-              <PageHeader.Title>Balances</PageHeader.Title>
+              <PageHeader.Title>Portfolio Entries</PageHeader.Title>
               <PageHeader.Action>
-                <AddPortfolioBalance />
+                {isSuccess && entries.length > 0 && <AddPortfolioBalance portfolio={portfolio} />}
               </PageHeader.Action>
             </PageHeader>
           </CardTitle>
@@ -78,7 +58,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
           <div className="space-y-8">
             {isLoading ? (
               <TableLoading />
-            ) : (
+            ) : isSuccess && entries.length > 0 ? (
               isSuccess &&
               entries.map((entry, index) => (
                 <div
@@ -86,8 +66,7 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                   className="flex items-center pt-1 pb-1 rounded-md transition-all hover:cursor-pointer hover:bg-accent hover:text-accent-foreground"
                   key={entry.id}
                   onClick={() => {
-                    setFormOpen(true);
-                    setEntry(entry);
+                    handleClick(entry);
                   }}
                 >
                   <Avatar className="h-9 w-9">
@@ -126,18 +105,27 @@ export const PortfolioEntries = ({ portfolio }: { portfolio: Portfolio }) => {
                   </div>
                 </div>
               ))
+            ) : (
+              <div className="flex flex-1 flex-col gap-4 p-2 md:p-4">
+                <div className="rounded-lg border border-dashed shadow-sm py-10">
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <h3 className="text-2xl font-bold tracking-tight">
+                      You have no manual entries
+                    </h3>
+                    <p className="text-sm text-muted-foreground px-2">
+                      You can entries such deposits, withdrawals, fees, and taxes to keep track of
+                      your portfolio.
+                    </p>
+                    <div className="mt-4">
+                      <AddPortfolioBalance portfolio={portfolio} />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </CardContent>
       </Card>
-      <Dialog open={formOpen} onOpenChange={setFormOpen}>
-        <DialogContent className="max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{`Edit ${entry?.entryType}`}</DialogTitle>
-          </DialogHeader>
-          <EntryForm />
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
