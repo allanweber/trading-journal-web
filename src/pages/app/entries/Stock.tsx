@@ -43,25 +43,6 @@ import { DeleteEntryButton } from "./components/DeleteEntryButton";
 import { EntryImages } from "./components/EntryImages";
 import { EntryStatus } from "./components/EntryStatus";
 
-const CloseTrade = ({ entry }: { entry: Entry }) => {
-  if (entry.orderStatus === OrderStatus.OPEN) {
-    return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="link">
-            <CheckCheck className="h-4 w-4 mr-1" /> Close trade
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <CloseStockForm entry={entry} />
-        </DialogContent>
-      </Dialog>
-    );
-  } else {
-    return null;
-  }
-};
-
 const StockForm = ({ portfolio, entry }: { portfolio: Portfolio; entry?: Entry }) => {
   const navigate = useNavigate();
   const mutation = useSaveEntry(portfolio.id!, entry?.id);
@@ -272,7 +253,7 @@ const StockForm = ({ portfolio, entry }: { portfolio: Portfolio; entry?: Entry }
                 <Button
                   variant="outline"
                   className="w-full sm:w-[200px]"
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate(`/trading/portfolios/${portfolio.id!}/entries`)}
                   type="button"
                 >
                   Cancel
@@ -347,7 +328,19 @@ export const Stock = () => {
               <PageHeader.Action>
                 {stock && (
                   <div className="flex items-center">
-                    <CloseTrade entry={stock} />
+                    {stock.orderStatus === OrderStatus.OPEN && (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="link">
+                            <CheckCheck className="h-4 w-4 mr-1" /> Close trade
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <CloseStockForm entry={stock!} />
+                        </DialogContent>
+                      </Dialog>
+                    )}
+
                     <DeleteEntryButton
                       entry={stock as Entry}
                       onError={(error) => setDeleteError(error)}
