@@ -7,13 +7,19 @@ export const EntryResult = ({ entry }: { entry: Entry }) => {
     return <NumberDisplay currency={entry.portfolio.currency}>{entry.result}</NumberDisplay>;
 
   return (
-    <div className="flex" aria-label="result">
+    <div className="flex flex-col" aria-label="result">
       <ColoredNumber value={entry.result}>
-        <NumberDisplay currency={entry.portfolio.currency}>{entry.result}</NumberDisplay>
+        <NumberDisplay className="truncate" currency={entry.portfolio.currency}>
+          {entry.result}
+        </NumberDisplay>
       </ColoredNumber>
       {entry.returnPercentage && (
-        <ColoredNumber value={entry.returnPercentage} className="ml-1">
-          (<NumberDisplay isPercentage>{entry.returnPercentage}</NumberDisplay>)
+        <ColoredNumber value={entry.returnPercentage}>
+          (
+          <NumberDisplay className="truncate" isPercentage>
+            {entry.returnPercentage}
+          </NumberDisplay>
+          )
         </ColoredNumber>
       )}
     </div>

@@ -123,8 +123,8 @@ export const ClosedEntry = () => {
       <MessageDisplay message={deleteError} variant="destructive" />
       <Card>
         <CardHeader>
-          <div className="flex flex-col items-start justify-between md:flex-row md:items-center ">
-            <div className="flex items-center justify-start gap-2 md:gap-4">
+          <div className="flex items-start justify-between flex-wrap gap-2">
+            <div className="flex items-center justify-start gap-2">
               <div>
                 <span className="pl-0 text-2xl font-bold">{entry.symbol}</span>
               </div>
@@ -132,11 +132,11 @@ export const ClosedEntry = () => {
                 <EntryResult entry={entry} />
               </div>
             </div>
-            <div className="flex md:justify-end mt-4 md:mt-0">
-              <div className="flex flex-wrap items-center gap-2">
+            <div>
+              <div className="flex items-center flex-wrap gap-2">
                 <div>
                   <Badge variant="outline" className="text-base" aria-label="entry type">
-                    {React.createElement(entryType.icon, { className: "h-5 w-5 mr-2" })}
+                    {React.createElement(entryType.icon, { className: "h-5 w-5" })}
                     {entryType.type}
                   </Badge>
                 </div>

@@ -17,7 +17,6 @@ import { Stock } from "./app/entries/Stock";
 import { Taxes } from "./app/entries/Taxes";
 import { Withdrawal } from "./app/entries/Withdrawal";
 import { Portfolio } from "./app/portfolios/Portfolio";
-import { Portfolios } from "./app/portfolios/Portfolios";
 import { UserProfile } from "./app/user/UserProfile";
 import { UserSettings } from "./app/user/UserSettings";
 
@@ -32,10 +31,9 @@ export const router = createBrowserRouter(
       </Route>
       <Route path="trading" element={<AppLayout />}>
         <Route index element={<Trading />} />
-        <Route path="portfolios" element={<Portfolios />} />
         <Route path="portfolios/new" element={<Portfolio />} />
-        <Route path="portfolios/:portfolioId/edit" element={<Portfolio />} />
         <Route path="portfolios/:portfolioId" element={<PortfolioLayout />}>
+          <Route path="edit" element={<Portfolio />} />
           <Route path="entries" element={<Entries />} />
           <Route path="entries/:entryId/closed" element={<ClosedEntry />} />
           <Route path="entries/stock/new" element={<Stock />} />

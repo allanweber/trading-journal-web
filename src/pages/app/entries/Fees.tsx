@@ -74,7 +74,7 @@ export const Fees = () => {
   }
 
   return (
-    <>
+    <div className="max-w-lg">
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
       <MessageDisplay message={queryError} variant="destructive" />
@@ -175,6 +175,6 @@ export const Fees = () => {
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };

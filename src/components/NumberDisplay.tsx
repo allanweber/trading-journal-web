@@ -5,10 +5,11 @@ type Props = {
   currency?: string;
   isPercentage?: boolean;
   withSign?: boolean;
+  className?: string;
 };
 
 export default function NumberDisplay(props: Props) {
-  const { children, currency, isPercentage, withSign } = props;
+  const { children, currency, isPercentage, withSign, className } = props;
   let sign = undefined;
   let formattedValue = undefined;
 
@@ -36,5 +37,5 @@ export default function NumberDisplay(props: Props) {
     formattedValue = "N/A";
   }
 
-  return <span>{formattedValue}</span>;
+  return <span className={className}>{formattedValue}</span>;
 }

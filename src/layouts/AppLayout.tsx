@@ -69,8 +69,7 @@ const Navigation = () => {
         item.name === "Portfolios" ? (
           <Collapsible open={true} key="portfolios">
             <CollapsibleTrigger asChild>
-              <NavLink
-                to={item.href}
+              <span
                 className={cn(
                   isActive(item.href) ? "bg-muted text-primary" : "text-muted-foreground",
                   "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary"
@@ -78,7 +77,7 @@ const Navigation = () => {
               >
                 <LayoutList className="h-4 w-4" />
                 {item.name}
-              </NavLink>
+              </span>
             </CollapsibleTrigger>
             <CollapsibleContent className="pl-8">
               {isSuccess &&

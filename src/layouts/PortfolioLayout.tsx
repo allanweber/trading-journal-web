@@ -1,5 +1,5 @@
-import { PortfolioSummary } from "components/PortfolioSummary";
 import { useToast } from "components/ui/use-toast";
+import { PortfolioSummary } from "pages/app/portfolios/components/PortfolioSummary";
 import { useEffect } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { useGetPortfolio } from "service/portfolioQueries";

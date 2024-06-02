@@ -74,7 +74,7 @@ export const Taxes = () => {
   }
 
   return (
-    <>
+    <div className="max-w-lg">
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
       <MessageDisplay message={queryError} variant="destructive" />
@@ -175,6 +175,6 @@ export const Taxes = () => {
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };

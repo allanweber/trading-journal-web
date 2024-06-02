@@ -18,9 +18,9 @@ export const AddTradeButton = () => {
     <div className="flex">
       <Dialog>
         <DialogTrigger asChild>
-          <Button size="sm" className="gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span>Add Trade</span>
+          <Button size="sm" className="gap-2">
+            <PlusCircle className="h-6 w-6 md:h-4 md:w-4" />
+            <span className="hidden md:block">Add Trade</span>
           </Button>
         </DialogTrigger>
         <DialogContent>

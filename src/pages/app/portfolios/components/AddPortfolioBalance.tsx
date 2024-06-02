@@ -35,12 +35,12 @@ export const AddPortfolioBalance = ({
             aria-label="add balance"
             className="px-0"
           >
-            <Edit className="h-4 w-4" />
+            <Edit size={20} />
           </Button>
         ) : (
-          <Button onClick={() => setMenuOpen(true)} aria-label="add balance">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Entry
+          <Button onClick={() => setMenuOpen(true)} aria-label="add balance" className="gap-2">
+            <PlusCircle className="h-6 w-6 md:h-4 md:w-4" />
+            <span className="hidden md:block">Add Entry</span>
           </Button>
         )}
         <DialogContent>

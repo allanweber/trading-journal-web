@@ -29,7 +29,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "components/ui/card";
 import { Input } from "components/ui/input";
 import { Textarea } from "components/ui/textarea";
 import { getSymbol } from "model/currency";
-import { NavLink } from "react-router-dom";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
 
 export const Dividend = () => {
@@ -78,7 +77,7 @@ export const Dividend = () => {
   }
 
   return (
-    <>
+    <div className="max-w-lg">
       <MessageDisplay message={mutation.error} variant="destructive" />
       <MessageDisplay message={deleteError} variant="destructive" />
       <MessageDisplay message={queryError} variant="destructive" />
@@ -176,8 +175,13 @@ export const Dividend = () => {
               />
 
               <div className="flex flex-wrap sm:justify-end">
-                <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to={`/trading/portfolios/${portfolio!.id}/entries`}>Cancel</NavLink>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => navigate(-1)}
+                  type="button"
+                >
+                  Cancel
                 </Button>
 
                 <Button
@@ -192,6 +196,6 @@ export const Dividend = () => {
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 };

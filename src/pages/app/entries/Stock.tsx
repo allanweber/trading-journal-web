@@ -38,7 +38,6 @@ import { config } from "lib/config";
 import { CheckCheck } from "lucide-react";
 import { getSymbol } from "model/currency";
 import { Portfolio } from "model/portfolio";
-import { NavLink } from "react-router-dom";
 import { CloseStockForm } from "./components/CloseStockForm";
 import { DeleteEntryButton } from "./components/DeleteEntryButton";
 import { EntryImages } from "./components/EntryImages";
@@ -270,8 +269,13 @@ const StockForm = ({ portfolio, entry }: { portfolio: Portfolio; entry?: Entry }
 
             <div className="col-span-12">
               <div className="flex flex-wrap sm:justify-end mt-0 mb-0 p-0">
-                <Button asChild variant="outline" className="w-full sm:w-[200px]">
-                  <NavLink to={`/trading/portfolios/${portfolio.id!}/entries`}>Cancel</NavLink>
+                <Button
+                  variant="outline"
+                  className="w-full sm:w-[200px]"
+                  onClick={() => navigate(-1)}
+                  type="button"
+                >
+                  Cancel
                 </Button>
                 <Button
                   type="submit"
@@ -323,7 +327,7 @@ export const Stock = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-3">
       <div>
         <MessageDisplay message={queryError} variant="destructive" />
         <MessageDisplay message={deleteError} variant="destructive" />

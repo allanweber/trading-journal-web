@@ -26,19 +26,14 @@ import { SymbolDisplay } from "./components/SymbolDisplay";
 
 const EntrySizeAndPrice = ({ entry }: { entry: Entry }) => {
   return (
-    <div className="flex items-center justify-start">
-      <div>
-        <NumberDisplay currency={entry.portfolio.currency}>{entry.price}</NumberDisplay>
-      </div>
-      <div>
-        {entry.size && (
-          <>
-            <span className=" text-muted-foreground text-xs ml-1">
-              (<NumberDisplay>{entry.size}</NumberDisplay>)
-            </span>
-          </>
-        )}
-      </div>
+    <div className="flex flex-col truncate">
+      <NumberDisplay currency={entry.portfolio.currency}>{entry.price}</NumberDisplay>
+
+      {entry.size && (
+        <span className="text-muted-foreground text-xs">
+          (<NumberDisplay>{entry.size}</NumberDisplay>)
+        </span>
+      )}
     </div>
   );
 };
